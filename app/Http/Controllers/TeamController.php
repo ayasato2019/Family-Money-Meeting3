@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreteamRequest;
-use App\Http\Requests\UpdateteamRequest;
-use App\Models\team;
+use App\Http\Requests\StoreTeamRequest;
+use App\Http\Requests\UpdateTeamRequest;
+use App\Models\Team;
 
 class TeamController extends Controller
 {
@@ -27,7 +27,7 @@ class TeamController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreteamRequest $request)
+    public function store(StoreTeamRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class TeamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(team $team)
+    public function show(Team $team)
     {
         //
     }
@@ -43,7 +43,7 @@ class TeamController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(team $team)
+    public function edit(Team $team)
     {
         //
     }
@@ -51,7 +51,7 @@ class TeamController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateteamRequest $request, team $team)
+    public function update(UpdateTeamRequest $request, Team $team)
     {
         //
     }
@@ -59,7 +59,7 @@ class TeamController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(team $team)
+    public function destroy(Team $team)
     {
         //
     }
