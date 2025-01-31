@@ -2,19 +2,21 @@ import { useRef } from 'react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/ButtonPrimary';
+import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function TeamsRegister() {
-    const user_id = usePage().props.auth.user.id;
-    const admin_type = usePage().props.auth.user.admin_type;
+export default function TeamsRegister({user_id, role, team_name }:{
+    user_id: number;
+    role: number;
+    team_name: string;
+}) {
 
     // useFormフックを使ってフォームデータを管理
     const { data, setData, post, processing, errors } = useForm({
-        team_name: '', // 初期値として空文字列
+        team_name: team_name ? team_name : '', // 初期値として空文字列
         user_id: user_id,
-        admin_type: admin_type,
+        role: role,
     });
 
     // 送信関係
@@ -28,20 +30,20 @@ export default function TeamsRegister() {
     return (
         <AuthenticatedLayout>
             <Head title="チーム登録" />
-            {admin_type === 0 ? (
+            {role === 0 ? (
                 <form onSubmit={handleSubmit}>
                     <TextInput
-                        id="admin_type"
+                        id="role"
                         type="hidden"
-                        name="admin_type"
+                        name="role"
                         value={user_id}
                         className="mt-1 block w-full"
                     />
                     <TextInput
-                        id="admin_type"
+                        id="role"
                         type="hidden"
-                        name="admin_type"
-                        value={admin_type}
+                        name="role"
+                        value={role}
                         className="mt-1 block w-full"
                     />
                     <TextInput

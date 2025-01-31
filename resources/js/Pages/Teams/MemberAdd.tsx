@@ -1,25 +1,33 @@
 import { useRef } from 'react';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/ButtonPrimary';
+import PrimaryButton from '@/Components/PrimaryButton';
+import Checkbox from '@/Components/Checkbox';
 import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function MemberAdd() {
-    const user_id = usePage().props.auth.user.id;
-    const admin_type = usePage().props.auth.user.admin_type;
-    const team_name = usePage().props.team_name;
-    const team_name_str: string = (team_name as { team_name: string }).team_name;
-    const admin_child: number = 1;
+interface TeamMember {
+    name: string;
+    team_id: number;
+}
+
+export default function MemberAdd({
+    teamMembers,
+}: {
+    teamMembers: TeamMember[];
+}) {
 
     // useFormフックを使ってフォームデータを管理
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm<{
+        childs_name: string;
+        role_child: boolean;
+        password: string;
+    }>({
         childs_name: '',
-        admin_child: admin_child,
+        role_child: false, // role_childはboolean型に初期化
         password: 'password',
-        user_id: user_id,
-        admin_type: admin_type,
+
     });
 
     // 送信関係
@@ -27,66 +35,63 @@ export default function MemberAdd() {
     const csrfToken = useRef<string>(metaCsrfToken.content);
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post('./teams_member_add');
+        post(route('teams-member-add'));
     };
 
     return (
         <AuthenticatedLayout>
             <Head title="メンバー追加" />
-            {admin_type === 0 ? (
-                <form onSubmit={handleSubmit}>
-                    <h2 className='text-center my-5'>{team_name_str}</h2>
-                    {/*親の情報*/}
+            {/* チームメンバー一覧 */}
+            {teamMembers.length > 0 ? (
+                <>
+                    <h2>メンバー一覧</h2>
+                    <ul className='mb-5'>
+                        {teamMembers.map((member) => (
+                            <li key={member.team_id}>{member.name}</li>
+                        ))}
+                    </ul>
+                </>
+            ) : (
+                <p>現在メンバーはいません。</p>
+            )}
+
+            <form onSubmit={handleSubmit}>
+
+                <TextInput
+                    id="csrf"
+                    type="hidden"
+                    name="_token"
+                    value={csrfToken.current}
+                    className="mt-1 block w-full"
+                    required
+                />
+
+                <div>
+                    <InputLabel htmlFor="childs_name" value="新しいメンバー名" />
+
                     <TextInput
-                        id="admin_type"
-                        type="hidden"
-                        name="admin_type"
-                        value={user_id}
+                        id="childs_name" // idを修正
+                        name="childs_name" // name属性を修正
+                        value={data.childs_name} // useFormの状態を反映
                         className="mt-1 block w-full"
+                        autoComplete="childs_name"
+                        isFocused={true}
+                        onChange={(e) => setData('childs_name', e.target.value)}
+                        required
                     />
-                    <TextInput
-                        id="admin_type"
-                        type="hidden"
-                        name="admin_type"
-                        value={admin_type}
-                        className="mt-1 block w-full"
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="role_child" value="管理者権限" />
+
+                    <Checkbox
+                        name="remember"
+                        checked={data.role_child}
+                        onChange={(e) =>
+                            setData('role_child', e.target.checked)
+                        }
                     />
-                    <TextInput
-                        id="csrf"
-                        type="hidden"
-                        name="_token"
-                        value={csrfToken.current}
-                        className="mt-1 block w-full"
-                    />
-
-                    <div>
-                        <InputLabel htmlFor="childs_name" value="新しいメンバー名" />
-
-                        <TextInput
-                            id="childs_name" // idを修正
-                            name="childs_name" // name属性を修正
-                            value={data.childs_name} // useFormの状態を反映
-                            className="mt-1 block w-full"
-                            autoComplete="childs_name"
-                            isFocused={true}
-                            onChange={(e) => setData('childs_name', e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <InputLabel htmlFor="admin_child" value="管理者権限" />
-
-                        <TextInput
-                            id="admin_child" // idを修正
-                            name="admin_child" // name属性を修正
-                            value={data.admin_child} // useFormの状態を反映
-                            className="mt-1 block w-full"
-                            autoComplete="admin_child"
-                            isFocused={true}
-                            onChange={(e) => setData('admin_child', Number(e.target.value))}                            required
-                        />
-                    </div>
+                </div>
 
                 <div className='mt-5'>
                     <InputLabel htmlFor="password" value="仮パスワード" />
@@ -103,21 +108,15 @@ export default function MemberAdd() {
                         required
                     />
 
-                    <InputError message={errors.password} className="mt-2" />
+                    {/* <InputError message={errors.password} className="mt-2" /> */}
                 </div>
 
-                    <div className="mt-4 flex items-center justify-end">
-                        <PrimaryButton className="ms-4" disabled={processing}>
-                            登録
-                        </PrimaryButton>
-                    </div>
-                </form>
-            ) : (
-                <Link
-                    href={route('login')}
-                    className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >チームページへ</Link>
-            )}
+                <div className="mt-4 flex items-center justify-end">
+                    <PrimaryButton className="ms-4" disabled={processing}>
+                        登録
+                    </PrimaryButton>
+                </div>
+            </form>
         </AuthenticatedLayout>
     );
 }

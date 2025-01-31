@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
+            $table->string('team_name', 255);
+            $table->string('email')->unique(); // チーム代表者のメールアドレス
             $table->timestamps();
         });
     }

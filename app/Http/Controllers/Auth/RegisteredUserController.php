@@ -34,7 +34,7 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'birth_date' => 'date',
-            'admin_type' => 'required|integer',
+            'role' => 'required|integer',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -42,7 +42,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'birth_date' => $request->birth_date,
-            'admin_type' => $request->admin_type,
+            'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
 

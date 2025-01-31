@@ -35,12 +35,12 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/teams_registration', [TeamController::class, 'create'])->name('teams-create');
     Route::post('/teams_confirm', [TeamController::class, 'store'])->name('teams-store');
+    // /* チームのページ メンバー一覧・チーム修正 */
+    // Route::get('/teams_retouching', [TeamController::class, 'edit'])->name('teams-edit');
+    // Route::post('/teams_retouching_done', [TeamController::class, 'update'])->name('teams-update');
     /* チームのページ メンバー一覧・チーム修正 */
-    Route::get('/teams_retouching', [TeamController::class, 'edit'])->name('teams-edit');
-    Route::post('/teams_retouching_done', [TeamController::class, 'update'])->name('teams-update');
-    /* チームのページ メンバー一覧・チーム修正 */
-    // Route::get('/teams_member', [TeamMemberController::class, 'create'])->name('teams-member');
-    // Route::post('/teams_member_add', [TeamMemberController::class, 'store'])->name('teams-member-add');
+    Route::get('/teams_member', [TeamController::class, 'add'])->name('teams-member');
+    Route::post('/teams_member_add', [TeamController::class, 'update'])->name('teams-member-add');
 });
 
 /* チームのページ 親カテゴリのみ家計簿ページ */

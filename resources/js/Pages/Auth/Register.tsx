@@ -53,6 +53,24 @@ export default function Register() {
                     <InputError message={errors.name} className="mt-2" />
                 </div>
 
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="birth_date" value="生年月日" />
+
+                    <TextInput
+                        id="birth_date"
+                        type="date"
+                        name="birth_date"
+                        value={data.birth_date}
+                        className="mt-1 block w-full"
+                        autoComplete="birthday"
+                        onChange={(e) => setData('birth_date', e.target.value)}
+                        required
+                    />
+
+                    {/* <InputError message="生年月日を登録してください" className="mt-2" /> */}
+                </div>
+
                 <div className="mt-4">
                     <InputLabel htmlFor="email" value="メールアドレス" />
 
@@ -110,23 +128,6 @@ export default function Register() {
                         message={errors.password_confirmation}
                         className="mt-2"
                     />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="birth_date" value="誕生日" />
-
-                    <TextInput
-                        id="birth_date"
-                        type="date"
-                        name="birth_date"
-                        value={data.birth_date}
-                        className="mt-1 block w-full"
-                        autoComplete="birthday"
-                        onChange={(e) => setData('birth_date', e.target.value)}
-                        required
-                    />
-
-                    <InputError message="生年月日を登録してください" className="mt-2" />
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
