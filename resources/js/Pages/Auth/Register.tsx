@@ -7,13 +7,22 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm<{
+        name: string,
+        email: string,
+        password: string,
+        password_confirmation: string,
+        birth_date: string,
+        role: number,
+        is_active: number,
+    }> ({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
         birth_date: '',
-        admin_type: 0,
+        role: 0,
+        is_active: 0,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -30,11 +39,16 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <TextInput
-                    id="admin_type"
+                    id="role"
                     type="hidden"
-                    name="admin_type"
-                    value={data.admin_type}
-                    className="mt-1 block w-full"
+                    name="role"
+                    value={data.role}
+                />
+                <TextInput
+                    id="is_active"
+                    type="hidden"
+                    name="is_active"
+                    value={data.is_active}
                 />
                 <div>
                     <InputLabel htmlFor="name" value="ユーザー名（チーム内で表示する名前）" />
@@ -45,6 +59,7 @@ export default function Register() {
                         value={data.name}
                         className="mt-1 block w-full"
                         autoComplete="name"
+                        placeholder ='例）ママ'
                         isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
                         required
@@ -80,6 +95,7 @@ export default function Register() {
                         name="email"
                         value={data.email}
                         className="mt-1 block w-full"
+                        placeholder ='例）example@xxxx.com'
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
                         required
@@ -97,6 +113,7 @@ export default function Register() {
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
+                        placeholder ='半角英数字'
                         autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
                         required
@@ -117,6 +134,7 @@ export default function Register() {
                         name="password_confirmation"
                         value={data.password_confirmation}
                         className="mt-1 block w-full"
+                        placeholder ='半角英数字'
                         autoComplete="new-password"
                         onChange={(e) =>
                             setData('password_confirmation', e.target.value)

@@ -1,42 +1,62 @@
-import { useRef } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { useRef} from 'react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import Checkbox from '@/Components/Checkbox';
 import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { FormEventHandler } from 'react';
+
 
 interface TeamMember {
     name: string;
-    team_id: number;
+    id: number;
 }
 
 export default function MemberAdd({
     teamMembers,
+    team_id,
+    appUrl,
 }: {
+    appUrl: string;
+    team_id: number;
     teamMembers: TeamMember[];
 }) {
 
     // useFormフックを使ってフォームデータを管理
-    const { data, setData, post, processing, errors } = useForm<{
+    const { data, setData, post, processing, errors, reset  } = useForm<{
         childs_name: string;
-        role_child: boolean;
+        role_child: number;
         password: string;
+        password_confirmation: string,
+        birth_date: string,
+        team_id: number,
     }>({
         childs_name: '',
-        role_child: false, // role_childはboolean型に初期化
+        role_child: 1,
         password: 'password',
-
+        password_confirmation: 'password',
+        birth_date: '',
+        team_id: team_id,
     });
+
+    const handleSubmit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        post(route('teams-member-add'), {
+            onFinish: () => reset('password', 'password_confirmation'),
+        });
+    };
+
+    console.log(appUrl);
+
+    // 動的生成URL
+    const loginChildUrl = `${appUrl}/login-child?team_id=${encodeURIComponent(team_id)}`;
 
     // 送信関係
     const metaCsrfToken = document.querySelector("meta[name='csrf-token']") as HTMLMetaElement;
     const csrfToken = useRef<string>(metaCsrfToken.content);
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        post(route('teams-member-add'));
-    };
 
     return (
         <AuthenticatedLayout>
@@ -47,9 +67,11 @@ export default function MemberAdd({
                     <h2>メンバー一覧</h2>
                     <ul className='mb-5'>
                         {teamMembers.map((member) => (
-                            <li key={member.team_id}>{member.name}</li>
+                            <li key={member.id}>{member.name}</li>
                         ))}
                     </ul>
+                    <p>ログインURLはこちら</p>
+                    <p>ulr: {loginChildUrl}</p>
                 </>
             ) : (
                 <p>現在メンバーはいません。</p>
@@ -62,6 +84,14 @@ export default function MemberAdd({
                     type="hidden"
                     name="_token"
                     value={csrfToken.current}
+                    className="mt-1 block w-full"
+                    required
+                />
+                <TextInput
+                    id="team_id"
+                    type="hidden"
+                    name="team_id"
+                    value={data.team_id}
                     className="mt-1 block w-full"
                     required
                 />
@@ -85,30 +115,70 @@ export default function MemberAdd({
                     <InputLabel htmlFor="role_child" value="管理者権限" />
 
                     <Checkbox
-                        name="remember"
-                        checked={data.role_child}
+                        name="role_child"
+                        checked={data.role_child === 0}
                         onChange={(e) =>
-                            setData('role_child', e.target.checked)
+                            setData('role_child', e.target.checked ? 0 : 1)  // チェックありなら0、なしなら1
                         }
                     />
                 </div>
 
+                <div className="mt-4">
+                    <InputLabel htmlFor="birth_date" value="生年月日" />
+
+                    <TextInput
+                        id="birth_date"
+                        type="date"
+                        name="birth_date"
+                        value={data.birth_date}
+                        className="mt-1 block w-full"
+                        autoComplete="birthday"
+                        onChange={(e) => setData('birth_date', e.target.value)}
+                        required
+                    />
+
+                    {/* <InputError message="生年月日を登録してください" className="mt-2" /> */}
+                </div>
+
                 <div className='mt-5'>
                     <InputLabel htmlFor="password" value="仮パスワード" />
-                    <p className='text-sm'>仮なのでシンプルなパスワードでもOKです。</p>
-                    <p className='text-sm'>アカウントを渡したらパスワードの変更をお願いします。</p>
+                    <p className='text-sm'>初期では「password」と設定されています。</p>
+                    <p className='text-sm'>アカウントを渡したら、すぐにパスワードの変更をお願いします。</p>
+
                     <TextInput
                         id="password"
+                        type="text"
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
-                        autoComplete="password"
-                        isFocused={true}
+                        placeholder ='半角英数字'
+                        autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
                         required
                     />
 
-                    {/* <InputError message={errors.password} className="mt-2" /> */}
+                    <InputError message={errors.password} className="mt-2" />
+                </div>
+
+                <div className='mt-5'>
+                    <InputLabel
+                        htmlFor="password_confirmation"
+                        value="パスワード（確認）"
+                    />
+
+                    <TextInput
+                        id="password_confirmation"
+                        type="text"
+                        name="password_confirmation"
+                        value={data.password_confirmation}
+                        className="mt-1 block w-full"
+                        placeholder ='半角英数字'
+                        autoComplete="new-password"
+                        onChange={(e) =>
+                            setData('password_confirmation', e.target.value)
+                        }
+                        required
+                    />
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">

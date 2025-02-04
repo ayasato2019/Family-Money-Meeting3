@@ -4,9 +4,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-// use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ChildaccountSessionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMemberController;
+use Illuminate\Support\Facades\Auth;
 
 /* LP ゲスト用ページ */
 
@@ -18,17 +19,18 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-// /*ログイン */
-// Route::get('/login', function () {
-//     return Inertia::render('Auth.Login', [AuthenticatedSessionController::class, 'create'])->name('login');
-// });
+/*ログイン */
+Route::get('/login-child', [ChildaccountSessionController::class, 'create'])
+->name('login-child');
 // Route::get('/register', function () {
 //     return Inertia::render('Auth.Register', [AuthenticatedSessionController::class, 'store'])->name('register');
 // });
 
 /*マイページ トップ */
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Dashboard', [
+        'team_id' => Auth::user()?->team_id ?? null
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 /* チームのページ メンバー一覧・チーム作成 */

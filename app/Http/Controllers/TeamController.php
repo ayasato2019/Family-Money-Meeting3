@@ -12,7 +12,8 @@ use Illuminate\Support\Str;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rules;
+use Illuminate\Validation\ValidationException;
 
 class TeamController extends Controller
 {
@@ -35,10 +36,17 @@ class TeamController extends Controller
             // チームが存在しない場合、新規作成する
             $team_name = null; // チーム名はnullまたは空で渡す
         }
+
+        // .envのurlを参照する
+        $appUrl = env('APP_URL');
+
+        dd(env('APP_URL'));
+
         return Inertia::render('Teams/CreateTeams', compact(
             'user_id',
             'role',
-            'team_name'
+            'team_name',
+            'appUrl',
         ));
     }
 
@@ -86,9 +94,11 @@ class TeamController extends Controller
         $teamMembers = User::select('name', 'team_id')
         ->where('team_id', $user->team_id)
         ->get();
+        $team_id = $user->team_id;
 
         return Inertia::render('Teams/MemberAdd', compact(
             'teamMembers',
+            'team_id'
         ));
     }
 
@@ -97,28 +107,47 @@ class TeamController extends Controller
      */
     public function update(UpdateTeamRequest $request, Team $team)
     {
-         // バリデーション
-        $request->validate([
-            'childs_name' => 'required|string|max:255',
-            'role_child' => 'required|numeric',
-            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
-        ]);
-        dd($request);
+        try {
+            $request->validate([
+                'team_id' => 'required|integer',
+                'childs_name' => 'required|string|max:255',
+                'role_child' => 'required|integer',
+                'birth_date' => 'date',
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            ]);
+        } catch (ValidationException $e) {
+            dd($e->errors());
+        }
 
         // 新しいユーザーの作成
         $user = User::create([
             'name' => $request->childs_name,
-            'email' => null, // メールアドレスはまだ設定しない（または仮のものを設定）
-            'birth_date' => null, // 生年月日などは後で更新
-            'role' => $request->role_child, // ロールを設定
-            'password' => Hash::make($request->password), // 仮パスワード
-            // 'is_active' => false, // 仮登録状態（仮）
+            'team_id' => $request->team_id, // チームを紐付け
+            'email' => null,
+            'birth_date' => $request->birth_date,
+            'role' => $request->role_child,
+            'password' => Hash::make($request->password),
+            'is_active' => 1,
         ]);
         // 必要であればイベントを発火
         event(new Registered($user));
 
         return redirect()->route('dashboard')->with('success', 'メンバーが仮登録されました。');
 
+    }
+
+
+    /**
+     * 追加用のURL発行
+     */
+    public function issue()
+    {
+        $user = Auth::user();
+        $team_id = $user->team_id;
+
+        return Inertia::render('Teams/CreateTeams', compact(
+            'team_id',
+        ));
     }
 
     /**

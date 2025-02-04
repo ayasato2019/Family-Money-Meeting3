@@ -1,7 +1,11 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 
-export default function Dashboard() {
+export default function Dashboard({
+    team_id
+}:{
+    team_id: number;
+}) {
     return (
         <AuthenticatedLayout
             header={
@@ -19,12 +23,17 @@ export default function Dashboard() {
                                 className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                             >チーム作成</Link>
                         </div>
+
+                        {team_id !== null ? (
                         <div className="p-6 text-gray-900">
                             <Link
                                 href={route('teams-member')}
                                 className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                             >チームにメンバー追加</Link>
                         </div>
+                        ) : (
+                            <p>チーム名を登録したらメンバーを追加できます。</p>
+                        ) }
                     </div>
                 </div>
             </div>

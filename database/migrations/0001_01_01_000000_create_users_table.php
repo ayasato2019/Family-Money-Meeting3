@@ -16,10 +16,10 @@ return new class extends Migration
             $table->integer('team_id')->nullable();
             $table->string('name');
             $table->date('birth_date')->nullable();
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->integer('role')->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->integer('is_active')->nullable()->default(0); //0->アクティブ 1->仮登録
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

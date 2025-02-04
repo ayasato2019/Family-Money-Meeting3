@@ -6,7 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function TeamsRegister({user_id, role, team_name }:{
+export default function TeamsRegister({user_id, role, team_name}:{
     user_id: number;
     role: number;
     team_name: string;
@@ -53,7 +53,6 @@ export default function TeamsRegister({user_id, role, team_name }:{
                         value={csrfToken.current}
                         className="mt-1 block w-full"
                     />
-
                     <div>
                         <InputLabel htmlFor="team_name" value="チーム名" />
 
@@ -63,8 +62,9 @@ export default function TeamsRegister({user_id, role, team_name }:{
                             value={data.team_name} // useFormの状態を反映
                             className="mt-1 block w-full"
                             autoComplete="name"
+                            placeholder='例）〇〇家・〇〇ファミリー'
                             isFocused={true}
-                            onChange={(e) => setData('team_name', e.target.value)} // フォームデータの更新
+                            onChange={(e) => setData('team_name', e.target.value)}
                             required
                         />
                     </div>

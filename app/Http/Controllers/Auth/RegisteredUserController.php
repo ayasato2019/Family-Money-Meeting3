@@ -32,24 +32,27 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'email' => 'required|string|email|unique:users|max:255',
             'birth_date' => 'date',
             'role' => 'required|integer',
+            'is_active' => 'required|integer',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        // dd($request->all()); // これが表示されない場合
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'birth_date' => $request->birth_date,
             'role' => $request->role,
+            'is_active' => $request->is_active,
             'password' => Hash::make($request->password),
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
-
         return redirect(route('dashboard', absolute: false));
     }
 }
