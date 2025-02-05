@@ -30,7 +30,7 @@ export default function TeamsRegister({user_id, role, team_name}:{
     return (
         <AuthenticatedLayout>
             <Head title="チーム登録" />
-            {role === 0 ? (
+            {role === 10 ? (
                 <form onSubmit={handleSubmit}>
                     <TextInput
                         id="role"

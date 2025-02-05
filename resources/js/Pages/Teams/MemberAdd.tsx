@@ -1,4 +1,4 @@
-import { useRef} from 'react';
+import { useRef } from 'react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
@@ -30,7 +30,7 @@ export default function MemberAdd({
 }) {
 
     // useFormフックを使ってフォームデータを管理
-    const { data, setData, post, processing, errors, reset  } = useForm<{
+    const { data, setData, post, processing, errors, reset } = useForm<{
         childs_name: string;
         role_child: number;
         password: string;
@@ -70,7 +70,7 @@ export default function MemberAdd({
                             <li key={member.id}>{member.name}</li>
                         ))}
                     </ul>
-                    <p>ログインURLはこちら</p>
+                    <p>招待用ログインURLはこちら</p>
                     <p className='break-all'>ulr: {loginChildUrl}</p>
                     {/* QRコードを表示 */}
                     {qrCodeBase64 && (
@@ -82,123 +82,123 @@ export default function MemberAdd({
             ) : (
                 <p>現在メンバーはいません。</p>
             )}
-            {role === 0 ? (
-            <form onSubmit={handleSubmit}>
-
-                <TextInput
-                    id="csrf"
-                    type="hidden"
-                    name="_token"
-                    value={csrfToken.current}
-                    className="mt-1 block w-full"
-                    required
-                />
-                <TextInput
-                    id="team_id"
-                    type="hidden"
-                    name="team_id"
-                    value={data.team_id}
-                    className="mt-1 block w-full"
-                    required
-                />
-
-                <div>
-                    <InputLabel htmlFor="childs_name" value="新しいメンバー名" />
+            {role === 10 ? (
+                <form onSubmit={handleSubmit}>
 
                     <TextInput
-                        id="childs_name" // idを修正
-                        name="childs_name" // name属性を修正
-                        value={data.childs_name} // useFormの状態を反映
+                        id="csrf"
+                        type="hidden"
+                        name="_token"
+                        value={csrfToken.current}
                         className="mt-1 block w-full"
-                        autoComplete="childs_name"
-                        isFocused={true}
-                        onChange={(e) => setData('childs_name', e.target.value)}
                         required
                     />
-                </div>
-
-                <div>
-                    <InputLabel htmlFor="role_child" value="管理者権限" />
-
-                    <Checkbox
-                        name="role_child"
-                        checked={data.role_child === 0}
-                        onChange={(e) =>
-                            setData('role_child', e.target.checked ? 0 : 1)  // チェックありなら0、なしなら1
-                        }
-                    />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="birth_date" value="生年月日" />
-
                     <TextInput
-                        id="birth_date"
-                        type="date"
-                        name="birth_date"
-                        value={data.birth_date}
+                        id="team_id"
+                        type="hidden"
+                        name="team_id"
+                        value={data.team_id}
                         className="mt-1 block w-full"
-                        autoComplete="birthday"
-                        onChange={(e) => setData('birth_date', e.target.value)}
                         required
                     />
 
-                    {/* <InputError message="生年月日を登録してください" className="mt-2" /> */}
-                </div>
+                    <div>
+                        <InputLabel htmlFor="childs_name" value="新しいメンバー名" />
 
-                <div className='mt-5'>
-                    <InputLabel htmlFor="password" value="仮パスワード" />
-                    <p className='text-sm'>初期では「password」と設定されています。</p>
-                    <p className='text-sm'>アカウントを渡したら、すぐにパスワードの変更をお願いします。</p>
+                        <TextInput
+                            id="childs_name" // idを修正
+                            name="childs_name" // name属性を修正
+                            value={data.childs_name} // useFormの状態を反映
+                            className="mt-1 block w-full"
+                            autoComplete="childs_name"
+                            isFocused={true}
+                            onChange={(e) => setData('childs_name', e.target.value)}
+                            required
+                        />
+                    </div>
 
-                    <TextInput
-                        id="password"
-                        type="text"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        placeholder ='半角英数字'
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                        required
-                    />
+                    <div>
+                        <InputLabel htmlFor="role_child" value="管理者権限" />
 
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
+                        <Checkbox
+                            name="role_child"
+                            checked={data.role_child === 0}
+                            onChange={(e) =>
+                                setData('role_child', e.target.checked ? 0 : 1)  // チェックありなら0、なしなら1
+                            }
+                        />
+                    </div>
 
-                <div className='mt-5'>
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="パスワード（確認）"
-                    />
+                    <div className="mt-4">
+                        <InputLabel htmlFor="birth_date" value="生年月日" />
 
-                    <TextInput
-                        id="password_confirmation"
-                        type="text"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        placeholder ='半角英数字'
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                        required
-                    />
-                </div>
+                        <TextInput
+                            id="birth_date"
+                            type="date"
+                            name="birth_date"
+                            value={data.birth_date}
+                            className="mt-1 block w-full"
+                            autoComplete="birthday"
+                            onChange={(e) => setData('birth_date', e.target.value)}
+                            required
+                        />
 
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        登録
-                    </PrimaryButton>
-                </div>
-            </form>
-                        ) : (
-                            <Link
-                                href={route('login')}
-                                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            >チームページへ</Link>
-                        )}
+                        {/* <InputError message="生年月日を登録してください" className="mt-2" /> */}
+                    </div>
+
+                    <div className='mt-5'>
+                        <InputLabel htmlFor="password" value="仮パスワード" />
+                        <p className='text-sm'>初期では「password」と設定されています。</p>
+                        <p className='text-sm'>アカウントを渡したら、すぐにパスワードの変更をお願いします。</p>
+
+                        <TextInput
+                            id="password"
+                            type="text"
+                            name="password"
+                            value={data.password}
+                            className="mt-1 block w-full"
+                            placeholder='半角英数字'
+                            autoComplete="new-password"
+                            onChange={(e) => setData('password', e.target.value)}
+                            required
+                        />
+
+                        <InputError message={errors.password} className="mt-2" />
+                    </div>
+
+                    <div className='mt-5'>
+                        <InputLabel
+                            htmlFor="password_confirmation"
+                            value="パスワード（確認）"
+                        />
+
+                        <TextInput
+                            id="password_confirmation"
+                            type="text"
+                            name="password_confirmation"
+                            value={data.password_confirmation}
+                            className="mt-1 block w-full"
+                            placeholder='半角英数字'
+                            autoComplete="new-password"
+                            onChange={(e) =>
+                                setData('password_confirmation', e.target.value)
+                            }
+                            required
+                        />
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-end">
+                        <PrimaryButton className="ms-4" disabled={processing}>
+                            登録
+                        </PrimaryButton>
+                    </div>
+                </form>
+            ) : (
+                <Link
+                    href={route('login')}
+                    className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >チームページへ</Link>
+            )}
         </AuthenticatedLayout>
     );
 }

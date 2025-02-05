@@ -23,6 +23,7 @@ Route::get('/', function () {
 /*ログイン */
 Route::get('/login-child', [ChildaccountSessionController::class, 'create'])->name('login-child');
 Route::post('/login-child-confirm', [ChildaccountSessionController::class, 'store'])->name('login-child-confirm');
+
 /*マイページ トップ */
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [

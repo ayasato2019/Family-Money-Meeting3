@@ -21,8 +21,8 @@ export default function Register() {
         password: '',
         password_confirmation: '',
         birth_date: '',
-        role: 0,
-        is_active: 0,
+        role: 10,
+        is_active: 10,
     });
 
     const submit: FormEventHandler = (e) => {

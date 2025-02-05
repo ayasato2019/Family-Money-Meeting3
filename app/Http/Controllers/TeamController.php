@@ -98,6 +98,7 @@ class TeamController extends Controller
         ->where('team_id', $user->team_id)
         ->get();
         $team_id = $user->team_id;
+        $role = $user->role;
 
         // URLを作成する
         $appUrl = config('app.url');
@@ -124,6 +125,7 @@ class TeamController extends Controller
         return Inertia::render('Teams/MemberAdd', compact(
             'teamMembers',
             'team_id',
+            'role',
             'loginChildUrl',
             'qrCodeBase64'
         ));
@@ -171,9 +173,11 @@ class TeamController extends Controller
     {
         $user = Auth::user();
         $team_id = $user->team_id;
+        $role = $user->role;
 
         return Inertia::render('Teams/CreateTeams', compact(
             'team_id',
+            'role',
         ));
     }
 
