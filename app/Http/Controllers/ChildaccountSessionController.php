@@ -8,17 +8,32 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Http\Requests\LoginChildaccountRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 
 class ChildaccountSessionController extends Controller
 {
     /**
      * 子供用ログインページ
      */
-    public function create(): Response
+    public function create(Request $request)
     {
-        return Inertia::render('Auth/LoginChildAccoount', [
+            // team_idの値を取得
+    $encryptedTeamId = $request->query('team_id');
+
+    // 複合化してみる
+    try {
+        $teamId = Crypt::decryptString(urldecode($encryptedTeamId));
+    } catch (\Exception $e) {
+        // 複合化エラーになったらHTTP 400 (Bad Request) としてエラーメッセージを返す
+        return response()->json(['error' => 'Invalid team_id'], 400);
+    }
+    // 復号化が成功した場合、元の team_id を JSON で返す
+
+    return Inertia::render('Auth/LoginChildAccoount', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
+            'teamId' => $teamId,
         ]);
     }
 
@@ -26,9 +41,8 @@ class ChildaccountSessionController extends Controller
      * 子供用ログインロジック
      */
 
-    public function store(LoginChildaccountRequest $request): RedirectResponse
+    public function store(LoginChildaccountRequest $request)
     {
-        dd($request);
         $request->authenticate();
 
         $request->session()->regenerate();

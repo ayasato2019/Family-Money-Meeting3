@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import Checkbox from '@/Components/Checkbox';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
@@ -10,33 +11,43 @@ import { FormEventHandler } from 'react';
 export default function LoginChildAccount({
     status,
     canResetPassword,
-    team_id,
+    teamId,
 }: {
+    teamId: string;
     status?: string;
     canResetPassword: boolean;
-    team_id: string;
 }) {
     const { data, setData, post, processing, errors, reset } = useForm<{
-        name: string;
+        birth_date: string;
         password: string;
         remember: boolean;
+        team_id: string; // teamId で定義されている
     }>({
-        name: '',
+        birth_date: '',
         password: '',
         remember: false,
+        team_id: teamId, // teamId に修正！
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('login'), {
+        console.log('Submitting form...'); // デバッグ用ログ
+        console.log(data); // 送信データを確認
+
+        post(route('login-child-confirm'), {
             onFinish: () => reset('password'),
         });
     };
 
+    // 送信関係
+    const metaCsrfToken = document.querySelector("meta[name='csrf-token']") as HTMLMetaElement;
+    const csrfToken = useRef<string>(metaCsrfToken.content);
+
+
     return (
         <GuestLayout>
-            <Head title="Log in" />
+            <Head title="Login" />
 
             {status && (
                 <div className="mb-4 text-sm font-medium text-green-600">
@@ -44,28 +55,37 @@ export default function LoginChildAccount({
                 </div>
             )}
             <form onSubmit={submit}>
-                {/* <TextInput
+                <TextInput
+                    id="csrf"
+                    type="hidden"
+                    name="_token"
+                    value={csrfToken.current}
+                    className="mt-1 block w-full"
+                    required
+                />
+                <TextInput
                     id="team_id"
                     type="hidden"
                     name="team_id"
                     value={data.team_id}
-                /> */}
-                <div>
-                    <InputLabel htmlFor="name" value="なまえ" />
+                />
+                <div className="mt-4">
+                    <InputLabel htmlFor="birth_date" value="生年月日" />
 
                     <TextInput
-                        id="name"
-                        type="name"
-                        name="name"
-                        value={data.name}
+                        id="birth_date"
+                        type="date"
+                        name="birth_date"
+                        value={data.birth_date}
                         className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
+                        autoComplete="birthday"
+                        onChange={(e) => setData('birth_date', e.target.value)}
+                        required
                     />
 
-                    <InputError message={errors.name} className="mt-2" />
+                    {/* <InputError message="生年月日を登録してください" className="mt-2" /> */}
                 </div>
+
 
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="パスワード" />

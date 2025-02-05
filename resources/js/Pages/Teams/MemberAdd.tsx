@@ -1,5 +1,5 @@
 import { useRef} from 'react';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -12,14 +12,19 @@ import { FormEventHandler } from 'react';
 interface TeamMember {
     name: string;
     id: number;
+
 }
 
 export default function MemberAdd({
     teamMembers,
     team_id,
-    appUrl,
+    role,
+    loginChildUrl,
+    qrCodeBase64,
 }: {
-    appUrl: string;
+    role: number;
+    qrCodeBase64: string;
+    loginChildUrl: string;
     team_id: number;
     teamMembers: TeamMember[];
 }) {
@@ -49,11 +54,6 @@ export default function MemberAdd({
         });
     };
 
-    console.log(appUrl);
-
-    // 動的生成URL
-    const loginChildUrl = `${appUrl}/login-child?team_id=${encodeURIComponent(team_id)}`;
-
     // 送信関係
     const metaCsrfToken = document.querySelector("meta[name='csrf-token']") as HTMLMetaElement;
     const csrfToken = useRef<string>(metaCsrfToken.content);
@@ -71,12 +71,18 @@ export default function MemberAdd({
                         ))}
                     </ul>
                     <p>ログインURLはこちら</p>
-                    <p>ulr: {loginChildUrl}</p>
-                </>
+                    <p className='break-all'>ulr: {loginChildUrl}</p>
+                    {/* QRコードを表示 */}
+                    {qrCodeBase64 && (
+                        <div>
+                            <p>QRコード:</p>
+                            <img src={qrCodeBase64} alt="ログインQRコード" />
+                        </div>
+                    )}                </>
             ) : (
                 <p>現在メンバーはいません。</p>
             )}
-
+            {role === 0 ? (
             <form onSubmit={handleSubmit}>
 
                 <TextInput
@@ -187,6 +193,12 @@ export default function MemberAdd({
                     </PrimaryButton>
                 </div>
             </form>
+                        ) : (
+                            <Link
+                                href={route('login')}
+                                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >チームページへ</Link>
+                        )}
         </AuthenticatedLayout>
     );
 }

@@ -8,9 +8,9 @@ use App\Http\Controllers\ChildaccountSessionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMemberController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 /* LP ゲスト用ページ */
-
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -19,13 +19,10 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-/*ログイン */
-Route::get('/login-child', [ChildaccountSessionController::class, 'create'])
-->name('login-child');
-// Route::get('/register', function () {
-//     return Inertia::render('Auth.Register', [AuthenticatedSessionController::class, 'store'])->name('register');
-// });
 
+/*ログイン */
+Route::get('/login-child', [ChildaccountSessionController::class, 'create'])->name('login-child');
+Route::post('/login-child-confirm', [ChildaccountSessionController::class, 'store'])->name('login-child-confirm');
 /*マイページ トップ */
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [

@@ -68,7 +68,6 @@ export default function Register() {
                     <InputError message={errors.name} className="mt-2" />
                 </div>
 
-
                 <div className="mt-4">
                     <InputLabel htmlFor="birth_date" value="生年月日" />
 
