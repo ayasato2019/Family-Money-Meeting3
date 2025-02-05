@@ -37,16 +37,10 @@ class TeamController extends Controller
             $team_name = null; // チーム名はnullまたは空で渡す
         }
 
-        // .envのurlを参照する
-        $appUrl = env('APP_URL');
-
-        dd(env('APP_URL'));
-
         return Inertia::render('Teams/CreateTeams', compact(
             'user_id',
             'role',
             'team_name',
-            'appUrl',
         ));
     }
 
@@ -62,8 +56,8 @@ class TeamController extends Controller
         $user = Auth::user();
 
         $team = Team::where('email', $user->email)
-            ->lockForUpdate()  // ロックをかける
-            ->first();
+        ->lockForUpdate()  // ロックをかける
+        ->first();
 
         if ($team) {
             // すでにチームが存在する場合、更新する処理
@@ -96,9 +90,13 @@ class TeamController extends Controller
         ->get();
         $team_id = $user->team_id;
 
+        // .envのurlを参照する
+        $appUrl = env('APP_URL');
+
         return Inertia::render('Teams/MemberAdd', compact(
             'teamMembers',
-            'team_id'
+            'team_id',
+            'appUrl',
         ));
     }
 
