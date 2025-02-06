@@ -7,8 +7,6 @@ use App\Http\Requests\UpdateTeamRequest;
 use Illuminate\Auth\Events\Registered;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Household;
-use Illuminate\Support\Str;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -19,8 +17,6 @@ use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\Label\Label;
-use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Color\Color;
 

@@ -70,15 +70,16 @@ export default function MemberAdd({
                             <li key={member.id}>{member.name}</li>
                         ))}
                     </ul>
-                    <p>招待用ログインURLはこちら</p>
-                    <p className='break-all'>ulr: {loginChildUrl}</p>
+                    <p>ログインURLはこちら</p>
+                    <p className='break-all'>URL: {loginChildUrl}</p>
                     {/* QRコードを表示 */}
                     {qrCodeBase64 && (
                         <div>
                             <p>QRコード:</p>
-                            <img src={qrCodeBase64} alt="ログインQRコード" />
+                            <img src={qrCodeBase64 ?? ''} alt="ログインQRコード" />
                         </div>
-                    )}                </>
+                    )}
+                </>
             ) : (
                 <p>現在メンバーはいません。</p>
             )}
