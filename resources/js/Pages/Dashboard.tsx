@@ -1,13 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 
 export default function Dashboard({
-    team_id,
-    role
-}:{
+    role,
+}: {
     role: number;
-    team_id: number;
 }) {
+    const user = usePage().props.auth.user;
+    const team_id = (user as any).team_id;
+
     return (
         <AuthenticatedLayout
             header={
@@ -27,20 +28,20 @@ export default function Dashboard({
                         </div>
 
                         {team_id !== null ? (
-                        <div className="p-6 text-gray-900">
-                            <Link
-                                href={route('teams-member')}
-                                className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                            >{role === 0 ? (
-                                <span>メンバー追加</span>
-                            ) : (
-                                <span>メンバーリスト</span>
-                            )}
+                            <div className="p-6 text-gray-900">
+                                <Link
+                                    href={route('teams-member')}
+                                    className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                >{role === 10 ? (
+                                    <span>メンバー追加</span>
+                                ) : (
+                                    <span>メンバーリスト</span>
+                                )}
                                 </Link>
-                        </div>
+                            </div>
                         ) : (
                             <p>チーム名を登録したらメンバーを追加できます。</p>
-                        ) }
+                        )}
                     </div>
                 </div>
             </div>

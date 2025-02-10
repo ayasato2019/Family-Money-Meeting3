@@ -19,9 +19,42 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Color\Color;
+use App\Models\Avatar;
+
 
 class TeamController extends Controller
 {
+    /**
+     * ヘッダーに掲載するチーム＆アバター情報
+     */
+    public function index()
+    {
+        // // ユーザーの team_id からチーム名を取得
+        // $team_name = Team::where('id', Auth::user()->team_id)->first()?->team_name ?? null;
+
+        // // アバターの種類を取得
+        // $user_avatar = Avatar::where('user_id', Auth::id())->value('type') ?? 0;
+
+        // $user = Auth::user();
+        // $user_id = $user->id;
+
+
+        // // アバターの値を変換
+        // $avatars = [
+        //     0 => "default-avatar",
+        //     1 => "avatar-1",
+        //     2 => "avatar-2",
+        //     3 => "avatar-3",
+        // ];
+        // $user_avatar = $avatars[$user_avatar] ?? "default-avatar";
+
+        // return Inertia::render('Dashboard', [
+        //     'team_name' => $team_name,
+        //     'user_avatar' => $user_avatar,
+        // ]);
+    }
+
+
     /**
      * チーム名の編集ボタン
      */

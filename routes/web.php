@@ -9,6 +9,8 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMemberController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Avatar;
+use App\Models\Team;
 
 /* LP ゲスト用ページ */
 Route::get('/', function () {
@@ -30,6 +32,11 @@ Route::get('/dashboard', function () {
         'team_id' => Auth::user()?->team_id ?? null
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard', [
+//         'team_id' => Auth::user()?->team_id ?? null
+//     ]);
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 /* チームのページ メンバー一覧・チーム作成 */
 Route::middleware(['auth'])->group(function () {

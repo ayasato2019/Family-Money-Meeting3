@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('avatars', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->integer('type');
+            $table->integer('type')->default(0);
             $table->timestamps();
         });
     }

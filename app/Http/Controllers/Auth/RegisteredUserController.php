@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Avatar;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -49,8 +50,13 @@ class RegisteredUserController extends Controller
             'is_active' => $request->is_active,
             'password' => Hash::make($request->password),
         ]);
-
         event(new Registered($user));
+
+        $avatar = Avatar::create([
+            'user_id' => $user->id, // これを必ず追加
+            'type' => 0,
+        ]);
+        event(new Registered($avatar));
 
         Auth::login($user);
         return redirect(route('dashboard', absolute: false));

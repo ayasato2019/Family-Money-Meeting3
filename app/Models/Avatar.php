@@ -9,4 +9,8 @@ class Avatar extends Model
 {
     /** @use HasFactory<\Database\Factories\AvatarFactory> */
     use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'type',
+    ];
 }

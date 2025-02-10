@@ -51,4 +51,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function avatar()
+    {
+        return $this->avatar
+        ? asset('storage/' . $this->avatar->image_path) // DBの画像
+        : asset('assets/images/default-avatar.png'); // デフォルト画像
+    }
 }

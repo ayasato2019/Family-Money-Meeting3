@@ -5,11 +5,20 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 
+interface AuthenticatedProps {
+    header?: ReactNode;
+}
+
 export default function Authenticated({
     header,
     children,
-}: PropsWithChildren<{ header?: ReactNode }>) {
-    const user = usePage().props.auth.user;
+}: PropsWithChildren<AuthenticatedProps>) {
+    const user = usePage().props.auth.user;  // 型を明示的に指定
+    const { user_avatar, team_name } = usePage().props;
+
+    console.log(user_avatar); // ユーザーのアバター
+    console.log(team_name);
+    const appUrl = import.meta.env.VITE_APP_URL;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -31,7 +40,7 @@ export default function Authenticated({
                                     href={route('dashboard')}
                                     active={route().current('dashboard')}
                                 >
-                                    Dashboard
+                                    {team_name}
                                 </NavLink>
                             </div>
                         </div>
@@ -45,6 +54,11 @@ export default function Authenticated({
                                                 type="button"
                                                 className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                                             >
+                                                <img
+                                                    src={`${appUrl}/build//assets/images/${user_avatar}.png`}
+                                                    alt="Avatar"
+                                                    className="h-8 w-8 rounded-full"
+                                                />
                                                 {user.name}
 
                                                 <svg
@@ -67,14 +81,14 @@ export default function Authenticated({
                                         <Dropdown.Link
                                             href={route('profile.edit')}
                                         >
-                                            Profile
+                                            プロフィール
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route('logout')}
                                             method="post"
                                             as="button"
                                         >
-                                            Log Out
+                                            ログアウト
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
@@ -135,7 +149,7 @@ export default function Authenticated({
                             href={route('dashboard')}
                             active={route().current('dashboard')}
                         >
-                            Dashboard
+                            マイページ
                         </ResponsiveNavLink>
                     </div>
 
@@ -151,14 +165,14 @@ export default function Authenticated({
 
                         <div className="mt-3 space-y-1">
                             <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
+                                プロフィール
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
                                 href={route('logout')}
                                 as="button"
                             >
-                                Log Out
+                                ログアウト
                             </ResponsiveNavLink>
                         </div>
                     </div>
