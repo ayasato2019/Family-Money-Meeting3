@@ -33,14 +33,12 @@ export default function TeamsRegister({user_id, role, team_name}:{
             {role === 10 ? (
                 <form onSubmit={handleSubmit}>
                     <TextInput
-                        id="role"
                         type="hidden"
-                        name="role"
+                        name="user_id"
                         value={user_id}
                         className="mt-1 block w-full"
                     />
                     <TextInput
-                        id="role"
                         type="hidden"
                         name="role"
                         value={role}
@@ -77,9 +75,8 @@ export default function TeamsRegister({user_id, role, team_name}:{
                             チームがある場合はチームページへ
                         </Link>
 
-                        <PrimaryButton className="ms-4" disabled={processing}>
-                            登録
-                        </PrimaryButton>
+                        <PrimaryButton className="ms-4" disabled={processing}
+                        >登録</PrimaryButton>
                     </div>
                 </form>
             ) : (

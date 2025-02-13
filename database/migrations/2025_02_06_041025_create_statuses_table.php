@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->integer('saving');
-            $table->integer('investment');
-            $table->integer('need');
-            $table->integer('want');
-            $table->integer('donation');
-            $table->integer('game_level');
-            $table->integer('game_life');
-            $table->integer('is_sare');
+            $table->integer('saving')->default(0);
+            $table->integer('investment')->default(0);
+            $table->integer('need')->default(0);
+            $table->integer('want')->default(0);
+            $table->integer('donation')->default(0);
+            $table->integer('game_level')->default(0);
+            $table->integer('game_life')->default(4);
+            $table->integer('is_share')->default(0); //０=team_share 1=not_share 2=public
             $table->timestamps();
         });
     }

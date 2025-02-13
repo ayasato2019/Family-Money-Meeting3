@@ -42,6 +42,12 @@ export default function Dashboard({
                         ) : (
                             <p>チーム名を登録したらメンバーを追加できます。</p>
                         )}
+                        <div className="p-6 text-gray-900">
+                            <Link
+                                href={route('status-create')}
+                                className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                            >ステータス</Link>
+                        </div>
                     </div>
                 </div>
             </div>

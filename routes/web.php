@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ChildaccountSessionController;
 use App\Http\Controllers\TeamController;
-use App\Http\Controllers\TeamMemberController;
+use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Avatar;
@@ -42,9 +42,6 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/teams_registration', [TeamController::class, 'create'])->name('teams-create');
     Route::post('/teams_confirm', [TeamController::class, 'store'])->name('teams-store');
-    // /* チームのページ メンバー一覧・チーム修正 */
-    // Route::get('/teams_retouching', [TeamController::class, 'edit'])->name('teams-edit');
-    // Route::post('/teams_retouching_done', [TeamController::class, 'update'])->name('teams-update');
     /* チームのページ メンバー一覧・チーム修正 */
     Route::get('/teams_member', [TeamController::class, 'add'])->name('teams-member');
     Route::post('/teams_member_add', [TeamController::class, 'update'])->name('teams-member-add');
@@ -60,9 +57,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    // //初期ステータスの登録
-    // Route::get('/firststep_registration', [StatusController::class, 'create'])->name('first-create');
-    // Route::post('/firststep_confirm', [StatusController::class, 'store'])->name('first-store');
+    //初期ステータスの登録
+    Route::get('/status', [StatusController::class, 'create'])->name('status-create');
+    Route::post('/status_registration', [StatusController::class, 'store'])->name('status-store');
     // //貯金の登録
     // Route::get('/saving-registration', [SavingController::class, 'create'])->name('saving-create');
     // Route::post('/savin-confirm', [SavingController::class, 'store'])->name('saving-confirm');

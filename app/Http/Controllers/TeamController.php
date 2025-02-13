@@ -19,8 +19,6 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Color\Color;
-use App\Models\Avatar;
-
 
 class TeamController extends Controller
 {

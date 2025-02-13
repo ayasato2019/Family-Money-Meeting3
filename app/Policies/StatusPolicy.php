@@ -29,7 +29,7 @@ class StatusPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user !== null && request()->is('firststep');
     }
 
     /**

@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
-    /** @use HasFactory<\Database\Factories\StatusFactory> */
-    use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'saving',
+        'investment',
+        'need',
+        'want',
+        'donation',
+        'is_share',
+    ];
 }
