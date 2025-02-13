@@ -16,14 +16,14 @@ return new class extends Migration
             $table->foreignId('team_id') // 外部キーを追加
                 ->constrained('teams') // `teams` テーブルの `id` に紐づけ
                 ->onDelete('cascade');
-            $table->string('title');
-            $table->decimal('price', 11, 0);
-            $table->date('date');
-            $table->boolean('achieve');
-            $table->boolean('is_share');
+            $table->string('title')->default("（例）お米5kg");
+            $table->decimal('price', 11, 0)->default(3000);
+            $table->date('date')->default('2025-04-01');
+            $table->boolean('achieve')->default(false);
+            $table->boolean('is_share')->default(true);;
             $table->string('images')->nullable(); //画像は必須ではない
             $table->text('memo')->nullable(); //メモは必須ではない
-            $table->integer('comment_id');
+            $table->integer('comment_id')->nullable();
             $table->timestamps();
         });
     }

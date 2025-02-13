@@ -20,7 +20,7 @@ class StatusController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * ステータスがあれば表示させる
      */
     public function create()
     {

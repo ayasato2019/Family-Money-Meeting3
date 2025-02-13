@@ -8,11 +8,9 @@ import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { FormEventHandler } from 'react';
 
-
 interface TeamMember {
     name: string;
     id: number;
-
 }
 
 export default function MemberAdd({
@@ -85,7 +83,6 @@ export default function MemberAdd({
             )}
             {role === 10 ? (
                 <form onSubmit={handleSubmit}>
-
                     <TextInput
                         id="csrf"
                         type="hidden"

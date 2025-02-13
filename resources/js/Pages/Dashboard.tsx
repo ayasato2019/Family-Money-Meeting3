@@ -32,11 +32,8 @@ export default function Dashboard({
                                 <Link
                                     href={route('teams-member')}
                                     className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                >{role === 10 ? (
-                                    <span>メンバー追加</span>
-                                ) : (
+                                >
                                     <span>メンバーリスト</span>
-                                )}
                                 </Link>
                             </div>
                         ) : (
@@ -48,6 +45,18 @@ export default function Dashboard({
                                 className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                             >ステータス</Link>
                         </div>
+                        {team_id !== null ? (
+                            <div className="p-6 text-gray-900">
+                                <Link
+                                    href={route('houseold-create')}
+                                    className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                >
+                                    家計簿
+                                </Link>
+                            </div>
+                        ) : (
+                            <p>チーム名を登録したら家計簿が利用できます。</p>
+                        )}
                     </div>
                 </div>
             </div>

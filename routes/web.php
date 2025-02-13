@@ -7,10 +7,12 @@ use Inertia\Inertia;
 use App\Http\Controllers\ChildaccountSessionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\HouseholdController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Models\Avatar;
-use App\Models\Team;
+
+// use Illuminate\Http\Request;
+// use App\Models\Avatar;
+// use App\Models\Team;
 
 /* LP ゲスト用ページ */
 Route::get('/', function () {
@@ -28,15 +30,8 @@ Route::post('/login-child-confirm', [ChildaccountSessionController::class, 'stor
 
 /*マイページ トップ */
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard', [
-        'team_id' => Auth::user()?->team_id ?? null
-    ]);
+    return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard', [
-//         'team_id' => Auth::user()?->team_id ?? null
-//     ]);
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 /* チームのページ メンバー一覧・チーム作成 */
 Route::middleware(['auth'])->group(function () {
@@ -57,9 +52,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    //初期ステータスの登録
+
+    //ステータス
     Route::get('/status', [StatusController::class, 'create'])->name('status-create');
     Route::post('/status_registration', [StatusController::class, 'store'])->name('status-store');
+
+    //家計簿
+    Route::get('/household', [HouseholdController::class, 'create'])->name('houseold-create');
+    Route::post('/household_registration', [HouseholdController::class, 'store'])->name('houseold-confirm');
+    Route::post('/household/${id}', [HouseholdController::class, 'destroy'])->name('houseold-destroy');
+
     // //貯金の登録
     // Route::get('/saving-registration', [SavingController::class, 'create'])->name('saving-create');
     // Route::post('/savin-confirm', [SavingController::class, 'store'])->name('saving-confirm');
