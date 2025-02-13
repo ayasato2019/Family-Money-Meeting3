@@ -32,14 +32,16 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        // ユーザーの team_id からチーム名を取得
-        $team_name = Team::where('id', Auth::user()->team_id)->first()?->team_name ?? null;
+        // ログイン済みかどうかを確認し、ユーザーの team_id からチーム名を取得
+        $team_name = Auth::check()
+        ? Team::where('id', Auth::user()->team_id)->first()?->team_name
+        : null;
 
         // アバターの種類を取得
         $user_avatar = Avatar::where('user_id', Auth::id())->value('type') ?? 0;
 
         $user = Auth::user();
-        $user_id = $user->id;
+        // $user_id = $user->id;
 
 
         // アバターの値を変換
