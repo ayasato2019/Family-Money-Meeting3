@@ -75,7 +75,9 @@ export default function TeamsRegister({user_id, role, team_name}:{
                             チームがある場合はチームページへ
                         </Link>
 
-                        <PrimaryButton className="ms-4" disabled={processing}
+                        <PrimaryButton
+                            className="ms-4"
+                            disabled={processing}
                         >登録</PrimaryButton>
                     </div>
                 </form>

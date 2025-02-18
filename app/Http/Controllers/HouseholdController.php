@@ -8,6 +8,7 @@ use App\Models\Household;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\Team;
+use Illuminate\Auth\Events\Registered;
 
 class HouseholdController extends Controller
 {
@@ -27,12 +28,11 @@ class HouseholdController extends Controller
         // チームの家計簿を取得
         $team_id = Auth::user()->team_id;
         $household = Household::where('team_id', $team_id)->get();
-        return Inertia::render(
-            'Household/Household',
-            compact(
-                'household',
-            )
-        );
+
+        return Inertia::render('Household/Household', [
+            'household' => $household,
+            // 'team_id' => $team_id, // ここで明示的に渡す
+        ]);
     }
 
     /**
@@ -40,8 +40,50 @@ class HouseholdController extends Controller
      */
     public function store(StoreHouseholdRequest $request)
     {
-        //
+        // 現在のユーザーのチームIDを取得
+        $team_id = Auth::user()->team_id;
+        // リクエストにteam_idを追加
+        $request->merge(['team_id' => $team_id]);
+
+        try {
+            // リクエストデータのバリデーション
+            $validated = $request->validate([
+                'team_id' => 'required|integer',
+                'title' => 'required|string|max:255',
+                'price' => 'required|integer',
+                'date' => 'required|string|max:255',
+                'is_share' => 'nullable|boolean',
+                'images' => 'nullable|string|max:255',
+                'memo' => 'nullable|string|max:255',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // バリデーションエラー時にエラー内容を出力
+            dd($e->errors());
+        }
+        // バリデートされたデータに追加情報を設定
+        $validated['comment_id'] = null;
+        $validated['achieve'] = false;
+
+        // 新規データを作成
+        $household = Household::create([
+            'team_id' => $team_id,
+            'title' => $validated['title'],
+            'price' => $validated['price'],
+            'date' => $validated['date'],
+            'is_share' => $validated['is_share'],
+            'images' => $validated['images'],
+            'memo' => $validated['memo'],
+            'comment_id' => null,
+            'achieve' => false,
+        ]);
+
+        // イベントをトリガー
+        event(new Registered($household));
+
+        // 家計簿作成ページへリダイレクト
+        return redirect()->route('houseold-create');
     }
+
 
     /**
      * Display the specified resource.
@@ -62,9 +104,49 @@ class HouseholdController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateHouseholdRequest $request, Household $household)
+    public function update(UpdateHouseholdRequest $request, $id)
     {
-        //
+        // リクエストにteam_idを追加
+        $team_id = Auth::user()->team_id;
+        $household_id = $id;
+        $request->merge(['team_id' => $team_id]);
+
+        try {
+            // リクエストデータのバリデーション
+            $validated = $request->validate([
+                'team_id' => 'required|integer',
+                'title' => 'required|string|max:255',
+                'price' => 'required|integer',
+                'date' => 'required|string|max:255',
+                'is_share' => 'nullable|boolean',
+                'images' => 'nullable|string|max:255',
+                'memo' => 'nullable|string|max:255',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // バリデーションエラー時にエラー内容を出力
+            dd($e->errors());
+        }
+
+        // 既存のデータを更新する場合
+        $household_content = Household::where('id', $household_id)
+            ->lockForUpdate()
+            ->first();
+
+        // 既存のデータを更新
+        $household_content->update(array_merge([
+            'team_id' => $team_id,
+            'title' => $validated['title'],
+            'price' => $validated['price'],
+            'date' => $validated['date'],
+            'is_share' => $validated['is_share'],
+            'images' => $validated['images'],
+            'memo' => $validated['memo'],
+            'comment_id' => null,
+            'achieve' => false,
+        ], $validated));
+
+        // 家計簿作成ページへリダイレクト
+        return redirect()->route('houseold-create');
     }
 
     /**

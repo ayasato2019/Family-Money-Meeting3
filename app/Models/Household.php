@@ -11,6 +11,7 @@ class Household extends Model
 {
     protected $fillable = [
         'team_id',
+        'title',
         'price',
         'date',
         'achieve',

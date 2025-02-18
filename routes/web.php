@@ -59,8 +59,9 @@ Route::middleware('auth')->group(function () {
 
     //家計簿
     Route::get('/household', [HouseholdController::class, 'create'])->name('houseold-create');
-    Route::post('/household_registration', [HouseholdController::class, 'store'])->name('houseold-confirm');
-    Route::post('/household/{id}', [HouseholdController::class, 'destroy']);
+    Route::post('/household_registration', [HouseholdController::class, 'store'])->name('houseold-register');
+    Route::post('/household_del/{id}', [HouseholdController::class, 'destroy'])->name('houseold-destroy');
+    Route::post('/household_edit/{id}', [HouseholdController::class, 'update'])->name('houseold-update');
 
     // //貯金の登録
     // Route::get('/saving-registration', [SavingController::class, 'create'])->name('saving-create');
