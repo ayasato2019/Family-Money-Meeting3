@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('price', 11, 0);
             $table->date('date');
             $table->boolean('achieve');
-            $table->boolean('is_share');
+            $table->boolean('is_share')->default(true);;
             $table->string('images')->nullable(); //画像は必須ではない
             $table->text('memo')->nullable(); //メモは必須ではない
             $table->integer('comment_id')->nullable();

@@ -27,10 +27,13 @@ class HouseholdController extends Controller
     {
         // チームの家計簿を取得
         $team_id = Auth::user()->team_id;
+        $role = Auth::user()->role;
+
         $household = Household::where('team_id', $team_id)->get();
 
         return Inertia::render('Household/Household', [
             'household' => $household,
+            'role' => $role,
             // 'team_id' => $team_id, // ここで明示的に渡す
         ]);
     }
@@ -81,7 +84,9 @@ class HouseholdController extends Controller
         event(new Registered($household));
 
         // 家計簿作成ページへリダイレクト
-        return redirect()->route('houseold-create');
+        return redirect()->route(
+            'houseold-create',
+        );
     }
 
 
