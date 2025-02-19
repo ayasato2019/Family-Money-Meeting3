@@ -62,6 +62,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/household_registration', [HouseholdController::class, 'store'])->name('houseold-register');
     Route::post('/household_del/{id}', [HouseholdController::class, 'destroy'])->name('houseold-destroy');
     Route::post('/household_edit/{id}', [HouseholdController::class, 'update'])->name('houseold-update');
+    Route::get('/household_edit/{id}', function () {
+        return redirect('/household');
+    });
+    Route::get('/household_del/{id}', function () {
+        return redirect('/household');
+    });
 
     // //貯金の登録
     // Route::get('/saving-registration', [SavingController::class, 'create'])->name('saving-create');
