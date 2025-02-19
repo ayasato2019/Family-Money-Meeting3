@@ -74,7 +74,7 @@ export default function Household({
 
     const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
-        put(`/household_edit/${editingId}`, {
+        post(`/household_edit/${editingId}`, {
             onSuccess: () => {
                 closeModal(); // 更新成功後にモーダルを閉じる
             },
@@ -88,7 +88,7 @@ export default function Household({
     //コメント
     const handleComment = (e: React.FocusEvent) => {
         e.preventDefault();
-        postMessage(`comments/{id}`)
+        postMessage(`comments`)
     }
 
     return (
