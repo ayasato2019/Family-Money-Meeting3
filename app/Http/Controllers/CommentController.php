@@ -30,6 +30,7 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
+        // dd($request);
         $validated = $request->validate([
             'team_id' => 'required|exists:teams,id',
             'user_id_to' => 'required|exists:users,id',
@@ -40,7 +41,7 @@ class CommentController extends Controller
 
         Comment::create([
             'team_id' => $validated['team_id'],
-            'user_id_from' => $user['id'],
+            'user_id_from' => $user->id,
             'user_id_to' => $validated['user_id_to'],
             'comment' => $validated['comment'],
         ]);

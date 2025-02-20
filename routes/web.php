@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
     });
 
     //コメント
-    Route::post('/comment', [CommentController::class, 'store'])->name('houseold-update');
+    Route::post('/comments', [CommentController::class, 'store'])->name('houseold-update');
 
 
     // //貯金の登録
