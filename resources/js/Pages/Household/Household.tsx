@@ -11,133 +11,137 @@ import TextInput from "@/Components/TextInput"
 import EditHouseholdModal from "@/Objects/ModalEditer"
 
 interface HouseholdTypes {
-  id: number
-  team_id: number
-  title: string
-  price: number
-  date: string
-  is_share: boolean
-  images?: string | null
-  memo?: string | null
-  created_at: string
-  updated_at: string
+    id: number
+    team_id: number
+    title: string
+    price: number
+    date: string
+    is_share: boolean
+    images?: string | null
+    memo?: string | null
+    created_at: string
+    updated_at: string
 }
 
 export default function Household({
-  household,
-  role,
+    household,
+    role,
 }: {
-  household: HouseholdTypes[]
-  role: number
+    household: HouseholdTypes[]
+    role: number
 }) {
-  const { data, setData, post, reset, processing } = useForm({
-    title: "",
-    price: 0,
-    date: "",
-    is_share: 1,
-    images: "",
-    memo: "",
-  })
-
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingHousehold, setEditingHousehold] = useState<HouseholdTypes | null>(null)
-
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault()
-    post("/household_registration", {
-      onSuccess: () => reset(),
+    const { data, setData, post, reset, processing } = useForm({
+        title: "",
+        price: 0,
+        date: "",
+        is_share: 1,
+        images: "",
+        memo: "",
     })
-  }
 
-  const handleDelete = (id: number) => {
-    post(`/household_del/${id}`, {
-      method: "delete",
-    })
-  }
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [editingHousehold, setEditingHousehold] = useState<HouseholdTypes | null>(null)
 
-  const handleEdit = (household: HouseholdTypes) => {
-    setEditingHousehold(household)
-    setIsModalOpen(true)
-  }
+    const handleRegister = (e: React.FormEvent) => {
+        e.preventDefault()
+        post("/household_registration", {
+            onSuccess: () => reset(),
+        })
+    }
 
-  const closeModal = () => {
-    setIsModalOpen(false)
-    setEditingHousehold(null)
-  }
+    const handleDelete = (id: number) => {
+        post(`/household_del/${id}`, {
+            method: "delete",
+        })
+    }
 
-  return (
-    <>
-      <h1>家計簿</h1>
-      <form onSubmit={handleRegister}>
-        <input type="date" value={data.date} onChange={(e) => setData("date", e.target.value)} required />
-        <input type="text" value={data.title} onChange={(e) => setData("title", e.target.value)} required />
-        <input
-          type="number"
-          value={data.price}
-          onChange={(e) => setData("price", Number.parseFloat(e.target.value))}
-          required
-        />
-        <div className="flex">
-          <InputLabel htmlFor="images" value="レシート登録" />
-          <TextInput
-            name="images"
-            type="file"
-            value={data.images}
-            onChange={(e) => setData("images", e.target.value)}
-          />
-        </div>
-        <div className="flex">
-          <InputLabel htmlFor="is_share" value="メモ" />
-          <TextInput name="memo" value={data.memo} onChange={(e) => setData("memo", e.target.value)} />
-        </div>
-        <div className="flex">
-          <Checkbox
-            name="is_share"
-            checked={data.is_share === 0}
-            onChange={(e) => setData("is_share", e.target.checked ? 0 : 1)}
-          />
-          <InputLabel htmlFor="is_share" value="家族と共有する" />
-        </div>
-        <PrimaryButton type="submit" disabled={processing}>
-          追加
-        </PrimaryButton>
-      </form>
+    const handleEdit = (listData: HouseholdTypes) => {
+        setEditingHousehold(listData)
+        setIsModalOpen(true)
+    }
 
-      {household.filter((item) => item.is_share || role === 10).length > 0 ? (
-        <ul className="mb-5">
-          {household
-            .filter((item) => item.is_share || role === 10)
-            .map((item) => (
-              <li key={item.id} className="mt-4 flex gap-4 items-center">
-                <button className="w-6 h-6" onClick={() => handleDelete(item.id)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={24} height={24}>
-                    <path
-                      fill="#d71d1d"
-                      d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
+    const closeModal = () => {
+        setIsModalOpen(false)
+        setEditingHousehold(null)
+    }
+
+    return (
+        <>
+            <h1>家計簿</h1>
+            <form onSubmit={handleRegister}>
+                <input type="date" value={data.date} onChange={(e) => setData("date", e.target.value)} required />
+                <input type="text" value={data.title} onChange={(e) => setData("title", e.target.value)} required />
+                <input
+                    type="number"
+                    value={data.price}
+                    onChange={(e) => setData("price", Number.parseFloat(e.target.value))}
+                    required
+                />
+                <div className="flex">
+                    <InputLabel htmlFor="images" value="レシート登録" />
+                    <TextInput
+                        name="images"
+                        type="file"
+                        value={data.images}
+                        onChange={(e) => setData("images", e.target.value)}
                     />
-                  </svg>
-                </button>
-                <div className="flex gap-4">
-                  <time>{item.date}</time>
-                  <p>{item.title}</p>
-                  <p>{item.price}円</p>
-                  <p>メモ：{item.memo}</p>
-                  <p>共有：{item.is_share ? "オン" : "オフ"}</p>
                 </div>
-                <button className="w-6 h-6" onClick={() => handleEdit(item)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
-                  </svg>
-                </button>
-              </li>
-            ))}
-        </ul>
-      ) : (
-        <p>共有されていないデータはありません</p>
-      )}
+                <div className="flex">
+                    <InputLabel htmlFor="is_share" value="メモ" />
+                    <TextInput name="memo" value={data.memo} onChange={(e) => setData("memo", e.target.value)} />
+                </div>
+                <div className="flex">
+                    <Checkbox
+                        name="is_share"
+                        checked={data.is_share === 0}
+                        onChange={(e) => setData("is_share", e.target.checked ? 0 : 1)}
+                    />
+                    <InputLabel htmlFor="is_share" value="家族と共有する" />
+                </div>
+                <PrimaryButton type="submit" disabled={processing}>
+                    追加
+                </PrimaryButton>
+            </form>
 
-      <EditHouseholdModal isOpen={isModalOpen} onClose={closeModal} household={editingHousehold} />
-    </>
-  )
+            {household.filter((item) => item.is_share || role === 10).length > 0 ? (
+                <ul className="mb-5">
+                    {household
+                        .filter((item) => item.is_share || role === 10)
+                        .map((item) => (
+                            <li key={item.id} className="mt-4 flex gap-4 items-center">
+                                <button className="w-6 h-6" onClick={() => handleDelete(item.id)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={24} height={24}>
+                                        <path
+                                            fill="#d71d1d"
+                                            d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
+                                        />
+                                    </svg>
+                                </button>
+                                <div className="flex gap-4">
+                                    <time>{item.date}</time>
+                                    <p>{item.title}</p>
+                                    <p>{item.price}円</p>
+                                    <p>メモ：{item.memo}</p>
+                                    <p>共有：{item.is_share ? "オン" : "オフ"}</p>
+                                </div>
+                                <button className="w-6 h-6" onClick={() => handleEdit(item)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
+                                    </svg>
+                                </button>
+                            </li>
+                        ))}
+                </ul>
+            ) : (
+                <p>共有されていないデータはありません</p>
+            )}
+
+            <EditHouseholdModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                listData={editingHousehold}
+            />
+        </>
+    )
 }
 

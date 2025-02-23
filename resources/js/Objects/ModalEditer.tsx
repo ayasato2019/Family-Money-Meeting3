@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { useForm } from "@inertiajs/react";
 import Modal from "@/Components/Modal";
 
-interface EditHouseholdModalProps {
+interface EditListdModalProps {
   isOpen: boolean;
   onClose: () => void;
-  household: {
+  listData: {
     id: number;
     title: string;
     price: number;
@@ -16,38 +16,38 @@ interface EditHouseholdModalProps {
   } | null;
 }
 
-export default function EditHouseholdModal({
+export default function EditListdModal({
   isOpen,
   onClose,
-  household,
-}: EditHouseholdModalProps) {
+  listData,
+}: EditListdModalProps) {
   const { data, setData, post, processing } = useForm({
-    title: household?.title || "",
-    price: household?.price || 0,
-    date: household?.date || "",
-    is_share: household?.is_share ? 1 : 0,
-    images: household?.images || "",
-    memo: household?.memo || "",
+    title: listData?.title || "",
+    price: listData?.price || 0,
+    date: listData?.date || "",
+    is_share: listData?.is_share ? 1 : 0,
+    images: listData?.images || "",
+    memo: listData?.memo || "",
   });
 
   useEffect(() => {
-    if (household) {
+    if (listData) {
       setData({
-        title: household.title || "",
-        price: household.price || 0,
-        date: household.date || "",
-        is_share: household.is_share ? 1 : 0,
-        images: household.images || "",
-        memo: household.memo || "",
+        title: listData.title || "",
+        price: listData.price || 0,
+        date: listData.date || "",
+        is_share: listData.is_share ? 1 : 0,
+        images: listData.images || "",
+        memo: listData.memo || "",
       });
     }
-  }, [household, setData]);
+  }, [listData, setData]);
 
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!household?.id) return;
+    if (!listData?.id) return;
 
-    post(`/household_edit/${household.id}`, {
+    post(`/household_edit/${listData.id}`, {
       onSuccess: () => {
         onClose();
       },
