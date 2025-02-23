@@ -9,6 +9,7 @@ import PrimaryButton from "@/Components/PrimaryButton"
 import Checkbox from "@/Components/Checkbox"
 import TextInput from "@/Components/TextInput"
 import EditHouseholdModal from "@/Objects/ModalEditer"
+import CommentModal from "@/Objects/ModalComments"
 
 interface HouseholdTypes {
     id: number
@@ -42,6 +43,7 @@ export default function Household({
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [editingHousehold, setEditingHousehold] = useState<HouseholdTypes | null>(null)
 
+    //登録
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault()
         post("/household_registration", {
@@ -49,12 +51,14 @@ export default function Household({
         })
     }
 
+    //削除
     const handleDelete = (id: number) => {
         post(`/household_del/${id}`, {
             method: "delete",
         })
     }
 
+    //編集
     const handleEdit = (listData: HouseholdTypes) => {
         setEditingHousehold(listData)
         setIsModalOpen(true)
@@ -64,6 +68,9 @@ export default function Household({
         setIsModalOpen(false)
         setEditingHousehold(null)
     }
+
+    //コメント
+    const [selectedHousehold, setSelectedHousehold] = useState<HouseholdTypes | null>(null)
 
     return (
         <>
@@ -140,6 +147,12 @@ export default function Household({
                 isOpen={isModalOpen}
                 onClose={closeModal}
                 listData={editingHousehold}
+            />
+
+            <CommentModal
+                isCommentOpen={isModalOpen}
+                onCommentClose={closeModal}
+                listData={selectedHousehold}
             />
         </>
     )
