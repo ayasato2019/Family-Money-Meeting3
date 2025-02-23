@@ -2,16 +2,18 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
+import UserImage from '@/Components/UserAvatar';
 import { PageProps } from '@inertiajs/core';
+import { usePage } from '@inertiajs/react';
+
 
 interface AuthenticatedProps {
     header?: ReactNode;
 }
 
 interface CustomPageProps extends PageProps {
-    user_avatar?: string;
     team_name?: string | null;
 }
 
@@ -19,11 +21,8 @@ export default function Authenticated({
     header,
     children,
 }: PropsWithChildren<AuthenticatedProps>) {
-    const user = usePage().props.auth.user;  // 型を明示的に指定
-    const { user_avatar, team_name } = usePage<CustomPageProps>().props;
-    console.log(user_avatar); // ユーザーのアバター
-    console.log(team_name);
-    const appUrl = import.meta.env.VITE_APP_URL;
+    const user = usePage().props.auth.user;
+    const { team_name } = usePage<CustomPageProps>().props;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -60,12 +59,7 @@ export default function Authenticated({
                                                 className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                                             >
                                                 {/* コンポーネント化させる */}
-                                                <div className="icon-face">
-                                                    <img
-                                                        src={`${appUrl}/build/assets/images/${user_avatar}.png`}
-                                                        alt="Avatar"
-                                                    />
-                                                </div>
+<UserImage />
 
 
                                                 {user.name}

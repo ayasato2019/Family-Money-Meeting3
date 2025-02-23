@@ -8,7 +8,9 @@ use App\Http\Controllers\ChildaccountSessionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\HouseholdController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 // use Illuminate\Http\Request;
 // use App\Models\Avatar;
@@ -61,7 +63,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/household', [HouseholdController::class, 'create'])->name('houseold-create');
     Route::post('/household_registration', [HouseholdController::class, 'store'])->name('houseold-register');
     Route::post('/household_del/{id}', [HouseholdController::class, 'destroy'])->name('houseold-destroy');
+    Route::get('/household_del/{id}', function () {
+        return redirect('/household');
+    });
     Route::post('/household_edit/{id}', [HouseholdController::class, 'update'])->name('houseold-update');
+    Route::get('/household_edit/{id}', function () {
+        return redirect('/household');
+    });
+
+    //コメント
+    Route::post('/comments', [CommentController::class, 'store'])->name('houseold-update');
+
 
     // //貯金の登録
     // Route::get('/saving-registration', [SavingController::class, 'create'])->name('saving-create');

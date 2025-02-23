@@ -7,6 +7,9 @@
 
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- react Scan -->
+    <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script>
+
     <!-- CSRF -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

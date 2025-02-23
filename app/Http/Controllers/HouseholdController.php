@@ -48,21 +48,17 @@ class HouseholdController extends Controller
         // リクエストにteam_idを追加
         $request->merge(['team_id' => $team_id]);
 
-        try {
-            // リクエストデータのバリデーション
-            $validated = $request->validate([
-                'team_id' => 'required|integer',
-                'title' => 'required|string|max:255',
-                'price' => 'required|integer',
-                'date' => 'required|string|max:255',
-                'is_share' => 'nullable|boolean',
-                'images' => 'nullable|string|max:255',
-                'memo' => 'nullable|string|max:255',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // バリデーションエラー時にエラー内容を出力
-            dd($e->errors());
-        }
+        // リクエストデータのバリデーション
+        $validated = $request->validate([
+            'team_id' => 'required|integer',
+            'title' => 'required|string|max:255',
+            'price' => 'required|integer',
+            'date' => 'required|string|max:255',
+            'is_share' => 'nullable|boolean',
+            'images' => 'nullable|string|max:255',
+            'memo' => 'nullable|string|max:255',
+        ]);
+
         // バリデートされたデータに追加情報を設定
         $validated['comment_id'] = null;
         $validated['achieve'] = false;
@@ -116,21 +112,16 @@ class HouseholdController extends Controller
         $household_id = $id;
         $request->merge(['team_id' => $team_id]);
 
-        try {
-            // リクエストデータのバリデーション
-            $validated = $request->validate([
-                'team_id' => 'required|integer',
-                'title' => 'required|string|max:255',
-                'price' => 'required|integer',
-                'date' => 'required|string|max:255',
-                'is_share' => 'nullable|boolean',
-                'images' => 'nullable|string|max:255',
-                'memo' => 'nullable|string|max:255',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // バリデーションエラー時にエラー内容を出力
-            dd($e->errors());
-        }
+        $validated = $request->validate([
+            'team_id' => 'required|integer',
+            'title' => 'required|string|max:255',
+            'price' => 'required|integer',
+            'date' => 'required|string|max:255',
+            'is_share' => 'nullable|boolean',
+            'images' => 'nullable|string|max:255',
+            'memo' => 'nullable|string|max:255',
+        ]);
+
 
         // 既存のデータを更新する場合
         $household_content = Household::where('id', $household_id)
