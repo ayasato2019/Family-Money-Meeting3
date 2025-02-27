@@ -6,6 +6,9 @@ use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
+use App\Models\Household;
+use Inertia\Inertia;
 
 class CommentController extends Controller
 {
@@ -26,27 +29,44 @@ class CommentController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * コメントコントローラー
      */
     public function store(StoreCommentRequest $request)
     {
-        // dd($request);
+        //usr情報の取得
+        $user = Auth::user();
+        dd($request->all());
+
         $validated = $request->validate([
-            'team_id' => 'required|exists:teams,id',
+            // 'team_id' => 'required|exists:teams,id',
+            // 'user_id_from' => 'required|exists:users,id',
             'user_id_to' => 'required|exists:users,id',
-            'comment' => 'required|string|max:255',
+            'comment' => 'required|string'
         ]);
 
-        $user = Auth::user();
+        // //コメントデータを参照
+        // $household = Household::find(1);
+        // $commentId = $household->comment->id ?? null;
+
+        // $commentId = DB::table('comments')
+        //     ->where('id', function ($query) {
+        //         $query->select('comment_id')->from('households')->where('id', 1);
+        //     })
+        //     ->value('id');
+
+        // // $comment = Comment::where('id', $list->comment_id)
+        // // ->lockForUpdate()  // ロックをかける
+        // // ->first();
 
         Comment::create([
-            'team_id' => $validated['team_id'],
+            'team_id' => $user->team_id,
             'user_id_from' => $user->id,
-            'user_id_to' => $validated['user_id_to'],
+            // 'user_id_to' => $validated['user_id_to'],
             'comment' => $validated['comment'],
         ]);
-
-        return redirect()->back();
+        event(new Registered($comment));
+        return response()->json(['message' => 'Comment added'], 201);
+        return Inertia::render('Teams/CreateTeams');
     }
 
     /**

@@ -20,4 +20,9 @@ class Household extends Model
         'memo',
         'comment_id',
     ];
+
+    public function comment()
+    {
+        return $this->belongsTo(Comment::class, 'comment_id');
+    }
 }

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
+import PrimaryButton from '@/Components/ButtonPrimary';
 import TextInput from '@/Components/TextInput';
 import Checkbox from '@/Components/Checkbox';
 

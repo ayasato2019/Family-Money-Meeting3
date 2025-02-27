@@ -57,6 +57,18 @@ export default function Dashboard({
                         ) : (
                             <p>チーム名を登録したら家計簿が利用できます。</p>
                         )}
+                        <div className="p-6 text-gray-900">
+                            <Link
+                                href={route('saving-create')}
+                                className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                            >ちょきん登録</Link>
+                        </div>
+                        <div className="p-6 text-gray-900">
+                            <Link
+                                href={route('saving-index')}
+                                className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                            >ちょきん一覧</Link>
+                        </div>
                     </div>
                 </div>
             </div>

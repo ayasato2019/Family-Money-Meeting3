@@ -1,4 +1,3 @@
-
 export interface HouseholdTypes {
     id: number;
     team_id: number;

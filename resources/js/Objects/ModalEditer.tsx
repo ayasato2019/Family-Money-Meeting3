@@ -58,7 +58,7 @@ export default function EditListdModal({
         <Modal show={isOpen} onClose={onClose}>
             <form onSubmit={handleUpdate}>
                 <div className="relative mt-4 flex gap-4 items-center">
-                    <div className="flex gap-4">
+                    <div className="flex flex-col gap-4">
                         <input
                             type="date"
                             value={data.date}
@@ -73,6 +73,15 @@ export default function EditListdModal({
                             type="number"
                             value={data.price}
                             onChange={(e) => setData("price", Number(e.target.value))}
+                        />
+                        <input
+                            type="file"
+                            onChange={(e) => {setData("images", e.target.value)}}
+                        />
+                        <input
+                            type="text"
+                            value={data.memo}
+                            onChange={(e) => {setData("memo", e.target.value)}}
                         />
                     </div>
                 </div>

@@ -8,6 +8,8 @@ use App\Http\Controllers\ChildaccountSessionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\HouseholdController;
+use App\Http\Controllers\SavingController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -71,9 +73,16 @@ Route::middleware('auth')->group(function () {
         return redirect('/household');
     });
 
-    //コメント
-    Route::post('/comments', [CommentController::class, 'store'])->name('houseold-update');
+    //貯金
+    Route::get('/saving', [SavingController::class, 'create'])->name('saving-create');
+    Route::post('/saving_registration', [SavingController::class, 'store'])->name('saving-register');
+    Route::get('/saving/list', [SavingController::class, 'index'])->name('saving-index');
+    //目標の詳細ページ
+    Route::get('/saving/item_{id}', [SavingController::class, 'show'])->name('saving-show');
+    Route::post('/saving-update', [HistoryController::class, 'store'])->name('saving-update');
 
+    //コメント
+    // Route::post('/comments', [CommentController::class, 'store'])->name('comment');
 
     // //貯金の登録
     // Route::get('/saving-registration', [SavingController::class, 'create'])->name('saving-create');

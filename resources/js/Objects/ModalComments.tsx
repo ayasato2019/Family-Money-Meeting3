@@ -1,6 +1,5 @@
 "use client"
 
-
 import Comment from '@/Objects/Comment';
 import { useEffect } from "react"
 import { useForm } from "@inertiajs/react"
@@ -15,7 +14,11 @@ interface CommentModalProps {
     } | null
 }
 
-export default function CommentModal({ isCommentOpen, onCommentClose, listData }: CommentModalProps) {
+export default function CommentModal({
+    isCommentOpen,
+    onCommentClose,
+    listData
+}: CommentModalProps) {
     const { data, setData, post, processing, reset } = useForm({
         comment: "",
     })
@@ -38,7 +41,7 @@ export default function CommentModal({ isCommentOpen, onCommentClose, listData }
         e.preventDefault()
         if (!listData?.id) return
 
-        post(`/comment/${listData.id}`, {
+        post(`/comments`, {
             onSuccess: () => {
                 onCommentClose()
                 reset()
@@ -51,7 +54,6 @@ export default function CommentModal({ isCommentOpen, onCommentClose, listData }
             <div className="relative p-6">
                 <h3 className="text-lg font-medium mb-4">コメント</h3>
                 <div className="space-y-4">
-
                     <div className="flex flex-col gap-2">
                         <input
                             id="comment"
