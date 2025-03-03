@@ -5,7 +5,9 @@ export interface StatusTypes {
     created_at: string,
     saving: number;
     investment: number;
-    essential: number;
-    extravagance: number;
+    need: number;
+    want: number;
     donation: number;
+    game_level: number;
+    game_life: number;
 }

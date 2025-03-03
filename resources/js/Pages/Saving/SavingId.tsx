@@ -9,18 +9,11 @@ import { openToggle } from '@/Functions/openToggle';
 // 型チェック
 import { StatusTypes } from '@/types/tableStatusData';
 import { SavingTypes } from '@/types/tableSavingData';
-
-interface HistoryTypes {
-    id: number;
-    user_id: number;
-    goal_id: number;
-    amount: number;
-    created_at: string;
-    updated_at: string;
-};
+import { HistoryTypes } from '@/types/tableHistoryData';
+import { UserTypes } from '@/types/tableUserData';
 
 export default function SavingId() {
-    const user = usePage().props.auth.user;
+    const user = usePage().props.auth.user as unknown as UserTypes;
 
     // ステータスの確認
     const { statuses } = usePage().props as {
@@ -69,7 +62,7 @@ export default function SavingId() {
         title: savings.title,
         amount: savings.amount,
         deadline: savings.deadline,
-        achieve: savings.achieve,
+        achieve: savings.achieve ? 1 : 0,
         level: savings.level,
         images: savings.images,
         is_shared: !!savings.is_shared,

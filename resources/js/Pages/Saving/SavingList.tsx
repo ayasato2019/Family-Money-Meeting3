@@ -11,6 +11,7 @@ import ListSavings from '@/Components/ListSaving';
 import { StatusTypes } from '@/types/tableStatusData'
 import { HistoryTypes } from '@/types/tableHistoryData'
 import { SavingTypes } from '@/types/tableSavingData'
+import { UserTypes } from '@/types/tableUserData'
 
 export default function SavingList() {
     const user = usePage().props.auth.user;
@@ -55,9 +56,11 @@ export default function SavingList() {
     // ユーザー情報の宣言
     const userSaving: number = status.saving;
     const userInvestment: number = status.investment;
-    const userEssential: number = status.essential;
-    const userExtravagance: number = status.extravagance;
+    const userNeed: number = status.need;
+    const userWant: number = status.want;
     const userDonation: number = status.donation;
+    const userGameLavel: number = status.game_level;
+    const userLife: number = status.game_life;
 
     //Objectをカウントする時の式
     const savingsCount: number = saving.length;
@@ -79,20 +82,19 @@ export default function SavingList() {
     } else if (donationLavel < 5000) {
         donationLavel = 5;
     }
-
-    const userDataAfter = {
+    const userDataAfter: UserTypes = {
         id: user.id,
         name: user.name,
         savings: userSaving,
         investment: userInvestment,
-        essential: userEssential,
-        extravagance: userExtravagance,
-        planned_extravagance: userDonation,
-        level: donationLavel,
+        need: userNeed,
+        want: userWant,
         donation: userDonation,
-        avatar: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh-Y7rgTcW5NdDkxvwMW4Gdj2Q3G3lZVBvHHC10A3T_Iwxj0257NbTbdhvWKFOqn7nxXw6-V4P_0VFuJZ_5cQSDPxlazFKTD9N-d1A0IrX0k7LoaVpG3X9IwQ48H0zfXTJOT1JntRr0Lq3o/s400/onepiece01_luffy.png",
+        game_level: 1,  // 仮の値
+        game_life: 100  // 仮の値
     };
-    const userAvatar: string = userDataAfter.avatar;
+
+    const userAvatar ="https://borderlesss.sakura.ne.jp/ss1/assets/images/photo-noimages.jpg";
 
     return (
         <>
@@ -114,9 +116,9 @@ export default function SavingList() {
                             /> */}
                             {
                                 saving.map((savingItem) => (
-                                    <div key={savingItem.saving_id} className='mt-5'>
+                                    <div key={savingItem.id} className='mt-5'>
                                         <Link
-                                            href={`./${savingItem.saving_id}`}
+                                            href={`./${savingItem.id}`}
                                             className=''>
                                             {savingItem.title}
                                         </Link>

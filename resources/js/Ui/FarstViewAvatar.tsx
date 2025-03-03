@@ -42,18 +42,18 @@ export default function FarstViewAvatar({
         }
     };
 
-    const plannedExtravagance: number = UserData.extravagance;
+    const plannedExtravagance: number = UserData.want;
 
     return (
         <div className="relative overflow-hidden aspect-video bg-slate-50 min-h-80 w-full max-w-full">
             <UserStatus
                 useName={UserData.name}
                 donation={UserData.donation}
-                level={UserData.level}
+                level={UserData.game_level}
                 savings={UserData.savings}
                 investment={UserData.investment}
-                essential={UserData.essential}
-                extravagance={UserData.extravagance}
+                essential={UserData.need}
+                extravagance={UserData.want}
                 plannedExtravagance={plannedExtravagance}
             />
             <div className={`overflow-hidden relative bg-${categoryColor} w-full h-full`}>
