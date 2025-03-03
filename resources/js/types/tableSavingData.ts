@@ -10,6 +10,7 @@ export interface SavingTypes {
     deadline: string;          // 日付 (ISO 8601形式推奨)
     level: number;
     images?: string | null;       // URL形式
+    achieve: boolean;
     is_shared: boolean;
     memo?: string | null;      // memoをnullableに対応
     comment_id: number | null;  // nullable対応

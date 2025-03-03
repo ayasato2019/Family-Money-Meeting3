@@ -24,7 +24,6 @@ class SavingController extends Controller
         $statuses = Status::where('user_id', $userId)->get()->keyBy('user_id');
 
         // Savingデータ取得
-
         $histories = History::where('user_id', $userId)->get()->toArray();
 
         return Inertia::render('Saving/SavingList');
@@ -52,7 +51,6 @@ class SavingController extends Controller
             'is_shared' => 'required|boolean',
             'memo' => 'nullable|string|max:255',
         ]);
-
 
         $user_id = Auth::id();
 

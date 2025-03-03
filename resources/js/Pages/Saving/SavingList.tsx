@@ -12,7 +12,7 @@ import { StatusTypes } from '@/types/tableStatusData'
 import { HistoryTypes } from '@/types/tableHistoryData'
 import { SavingTypes } from '@/types/tableSavingData'
 
-export default function Saving_List() {
+export default function SavingList() {
     const user = usePage().props.auth.user;
 
     //ステータスの確認
@@ -31,7 +31,7 @@ export default function Saving_List() {
         histories?: HistoryTypes[],
     };
 
-    if (!status || !savings || !histories) {
+    if (!status || !savings) {
         return (
             <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
@@ -47,9 +47,9 @@ export default function Saving_List() {
         );
     }
 
+    const saving = Array.isArray(savings) ? savings.filter((saving) => saving.user_id === user.id) : [];
+    const history = Array.isArray(histories) ? histories.filter((history) => history.user_id === user.id) : [];
 
-    const saving = savings.filter((saving) => saving.user_id === user.id);
-    const history = histories.filter((history) => history.user_id === user.id);
     // もしも履歴がゼロだったら
 
     // ユーザー情報の宣言
@@ -60,8 +60,8 @@ export default function Saving_List() {
     const userDonation: number = status.donation;
 
     //Objectをカウントする時の式
-    const savingsCount: number = savings.length;
-    const historiesCount: number = histories.length;
+    const savingsCount: number = saving.length;
+    const historiesCount: number = histories ? histories.length : 0;
 
     const donationTotal = userDonation;
     // const donationTotal = history
@@ -113,7 +113,7 @@ export default function Saving_List() {
                                 childPage={false}
                             /> */}
                             {
-                                savings.map((savingItem) => (
+                                saving.map((savingItem) => (
                                     <div key={savingItem.saving_id} className='mt-5'>
                                         <Link
                                             href={`./${savingItem.saving_id}`}
@@ -125,7 +125,7 @@ export default function Saving_List() {
                             }
 
                             <Link
-                                href="./goal-registration"
+                                href="./saving_registration"
                                 className='flex items-center justify-center rounded-md border border-transparent bg-gradation min-w-32 max-w-52 px-4 py-2 max-h-10 text-sm font-bold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gradation-blue focus:bg-gradation focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 active:bg-gradation icon-plus mx-auto mt-5 gap-2'>
                                 もくひょうをついか
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={12} height={12}>

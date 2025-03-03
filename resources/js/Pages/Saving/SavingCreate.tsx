@@ -9,7 +9,7 @@ import InputDate from '@/Components/InputDate';
 import Checkbox from "@/Components/Checkbox";
 import InputLabel from "@/Components/InputLabel";
 
-export default function Saving_Goal_Create() {
+export default function SavingCreate() {
     const { data, setData, post, reset, processing } = useForm({
         goal_id: "",
         title: "",

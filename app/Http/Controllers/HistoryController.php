@@ -36,8 +36,8 @@ class HistoryController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|integer',
             'category' => 'required|integer',
-            // 'goal_id' => 'required|integer',
-            'date_saved' => 'required|date', // date_savedは必須で日付形式であること
+            'goal_id' => 'required|integer',
+            'deadline' => 'required|date',
             'amount_saved' => 'required|numeric',
         ]);
 
@@ -55,13 +55,17 @@ class HistoryController extends Controller
         $history->memo = $request->memo ?? null; // メモがあれば保存
         $history->is_shared = $request->is_shared ?? false; // 共有設定があれば保存
         $history->created_at = now(); // 作成日時をセット
+        $histories = History::where('user_id', $id)->get();
 
         if($request->amount_saved != 0) {
             $history->save(); // 履歴を保存
         }
         // 成功したらリダイレクト
-        return redirect()->route('saving-show', ['id' => $request->goal_group_id])
-        ->with('success', '履歴が登録されました。');
+        return redirect()->route('saving-show', [
+            'id' => $request->goal_id,
+            'histories' =>  $histories,
+            'savings' =>  $savings,
+        ]);
     }
 
     /**
