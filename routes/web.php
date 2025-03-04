@@ -78,8 +78,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/saving_registration', [SavingController::class, 'store'])->name('saving-register');
     Route::get('/saving/list', [SavingController::class, 'index'])->name('saving-index');
     //目標の詳細ページ
-    Route::get('/saving/item_{id}', [SavingController::class, 'show'])->name('saving-show');
-    Route::post('/saving-update', [HistoryController::class, 'store'])->name('saving-update');
+    Route::get('/saving/saving-{id}', [SavingController::class, 'show'])->name('saving-show');
+    Route::post('/saving/update', [HistoryController::class, 'store'])->name('saving-update');
 
     //コメント
     // Route::post('/comments', [CommentController::class, 'store'])->name('comment');

@@ -18,15 +18,23 @@ class SavingController extends Controller
      */
     public function index()
     {
-        $userId = Auth::id();
 
+        $userId = Auth::id();
         // user_idをキーにした連想配列に変換
+        $savings = Saving::where('user_id', $userId)
+        ->orderBy('deadline', 'desc')
+        ->get();
+        // Savingデータ取得
+        $histories = History::where('user_id', $userId)
+        ->get();
+        // statusデータ取得
         $statuses = Status::where('user_id', $userId)->get()->keyBy('user_id');
 
-        // Savingデータ取得
-        $histories = History::where('user_id', $userId)->get()->toArray();
-
-        return Inertia::render('Saving/SavingList');
+        return Inertia::render('Saving/SavingList', compact(
+            'statuses',
+            'savings',
+            'histories'
+        ));
     }
 
     /**
@@ -42,6 +50,7 @@ class SavingController extends Controller
      */
     public function store(StoreSavingRequest $request)
     {
+        dd($request);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'amount' => 'required|integer',
@@ -73,9 +82,8 @@ class SavingController extends Controller
         );
     }
 
-
     /**
-     * Display the specified resource.
+     * 個別の目標を閲覧
      */
     public function show(Saving $id)
     {
@@ -89,8 +97,7 @@ class SavingController extends Controller
         $savings = $id;
 
         $histories = History::where('user_id', $userId)->get()->toArray();
-
-        return Inertia::render('Saving/SavingList', compact(
+        return Inertia::render('Saving/SavingItem', compact(
             'statuses',
             'savings',
             'histories'

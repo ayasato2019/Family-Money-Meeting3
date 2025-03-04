@@ -32,12 +32,11 @@ class HistoryController extends Controller
      */
     public function store(StoreHistoryRequest $request)
     {
-        // バリデーション
         $validated = $request->validate([
             'user_id' => 'required|integer',
             'category' => 'required|integer',
             'goal_id' => 'required|integer',
-            'deadline' => 'required|date',
+            'deadline' => 'required|date|nullable',
             'amount_saved' => 'required|numeric',
         ]);
 
@@ -57,7 +56,7 @@ class HistoryController extends Controller
         $history->created_at = now(); // 作成日時をセット
         $histories = History::where('user_id', $id)->get();
 
-        if($request->amount_saved != 0) {
+        if ($request->amount_saved != 0) {
             $history->save(); // 履歴を保存
         }
         // 成功したらリダイレクト

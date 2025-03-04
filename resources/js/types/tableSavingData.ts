@@ -1,17 +1,17 @@
 import { Key } from "react";
 
 export interface SavingTypes {
-    saving_id: Key | null | undefined;
     id: number;
     user_id: number;
     goal_id: number;
     title: string;
-    amount: number;        // 小数点を含む金額
-    deadline: string;          // 日付 (ISO 8601形式推奨)
-    level: number;
-    images?: string | null;       // URL形式
-    achieve: boolean;
-    is_shared: boolean;
-    memo?: string | null;      // memoをnullableに対応
-    comment_id: number | null;  // nullable対応
+    amount: number; // decimal(11,0) → number
+    deadline: string; // MySQLの`date`はISO 8601形式の文字列
+    achieve: boolean; // tinyint(1) → boolean
+    level: number; // int unsigned
+    images?: string | null; // varchar(255) (null許容)
+    is_shared: boolean; // tinyint(1) → boolean
+    comment_id: number | null; // bigint unsigned (null許容)
+    memo?: string | null; // text (null許容)
 }
+

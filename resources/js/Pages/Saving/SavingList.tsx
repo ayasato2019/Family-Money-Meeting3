@@ -13,12 +13,19 @@ import { HistoryTypes } from '@/types/tableHistoryData'
 import { SavingTypes } from '@/types/tableSavingData'
 import { UserTypes } from '@/types/tableUserData'
 
-export default function SavingList() {
+export default function SavingList({
+    // saviving,
+    // history,
+}: {
+    // savibg: SavingTypes[],
+    // history: HistoryTypes[],
+}) {
+    //ユーザーの確認
     const user = usePage().props.auth.user;
 
     //ステータスの確認
     const { statuses } = usePage().props as {
-        statuses?: StatusTypes[],
+        statuses?: Record<number, StatusTypes>,
     };
     const status = statuses?.[user.id] ?? null;
 
@@ -118,7 +125,7 @@ export default function SavingList() {
                                 saving.map((savingItem) => (
                                     <div key={savingItem.id} className='mt-5'>
                                         <Link
-                                            href={`./${savingItem.id}`}
+                                            href={`./saving-${savingItem.id}`}
                                             className=''>
                                             {savingItem.title}
                                         </Link>
