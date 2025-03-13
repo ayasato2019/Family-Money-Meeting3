@@ -24,7 +24,7 @@ export default function InputSelectInterval({
     const left = extravagance;
 
     return (
-        <div className="overflow-hidden flex flex-col items-start justify-center gap-1 bg-black/95 px-2 pt-0.5 pb-1 rounded-md max-w-80 shadow-xl text-white">
+        <div className="overflow-hidden flex flex-col items-start justify-center gap-1 bg-gray-900/85 px-2 pt-0.5 pb-1 rounded-md max-w-80 shadow-xl text-white">
             <div className="flex items-center justify-between gap-2 pb-0.5 w-full h-auto border-b border-dotted border-white pr-3">
                 <BadgeType variant="assets" />
                 <p className="text-sm"><ConvertPrice price={assets} /></p>

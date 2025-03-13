@@ -2,17 +2,16 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
 import DashboardButton from '@/Components/Button/DashboardButton';
 import { PageProps } from '@inertiajs/core';
+import { UserTypes  } from '@/types/tableUserData';
 
 interface CustomPageProps extends PageProps {
     auth: {
-        user: User;
+        user: UserTypes & {
+            role: string;
+            team_id: number;
+            email: string;
+        };
     };
-}
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    team_id: number | null;
 }
 
 export default function Dashboard({
@@ -81,7 +80,8 @@ export default function Dashboard({
         >
             <Head title="ホーム" />
 
-            <div className="flex py-6 lg:py-12 max-w-2xl">
+
+            <div className="flex p-4 max-w-2xl">
                 <div className="mx-auto max-w-2xl sm:px-2 lg:px-0">
                     <ul className="overflow-hidden bg-white sm:rounded-l flex flex-col gap-2 w-full">
                     {dashboardLinks.map(({ href, label, icon }) => (

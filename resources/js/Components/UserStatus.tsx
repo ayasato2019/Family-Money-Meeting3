@@ -29,7 +29,7 @@ export default function UserStatus({
     };
 
     return (
-        <div className='absolute left-0 w-full h-10 z-50 transition-all duration-300 top-0'>
+        <div className='absolute top-2 left-2 w-[calc(100%-16px)] h-8 z-50 transition-all duration-300'>
             <div className="relative w-full h-full">
                 <UserStatusName
                 donation={donation}
@@ -39,7 +39,7 @@ export default function UserStatus({
                 <div
                     onClick={handleOpen}
                     // onTouchStart={handleOpen}
-                    className={`absolute right-0 w-1/2 flex items-stert justify-end transition-all duration-300 ${isOpen ? 'top-0' : 'top-[-60px]'
+                    className={`absolute right-0 w-1/2 flex items-stert justify-end transition-all duration-300 ${isOpen ? 'top-0' : 'top-[-68px]'
                     }`}>
                     <UserStatusAmount
                         isOpen={isOpen}

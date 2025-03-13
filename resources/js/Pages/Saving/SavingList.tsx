@@ -13,13 +13,7 @@ import { HistoryTypes } from '@/types/tableHistoryData'
 import { SavingTypes } from '@/types/tableSavingData'
 import { UserTypes } from '@/types/tableUserData'
 
-export default function SavingList({
-    // saviving,
-    // history,
-}: {
-    // savibg: SavingTypes[],
-    // history: HistoryTypes[],
-}) {
+export default function SavingList() {
     //ユーザーの確認
     const user = usePage().props.auth.user;
 

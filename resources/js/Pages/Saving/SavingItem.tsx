@@ -5,7 +5,6 @@ import TitleSavings from '@/Components/TitleSavings';
 import ConvertPrice from '@/Components/ConvertPrice';
 import StatusBar from '@/Components/StatusBarLarge';
 import InputButtons from '@/Components/InputButtons';
-import FarstView from '@/Ui/FarstViewAvatar';
 import { openToggle } from '@/Functions/openToggle';
 // 型チェック
 import { StatusTypes } from '@/types/tableStatusData'
@@ -17,11 +16,11 @@ import { UserTypes } from '@/types/tableUserData'
 export default function SavingId() {
     const user = usePage().props.auth.user;
 
-    //ステータスの確認
-    const { statuses } = usePage().props as {
-        statuses?: StatusTypes[],
-    };
-    const status = statuses?.[user.id] ?? null;
+    // //ステータスの確認
+    // const { statuses } = usePage().props as {
+    //     statuses?: StatusTypes[],
+    // };
+    // const status = statuses?.[user.id] ?? null;
 
     // 貯金目標の確認
     const { savings } = usePage().props as {
@@ -85,12 +84,6 @@ export default function SavingId() {
             </div>
         );
     }
-    // ユーザー情報の宣言
-    const userSaving: number = status.saving;
-    const userInvestment: number = status.investment;
-    const userEssential: number = status.need;
-    const userExtravagance: number = status.want;
-    const userDonation: number = status.donation;
 
     // 積立額の計算
     const calculateTotalSavings = (savingsId: number, histories: HistoryTypes[], goalGroupId: number): number => {
@@ -121,38 +114,6 @@ export default function SavingId() {
         setStatusBarAmount(updatedAmount);
     };
 
-    const donationTotal = userDonation;
-    let donationLavel: number = donationTotal
-    if (donationTotal < 1000) {
-        donationLavel = 1;
-    } else if (donationLavel < 2000) {
-        donationLavel = 2;
-    } else if (donationLavel < 3000) {
-        donationLavel = 3;
-    } else if (donationLavel < 4000) {
-        donationLavel = 4;
-    } else if (donationLavel < 5000) {
-        donationLavel = 5;
-    }
-    const userNeed: number = status.need;
-    const userWant: number = status.want;
-
-
-    const userDataAfter: UserTypes = {
-        id: user.id,
-        name: user.name,
-        savings: userSaving,
-        investment: userInvestment,
-        need: userNeed,
-        want: userWant,
-        donation: userDonation,
-        game_level: 1,  // 仮の値
-        game_life: 100  // 仮の値
-    };
-
-    const userAvatar ="https://borderlesss.sakura.ne.jp/ss1/assets/images/photo-noimages.jpg";
-
-
     // タイトルクリックで開閉を管理するための状態
     const { openIndexes, handleToggle } = openToggle();
     // 時間の修正
@@ -177,11 +138,6 @@ export default function SavingId() {
     return (
         <div className='overflow-hidden flex items-center justify-center w-full h-full'>
             <div className='contents_box overflow-auto flex flex-col gap-5 pb-5 w-full md:max-w-[64vmin] h-screen md:border-solid border-0 md:border-8 md:border-black md:rounded-2xl '>
-                <FarstView
-                    UserData={userDataAfter}
-                    category={1}
-                    fvImages={userAvatar}
-                />
 
                 <div className='flex flex-col gap-5'>
                     <ul className='px-4'>

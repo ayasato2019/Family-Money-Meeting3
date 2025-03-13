@@ -27,38 +27,34 @@ export default function Edit({
         >
             <Head title="Profile" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl space-y-6">
-                    <div className="">
+                <ul className="mx-auto max-w-7xl space-y-6">
+                    <li className="">
                         <p>ログアウトする？</p>
                         <PrimaryButton
                             onClick={handleLogout}
                         >ログアウト</PrimaryButton>
-                    </div>
-                    <div className="">
+                    </li>
+                    <li className="">
                         <UpdateUpdateAvatarForm
                             mustVerifyEmail={mustVerifyEmail}
                             status={status}
                             className="max-w-xl"
                         />
-                    </div>
-                    <div className="">
+                    </li>
+                    <li className="">
                         <UpdateProfileInformationForm
                             mustVerifyEmail={mustVerifyEmail}
                             status={status}
                             className="max-w-xl"
                         />
-                    </div>
-
-                    <div className="">
+                    </li>
+                    <li className="">
                         <UpdatePasswordForm className="max-w-xl" />
-                    </div>
-
-                    <div className="">
+                    </li>
+                    <li className="">
                         <DeleteUserForm className="max-w-xl" />
-                    </div>
-                </div>
-            </div>
+                    </li>
+                </ul>
         </AuthenticatedLayout>
     );
 }
