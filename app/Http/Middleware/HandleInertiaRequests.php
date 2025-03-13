@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Middleware;
 use App\Models\Avatar;
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class HandleInertiaRequests extends Middleware
@@ -32,19 +33,21 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        // ログイン済みかどうかを確認し、ユーザーの team_id からチーム名を取得
-        $team_name = Auth::check()
-        ? Team::where('id', Auth::user()->team_id)->first()?->team_name
-        : null;
-
-        // アバターの種類を取得
-        $user_avatar = Avatar::where('user_id', Auth::id())->value('type') ?? 0;
-
+        // ユーザー情報を取得
         $user = Auth::user();
-        // $user_id = $user->id;
 
+        // アバターの種類を取得（デフォルト 0）
+        $user_avatar = $user ? Avatar::where('user_id', $user->id)->value('type') ?? 0 : 0;
 
-        // アバターの値を変換
+        // チーム情報を取得
+        $team = $user ? Team::where('id', $user->team_id)->first() : null;
+        $team_id = $team?->id;
+        $team_name = $team?->team_name;
+
+        // チームメンバー取得（チームIDがある場合のみ）
+        $teamMembers = $team_id ? User::where('team_id', $team_id)->select('name', 'team_id')->get() : collect();
+
+        // アバターのマッピング
         $avatars = [
             0 => "default-avatar",
             1 => "avatar-1",
@@ -56,10 +59,11 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user,
             ],
             'user_avatar' => $user_avatar,
             'team_name' => $team_name,
+            'team_members' => $teamMembers,
         ];
     }
 }

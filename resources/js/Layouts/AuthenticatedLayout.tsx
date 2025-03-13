@@ -1,196 +1,164 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 import UserImage from '@/Components/UserAvatar';
 import { PageProps } from '@inertiajs/core';
 import { usePage } from '@inertiajs/react';
-
+import { Method } from '@inertiajs/core';
 
 interface AuthenticatedProps {
     header?: ReactNode;
 }
 
+interface TeamMember {
+    name: string;
+    id: number;
+}
+
+interface User {
+    id: number;
+    name: string;
+    email: string;
+    team_id: number | null;
+    teamMembers: TeamMember[];
+}
+
 interface CustomPageProps extends PageProps {
-    team_name?: string | null;
+    auth: {
+        user: User;
+    };
 }
 
 export default function Authenticated({
     header,
     children,
 }: PropsWithChildren<AuthenticatedProps>) {
-    const user = usePage().props.auth.user;
-    const { team_name } = usePage<CustomPageProps>().props;
+    const { auth } = usePage<CustomPageProps>().props;
+    const user = auth.user;
+    const team_id = user.team_id;
+    const teamMembers: TeamMember[] = user.teamMembers || [];
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    // ✅ 共通メニューリスト
+    const menuLinks = [
+        { label: 'プロフィール', route: 'profile.edit', className: '' },
+        ...(team_id ? [{ label: 'メンバーリスト', route: 'teams-member', className: '' }] : []),
+        { label: 'ステータス', route: 'status-create', className: '' },
+        { label: '新しいメンバー', route: 'teams-create', className: '' },
+        { label: 'ログアウト', route: 'logout', method: 'post' as Method, as: 'button', className: '!w-auto mx-auto border border-transparent rounded-md bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 ,md:hidden' }
+    ];
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
-                                >
-                                    {team_name}
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {/* コンポーネント化させる */}
-<UserImage />
-
-
-                                                {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
-                                            プロフィール
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            ログアウト
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState,
-                                    )
-                                }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-                            >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
-                    }
-                >
-                    <div className="space-y-1 pb-3 pt-2">
+        <div className="flex min-h-screen max-w-6xl mx-auto">
+            {/* Left Sidebar (デスクトップ用) */}
+            <div className="w-64 mt-10 p-4 hidden md:block" aria-hidden={!showingNavigationDropdown}>
+                <nav className="space-y-2">
+                    {menuLinks.map((link) => (
                         <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
+                            key={link.route}
+                            href={route(link.route)}
+                            method={link.method}
+                            as={link.as}
+                            className={link.className}
                         >
-                            マイページ
+                            {link.label}
                         </ResponsiveNavLink>
-                    </div>
+                    ))}
+                </nav>
+            </div>
 
-                    <div className="border-t border-gray-200 pb-1 pt-4">
-                        <div className="px-4">
-                            <div className="text-base font-medium text-gray-800">
-                                {user.name}
-                            </div>
-                            <div className="text-sm font-medium text-gray-500">
-                                {user.email}
-                            </div>
-                        </div>
+            {/* Middle Content */}
+            <div className="flex-1 max-w-2xl mx-auto">
+                <div className="relative mx-auto lg:px-8 bg-gradation rounded-b-3xl flex justify-between">
+                    <Link className='py-2 px-4 lg:px-0' href={route('dashboard')}>
+                        <ApplicationLogo className="block h-9 w-auto fill-current text-white" />
+                    </Link>
 
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
-                                プロフィール
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
-                            >
-                                ログアウト
-                            </ResponsiveNavLink>
+                    <Link
+                        className='py-2 px-4 hidden lg:flex'
+                        href={route('profile.edit')}>
+                        <div className="text-base font-medium text-gray-800 hidden lg:flex items-center gap-2">
+                            <UserImage />
                         </div>
+                    </Link>
+
+                    {/* ✅ ハンバーガーメニュー (SP, md 以下で表示) */}
+                    <div className="relative z-10 flex items-center md:hidden">
+                        <button
+                            onClick={() => setShowingNavigationDropdown(prev => !prev)}
+                            className="inline-flex items-center justify-center rounded-md p-4 lg:px-0 text-white transition duration-150 ease-in-out hover:text-white focus:text-white focus:outline-2 focus:online-primary-500"
+                            aria-expanded={showingNavigationDropdown}
+                            aria-controls="mobile-menu"
+                        >
+                            <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                <path
+                                    className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                />
+                                <path
+                                    className={showingNavigationDropdown ? 'inline-flex' : 'hidden'}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </button>
                     </div>
                 </div>
-            </nav>
 
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
+                <main className="p-4">
+                    <div className="flex space-x-4">{children}</div>
+                </main>
+            </div>
+
+            {/* ✅ SP, md 以下で表示されるナビゲーション */}
+            <div id="mobile-menu" className={`absolute top-0 pt-16 pb-4 left-0 w-full shadow-md transition-all duration-300 bg-primary-100 ${showingNavigationDropdown ? 'block' : 'hidden'} md:hidden`} aria-hidden={!showingNavigationDropdown}>
+                <div className="px-4 py-3">
+                    <div className="text-base text-white font-bold flex items-center gap-2">
+                        <UserImage />
+                        {user.name}
                     </div>
-                </header>
-            )}
-
-            <main>{children}</main>
+                </div>
+                <nav className="space-y-1">
+                    {menuLinks.map((link) => (
+                        <ResponsiveNavLink
+                            key={link.route}
+                            href={route(link.route)}
+                            method={link.method}
+                            as={link.as}
+                            className={link.className}
+                        >
+                            {link.label}
+                        </ResponsiveNavLink>
+                    ))}
+                </nav>
+            </div>
+             {/* Right Sidebar */}
+            <div className="w-80 mt-8 p-4 hidden lg:block">
+                <div className="bg-gray-50 rounded-xl p-4 mb-4">
+                    <div className="w-96 h-full ">
+                        {/* チームメンバー一覧 */}
+                        {teamMembers.length > 0 ? (
+                            <>
+                                <ul className='mb-5'>
+                                    {teamMembers.map((member) => (
+                                        <li key={member.id}>{member.name}</li>
+                                    ))}
+                                </ul>
+                            </>
+                        ) : (
+                            <p>現在メンバーはいません。</p>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

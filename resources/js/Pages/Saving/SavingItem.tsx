@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useForm } from "@inertiajs/react";
 import { Head, Link, usePage } from '@inertiajs/react';
 import TitleSavings from '@/Components/TitleSavings';
 import ConvertPrice from '@/Components/ConvertPrice';
@@ -44,6 +45,16 @@ export default function SavingId() {
     }
 
     const savingsArray = Object.values(savings);
+    const { data, setData, post, reset, processing } = useForm({
+        goal_id: "",
+        title: "",
+        amount: 0,
+        deadline: "",
+        level: 1,
+        images: "",
+        is_shared: 1, // Ensure this is a boolean
+        memo: "",
+    });
 
 
     // 履歴の確認
@@ -149,10 +160,19 @@ export default function SavingId() {
     const formattedDate = date.toISOString().split('T')[0];  // ISO形式で取り出して、Tの前（年月日）だけ取得
 
     //送信関係
+    const today = new Date().toISOString().split('T')[0];
+
+    // CSRF token for security
     const metaCsrfToken = document.querySelector("meta[name='csrf-token']") as HTMLMetaElement;
     const csrfToken = useRef<string>(metaCsrfToken.content);
 
-    const today = new Date().toISOString().split('T')[0];
+    // Handle form submission
+    const handleRegister = (e: React.FormEvent) => {
+        e.preventDefault();
+        post("/saving_registration", {
+            onSuccess: () => reset(),
+        });
+    };
 
     return (
         <div className='overflow-hidden flex items-center justify-center w-full h-full'>
