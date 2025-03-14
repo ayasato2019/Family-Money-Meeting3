@@ -67,6 +67,9 @@ export default function MainView() {
         game_life: 4,  // 仮の値
     };
 
+    const userAvatar = "";
+    const userBg = "";
+
     return (
         <div className='overflow-hidden h-full w-[calc(100%-2rem)] mx-auto'>
             <div className="bg-[''] bg-center w-full h-full">

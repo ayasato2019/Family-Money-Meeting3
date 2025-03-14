@@ -33,35 +33,38 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        // ユーザー情報を取得
+        // 現在ログインしているユーザー
         $user = Auth::user();
 
-        // アバターの種類を取得（デフォルト 0）
-        $user_avatar = $user ? Avatar::where('user_id', $user->id)->value('type') ?? 0 : 0;
+        // ユーザーのアバター情報を取得（デフォルト 0）
+        $avatar = Avatar::where('type', 0)->first();
+        $user_avatar = $avatar && $avatar->filename ? $avatar->filename : 'avatar_child_01.png';
+
 
         // チーム情報を取得
         $team = $user ? Team::where('id', $user->team_id)->first() : null;
         $team_id = $team?->id;
         $team_name = $team?->team_name;
 
-        // チームメンバー取得（チームIDがある場合のみ）
-        $teamMembers = $team_id ? User::where('team_id', $team_id)->select('name', 'team_id')->get() : collect();
-
-        // アバターのマッピング
-        $avatars = [
-            0 => "default-avatar",
-            1 => "avatar-1",
-            2 => "avatar-2",
-            3 => "avatar-3",
-        ];
-        $user_avatar = $avatars[$user_avatar] ?? "default-avatar";
+        // チームメンバーを取得（チームがある場合のみ）
+        $teamMembers = $team_id ? User::where('team_id', $team_id)->select('id', 'name', 'team_id')->get() : collect();
 
         return [
             ...parent::share($request),
+
+            // 認証情報
             'auth' => [
-                'user' => $user,
+                'user' => $user ? [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                ] : null,
             ],
-            'user_avatar' => $user_avatar,
+
+            // 認証ユーザーのアバターURL
+            'avatar' => $user_avatar,
+
+            // チーム情報
+            'team_id' => $team_id,
             'team_name' => $team_name,
             'team_members' => $teamMembers,
         ];

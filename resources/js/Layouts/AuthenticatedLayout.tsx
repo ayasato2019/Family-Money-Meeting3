@@ -52,6 +52,7 @@ export default function Authenticated({
         { label: 'ログアウト', route: 'logout', method: 'post' as Method, as: 'button', className: '!w-auto mx-auto border border-transparent rounded-md bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 md:hidden' }
     ];
 
+
     return (
         <div className="flex min-h-screen max-w-6xl mx-auto">
             {/* Left Sidebar (デスクトップ用) */}
@@ -86,7 +87,7 @@ export default function Authenticated({
                         </div>
                     </Link>
 
-                    {/* ✅ ハンバーガーメニュー (SP, md 以下で表示) */}
+                    {/*  ハンバーガーメニュー */}
                     <div className="relative z-10 flex items-center md:hidden">
                         <button
                             onClick={() => setShowingNavigationDropdown(prev => !prev)}
@@ -120,7 +121,7 @@ export default function Authenticated({
                 </main>
             </div>
 
-            {/* ✅ SP, md 以下で表示されるナビゲーション */}
+            {/*  SP, md 以下で表示されるナビゲーション */}
             <div id="mobile-menu" className={`absolute top-0 pt-16 pb-4 left-0 w-full shadow-md transition-all duration-300 bg-primary-100 ${showingNavigationDropdown ? 'block' : 'hidden'} md:hidden`} aria-hidden={!showingNavigationDropdown}>
                 <div className="px-4 py-3">
                     <div className="text-base text-white font-bold flex items-center gap-2">
