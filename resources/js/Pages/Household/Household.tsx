@@ -1,6 +1,7 @@
 "use client"
-
-import type React from "react"
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Head } from '@inertiajs/react';
+import FarstView from '@/Objects/FarstView';
 
 import { useState } from "react"
 import { useForm } from "@inertiajs/react"
@@ -73,7 +74,16 @@ export default function Household({
     }
 
     return (
-        <>
+        <AuthenticatedLayout
+            header={
+                <h2 className="text-xl font-semibold leading-tight text-gray-800">ホーム</h2>
+            }
+        >
+            <Head title="ホーム" />
+
+            <FarstView
+                category={6}
+            />
             <h1>家計簿</h1>
             <form onSubmit={handleRegister}>
                 <input type="date" value={data.date} onChange={(e) => setData("date", e.target.value)} required />
@@ -163,7 +173,7 @@ export default function Household({
                 onCommentClose={closehandleCommentModal}
                 listData={selectedHousehold}
             />
-        </>
+        </AuthenticatedLayout>
     )
 }
 

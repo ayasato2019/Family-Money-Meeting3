@@ -8,22 +8,17 @@ export default function UserAvatar({
     allowUpload?: boolean; // ファイルアップロードの有効/無効を制御
 }) {
     const page = usePage();
-    const user_avatar = typeof page.props.avatar === "string" ? page.props.avatar : "avatar_child_1.png";
+    const user_avatar = typeof page.props.avatar === "string" ? page.props.avatar : "avatar_child_1.webp";
 
-    const appUrl = import.meta.env.VITE_APP_URL?.replace(/\/$/, ""); // 最後のスラッシュを削除
+    const appUrl = import.meta.env.VITE_APP_URL?.replace(/\/$/, "");
     const imageUrl = `${appUrl}/build/assets/images/avatar/${user_avatar}`;
 
-    console.log("Image URL:", imageUrl); // デバッグ用
-    console.log("props.avatar:", page.props.avatar);
-    console.log("Final imageUrl:", imageUrl);
-
-
     return (
-        <div className="overflow-hidden h-8 w-8 rounded-full">
+        <div className="overflow-hidden h-8 w-8 rounded-full ">
             <img
                 src={imageUrl}
                 alt="Avatar"
-                className="h-full w-full object-cover object-top scale-[2]"
+                className="h-full w-full object-cover object-top scale-150"
             />
         </div>
     );

@@ -8,6 +8,7 @@ use App\Models\Avatar;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Status;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -38,8 +39,7 @@ class HandleInertiaRequests extends Middleware
 
         // ユーザーのアバター情報を取得（デフォルト 0）
         $avatar = Avatar::where('type', 0)->first();
-        $user_avatar = $avatar && $avatar->filename ? $avatar->filename : 'avatar_child_01.png';
-
+        $user_avatar = $avatar && $avatar->filename ? $avatar->filename : 'avatar_child_1.webp';
 
         // チーム情報を取得
         $team = $user ? Team::where('id', $user->team_id)->first() : null;
@@ -67,6 +67,9 @@ class HandleInertiaRequests extends Middleware
             'team_id' => $team_id,
             'team_name' => $team_name,
             'team_members' => $teamMembers,
+
+            // ステータス情報
+            'statuses' => $user ? Status::where('user_id', $user->id)->get()->keyBy('user_id') : [],
         ];
     }
 }

@@ -7,7 +7,6 @@ import UserImage from '@/Components/UserAvatar';
 import { PageProps } from '@inertiajs/core';
 import { usePage } from '@inertiajs/react';
 import { Method } from '@inertiajs/core';
-import MainView from '@/Objects/Mainview';
 
 interface AuthenticatedProps {
     header?: ReactNode;
@@ -43,7 +42,7 @@ export default function Authenticated({
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
-    // ✅ 共通メニューリスト
+    // 共通メニューリスト
     const menuLinks = [
         { label: 'プロフィール', route: 'profile.edit', className: '' },
         ...(team_id ? [{ label: 'メンバーリスト', route: 'teams-member', className: '' }] : []),
@@ -51,7 +50,6 @@ export default function Authenticated({
         { label: '新しいメンバー', route: 'teams-create', className: '' },
         { label: 'ログアウト', route: 'logout', method: 'post' as Method, as: 'button', className: '!w-auto mx-auto border border-transparent rounded-md bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 md:hidden' }
     ];
-
 
     return (
         <div className="flex min-h-screen max-w-6xl mx-auto">
@@ -116,7 +114,6 @@ export default function Authenticated({
                 </div>
 
                 <main>
-                    <MainView />
                     {children}
                 </main>
             </div>
