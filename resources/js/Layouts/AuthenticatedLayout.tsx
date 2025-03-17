@@ -44,10 +44,10 @@ export default function Authenticated({
 
     // 共通メニューリスト
     const menuLinks = [
-        { label: 'プロフィール', route: 'profile.edit', className: '' },
-        ...(team_id ? [{ label: 'メンバーリスト', route: 'teams-member', className: '' }] : []),
-        { label: 'ステータス', route: 'status-create', className: '' },
-        { label: '新しいメンバー', route: 'teams-create', className: '' },
+        { label: 'プロフィール', route: 'profile.edit', className: 'break-keep' },
+        ...(team_id ? [{ label: 'メンバーリスト', route: 'teams-member', className: 'break-keep' }] : []),
+        { label: 'ステータス', route: 'status-create', className: 'break-keep' },
+        { label: '新しいメンバー', route: 'teams-create', className: 'break-keep' },
         { label: 'ログアウト', route: 'logout', method: 'post' as Method, as: 'button', className: '!w-auto mx-auto border border-transparent rounded-md bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 md:hidden' }
     ];
 
@@ -62,7 +62,7 @@ export default function Authenticated({
                             href={route(link.route)}
                             method={link.method}
                             as={link.as}
-                            className={link.className}
+                            className={link.className }
                         >
                             {link.label}
                         </ResponsiveNavLink>
@@ -114,6 +114,13 @@ export default function Authenticated({
                 </div>
 
                 <main>
+                {header && (
+                <header className="bg-white">
+                    <div className="mx-auto max-w-3xl px-4 pt-2 sm:px-6 lg:px-8">
+                        {header}
+                    </div>
+                </header>
+            )}
                     {children}
                 </main>
             </div>
@@ -141,7 +148,7 @@ export default function Authenticated({
                 </nav>
             </div>
              {/* Right Sidebar */}
-            <div className="w-80 mt-8 p-4 hidden lg:block">
+            <div className="w-80 mt-16 p-4 hidden lg:block">
                 <div className="bg-gray-50 rounded-xl p-4 mb-4">
                     <div className="w-96 h-full ">
                         {/* チームメンバー一覧 */}

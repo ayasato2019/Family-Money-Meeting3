@@ -1,10 +1,12 @@
 import UserStatus from '@/Components/UserStatus';
 import { usePage } from '@inertiajs/react';
 import { PageProps } from '@inertiajs/core';
+import LineChart from "@/Objects/Chart";
 
 //タイプチェック
 import { UserTypes } from "@/types/tableUserData";
 import { StatusTypes } from '@/types/tableStatusData';
+import { ChartTypes } from '@/types/tableChartData';
 
 interface CustomPageProps extends PageProps {
     auth: {
@@ -20,8 +22,10 @@ interface CustomPageProps extends PageProps {
 
 export default function FarstViewAvatar({
     category,
+    chartData
 }: {
     category: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    chartData?: ChartTypes,
 }) {
 
     const { auth, avatar, statuses } = usePage<CustomPageProps>().props;
@@ -70,15 +74,15 @@ export default function FarstViewAvatar({
             case 1: // 'Saving' カテゴリの場合
                 return <img src={fvImages}  width={180} height={100} />;// className='w-full max-w-full h-full object-cover object-center'
             case 2: // 'Investments' カテゴリの場合
-                return <div>Investments関連の情報を表示</div>;
+                return <div>投資のグラフ</div>;
             case 3: // 'Need' カテゴリの場合
-                return <div>必要経費に関する情報を表示</div>;
+                return <div>必要のグラフ</div>;
             case 4: // 'Want' カテゴリの場合
-                return <div>無駄遣いに関する情報を表示</div>;
+                return <div>欲しいのグラフ</div>;
             case 5: // 'Donations' カテゴリの場合
-                return <div>寄付に関する情報を表示</div>;
+                return <div>寄付のグラフ</div>;
             case 6: // Household' カテゴリの場合
-                return <img src={fvImages}  width={2000} height={1000} />;
+                return <div>家計簿のグラフ</div>;
             default:
                 return null;
         }
