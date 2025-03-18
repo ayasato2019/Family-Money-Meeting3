@@ -1,9 +1,11 @@
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { useRef } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/ButtonPrimary';
 import TextInput from '@/Components/TextInput';
 import Checkbox from '@/Components/Checkbox';
+import FarstView from '@/Objects/FarstView';
 
 export default function FirstStep({
     saving,
@@ -44,10 +46,25 @@ export default function FirstStep({
         post('./status_registration');
     };
 
+    //ページタイトル
+    const pagetitle = "ステータス";
+
 
     return (
-        <div className="">
-            <h1>ステータス</h1>
+<AuthenticatedLayout
+    header={
+        <h1 className="flex gap-2 items-center justify-center text-lg font-semibold leading-tight text-[#374151]">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={18} height={18}><path d="M512 32c0 113.6-84.6 207.5-194.2 222c-7.1-53.4-30.6-101.6-65.3-139.3C290.8 46.3 364 0 448 0l32 0c17.7 0 32 14.3 32 32zM0 96C0 78.3 14.3 64 32 64l32 0c123.7 0 224 100.3 224 224l0 32 0 160c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-160C100.3 320 0 219.7 0 96z" fill="#374151"/></svg>
+            {pagetitle}
+        </h1>
+    }
+>
+    <Head title={pagetitle} />
+
+    <FarstView
+        category={0}
+    />
+        <div className="my-6">
             <form onSubmit={handleSubmit}>
                 <TextInput
                     id="csrf"
@@ -142,9 +159,7 @@ export default function FirstStep({
                     {/* <InputError message="生年月日を登録してください" className="mt-2" /> */}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="is_share" value="ステータスはヒミツにする" />
-
+                <div className="my-4 flex gap-2 items-center">
                     <Checkbox
                         id="is_share"
                         name="is_share"
@@ -152,12 +167,13 @@ export default function FirstStep({
                         autoComplete="is_share"
                         onChange={(e) => setData('is_share', e.target.checked ? 1 : 0)}
                     />
-
+                    <InputLabel htmlFor="is_share" value="ステータスはヒミツにする" />
                     {/* <InputError message="生年月日を登録してください" className="mt-2" /> */}
                 </div>
-                <PrimaryButton className="ms-4" disabled={processing}
+                <PrimaryButton className="mx-auto" disabled={processing}
                 >登録</PrimaryButton>
             </form>
         </div>
+</AuthenticatedLayout>
     )
 }

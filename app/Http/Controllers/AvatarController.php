@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAvatarRequest;
 use App\Http\Requests\UpdateAvatarRequest;
 use App\Models\Avatar;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
+use Inertia\Inertia;
 
 class AvatarController extends Controller
 {
@@ -51,9 +55,20 @@ class AvatarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAvatarRequest $request, Avatar $avatar)
+    public function update(UpdateAvatarRequest $request)
     {
-        //
+        $request->validate([
+            'avatar' => 'required|integer',
+        ]);
+
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->back()->withErrors(['error' => 'ユーザーが認証されていません。']);
+        }
+
+        $user->update(['avatar' => $request->avatar]);
+
+        return redirect()->route('dashboard')->with('success', 'アバターが更新されました。');
     }
 
     /**

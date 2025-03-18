@@ -29,7 +29,7 @@ export default function UserStatus({
     };
 
     return (
-        <div className='absolute top-2 left-2 w-[calc(100%-16px)] h-8 z-50 transition-all duration-300'>
+        <div className='absolute top-2 left-2 w-[calc(100%-16px)] h-8 z-10 transition-all duration-300'>
             <div className="relative w-full h-full">
                 <UserStatusName
                 donation={donation}

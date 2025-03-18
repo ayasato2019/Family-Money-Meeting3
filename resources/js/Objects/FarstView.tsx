@@ -70,9 +70,9 @@ export default function FarstViewAvatar({
     const ImagesFv = () => {
         switch (category) {
             case 0: // 'Home' カテゴリの場合
-                return <img src={fvImages} width={80} height={160} />;
+                return <div>ホーム画面</div>;
             case 1: // 'Saving' カテゴリの場合
-                return <img src={fvImages}  width={180} height={100} />;// className='w-full max-w-full h-full object-cover object-center'
+                return <div>貯金のグラフ</div>;// className='w-full max-w-full h-full object-cover object-center'
             case 2: // 'Investments' カテゴリの場合
                 return <div>投資のグラフ</div>;
             case 3: // 'Need' カテゴリの場合

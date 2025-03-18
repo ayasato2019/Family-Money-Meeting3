@@ -30,7 +30,7 @@
     @inertiaHead
 </head>
 
-<body class="font-sans antialiased overflow-x-clip">
+<body class="font-sans antialiased overflow-x-clip text-gray-700">
     @inertia
 </body>
 

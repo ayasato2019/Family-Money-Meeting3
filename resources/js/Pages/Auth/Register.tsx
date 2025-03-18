@@ -14,6 +14,7 @@ export default function Register() {
         password_confirmation: string,
         birth_date: string,
         role: number,
+        avatar: number,
         is_active: number,
     }> ({
         name: '',
@@ -22,6 +23,7 @@ export default function Register() {
         password_confirmation: '',
         birth_date: '',
         role: 10,
+        avatar: 1,
         is_active: 10,
     });
 
@@ -32,6 +34,9 @@ export default function Register() {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
+
+    const appUrl = import.meta.env.VITE_APP_URL?.replace(/\/$/, "");
+    const imageUrl = `${appUrl}/build/assets/images/avatar/`;
 
     return (
         <GuestLayout>
@@ -64,8 +69,123 @@ export default function Register() {
                         onChange={(e) => setData('name', e.target.value)}
                         required
                     />
-
                     <InputError message={errors.name} className="mt-2" />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="avatar" value="アバター" />
+                        <div className="mt-4 flex justify-center">
+                            <img
+                                key={selectedAvatar}
+                                src={`${imageUrl}avatar_${selectedAvatar}.webp`}
+                                alt="選択中のアバター"
+                                className="!w-24 !h-24 rounded-full border-2 border-gray-300 transition-all duration-200"
+                            />
+                        </div>
+
+                    <div className="mt-2 grid grid-cols-5 gap-1">
+                        <label key={1} className="cursor-pointer">
+                            <input
+                                type="radio"
+                                name="avatar"
+                                value={1}
+                                checked={Number(data.avatar) === 1}
+                                onChange={(e) => {
+                                    setData('avatar', Number(e.target.value));
+                                }}
+                                className="hidden"
+                            />
+                            <img
+                                key={1}
+                                src={`${imageUrl}avatar_1.webp`}
+                                alt={`アバター1`}
+                                className={`!w-16 !h-16 rounded-full border-2 transition ${
+                                    Number(data.avatar) === 1 ? 'border-blue-500 scale-110' : 'border-gray-300'
+                                }`}
+                                />
+                        </label>
+                        <label key={2} className="cursor-pointer">
+                            <input
+                                type="radio"
+                                name="avatar"
+                                value={2}
+                                checked={Number(data.avatar) === 2}
+                                onChange={(e) => {
+                                    setData('avatar', Number(e.target.value));
+                                }}
+                                className="hidden"
+                            />
+                            <img
+                                key={2}
+                                src={`${imageUrl}avatar_2.webp`}
+                                alt={`アバター2`}
+                                className={`!w-16 !h-16 rounded-full border-2 transition ${
+                                    Number(data.avatar) === 2 ? 'border-blue-500 scale-110' : 'border-gray-300'
+                                }`}
+                            />
+                        </label>
+                        <label key={3} className="cursor-pointer">
+                            <input
+                                type="radio"
+                                name="avatar"
+                                value={3}
+                                checked={Number(data.avatar) === 3}
+                                onChange={(e) => {
+                                    setData('avatar', Number(e.target.value));
+                                }}
+                                className="hidden"
+                            />
+                            <img
+                                key={3}
+                                src={`${imageUrl}avatar_3.webp`}
+                                alt={`アバター3`}
+                                className={`!w-16 !h-16 rounded-full border-2 transition ${
+                                    Number(data.avatar) === 2 ? 'border-blue-500 scale-110' : 'border-gray-300'
+                                }`}
+                            />
+                        </label>
+                        <label key={4} className="cursor-pointer">
+                            <input
+                                type="radio"
+                                name="avatar"
+                                value={3}
+                                checked={Number(data.avatar) === 3}
+                                onChange={(e) => {
+                                    setData('avatar', Number(e.target.value));
+                                }}
+                                className="hidden"
+                            />
+                            <img
+                                key={4}
+                                src={`${imageUrl}avatar_4.webp`}
+                                alt={`アバター4`}
+                                className={`!w-16 !h-16 rounded-full border-2 transition ${
+                                    Number(data.avatar) === 2 ? 'border-blue-500 scale-110' : 'border-gray-300'
+                                }`}
+                            />
+                        </label>
+                        <label key={5} className="cursor-pointer">
+                            <input
+                                type="radio"
+                                name="avatar"
+                                value={5}
+                                checked={Number(data.avatar) === 5}
+                                onChange={(e) => {
+                                    setData('avatar', Number(e.target.value));
+                                }}
+                                className="hidden"
+                            />
+                            <img
+                                key={5}
+                                src={`${imageUrl}avatar_5.webp`}
+                                alt={`アバター5`}
+                                className={`!w-16 !h-16 rounded-full border-2 transition ${
+                                    Number(data.avatar) === 2 ? 'border-blue-500 scale-110' : 'border-gray-300'
+                                }`}
+                            />
+                        </label>
+                    </div>
+                    <InputError message={errors.avatar} className="mt-2" />
                 </div>
 
                 <div className="mt-4">

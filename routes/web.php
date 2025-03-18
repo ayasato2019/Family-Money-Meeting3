@@ -10,6 +10,7 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\HouseholdController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -77,9 +78,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/saving', [SavingController::class, 'create'])->name('saving-create');
     Route::post('/saving_registration', [SavingController::class, 'store'])->name('saving-register');
     Route::get('/saving/list', [SavingController::class, 'index'])->name('saving-index');
+
     //目標の詳細ページ
     Route::get('/saving/saving-{id}', [SavingController::class, 'show'])->name('saving-show');
     Route::post('/saving/update', [HistoryController::class, 'store'])->name('saving-update');
+
+    //アバターアップデート
+    Route::patch('/avatarupdate', [AvatarController::class, 'update'])->name('avatar-update');
 
     //コメント
     // Route::post('/comments', [CommentController::class, 'store'])->name('comment');

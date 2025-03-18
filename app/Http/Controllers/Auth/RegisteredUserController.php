@@ -35,6 +35,7 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users|max:255',
             'birth_date' => 'date',
+            'avatar' => 'required|integer',
             'role' => 'required|integer',
             'is_active' => 'required|integer',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -46,17 +47,12 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'birth_date' => $request->birth_date,
+            'avatar' => $request->avatar,
             'role' => $request->role,
             'is_active' => $request->is_active,
             'password' => Hash::make($request->password),
         ]);
         event(new Registered($user));
-
-        $avatar = Avatar::create([
-            'user_id' => $user->id, // これを必ず追加
-            'type' => 0,
-        ]);
-        event(new Registered($avatar));
 
         Auth::login($user);
         return redirect(route('dashboard', absolute: false));
