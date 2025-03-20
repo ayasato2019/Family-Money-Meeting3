@@ -10,10 +10,7 @@ import { StatusTypes } from '@/types/tableStatusData';
 
 interface CustomPageProps extends PageProps {
     auth: {
-        user: UserTypes & {
-            role: string;
-            team_id: number;
-        };
+        user: UserTypes;
     };
     statuses?: Record<number, StatusTypes>;
     avatar?: string;
@@ -34,7 +31,7 @@ export default function FarstViewAvatar({
     if (!user) {
         return <div>ユーザー情報が取得できません</div>;
     }
-    const status = statuses?.[user.id] ?? null;
+    const status = statuses?.[user.id] ?? {} as StatusTypes;
 
     const categoryColor = {
         0: 'primary',
@@ -54,14 +51,9 @@ export default function FarstViewAvatar({
     const userDonation: number = status?.donation ?? 0;
 
     // ステータス
-    const userData: UserTypes = {
-        id: user.id,
-        name: user.name,
-        savings: userSaving,
-        investment: userInvestment,
-        need: userNeed,
-        want: userWant,
-        donation: userDonation,
+    const userData: UserTypes & StatusTypes = {
+        ...user,
+        ...status,
         game_level: 1,  // 仮の値
         game_life: 4,  // 仮の値
     };
@@ -118,7 +110,7 @@ export default function FarstViewAvatar({
                 useName={userData.name}
                 donation={userData.donation}
                 level={userData.game_level}
-                savings={userData.savings}
+                savings={userData.saving}
                 investment={userData.investment}
                 essential={userData.need}
                 extravagance={userData.want}

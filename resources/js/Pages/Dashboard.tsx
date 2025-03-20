@@ -6,7 +6,7 @@ import FarstView from '@/Objects/FarstView';
 
 // タイプチェック
 import { AuthPageProps } from '@/types/AuthPageProps'
-
+import { PageProps } from "@inertiajs/core";
 
 export default function Dashboard({
     role,

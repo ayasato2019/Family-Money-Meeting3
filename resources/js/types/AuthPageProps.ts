@@ -12,5 +12,6 @@ export interface AuthPageProps {
         };
     };
     statuses?: Record<number, StatusTypes>;
+    [key: string]: any;
 }
 

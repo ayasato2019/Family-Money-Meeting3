@@ -2,7 +2,8 @@ export type UserTypes = {
     id: number;
     name: string;
     role: number;
-    avatar: number | null;
+    email: string;
+    avatar: string;
     team_id: number | null;
 
     // savings: number; //貯金の合計金額
