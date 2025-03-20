@@ -20,11 +20,11 @@ export default function UserAvatar({
 
     // ユーザーのアバターを取得（null の場合デフォルトを設定）
     // const user_avatar = src ?? (props.auth?.user?.avatar ? `avatar_${props.auth.user.avatar}.webp` : "avatar_1.webp");
-    let user_avatar = "avatar_1.webp";
+    let user_avatar = "";
 
     // アバターを取得
     if (userId === null) {
-        user_avatar = props.auth?.user?.avatar ? `avatar_${props.auth.user.avatar}.webp` : "avatar_1.webp";
+        user_avatar = props.auth?.user?.avatar ? `avatar_${String(props.auth.user.avatar)}.webp` : "avatar_1.webp";
     } else {
         const member = teamMembers.find((m) => m.id === userId);
         if (member?.avatar) {

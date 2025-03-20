@@ -8,7 +8,7 @@ export interface AuthPageProps {
             // role: string;
             team_id: number;
             email: string;
-            // avatar: number | null; // ✅ avatar を追加
+            avatar: number | null;
         };
     };
     statuses?: Record<number, StatusTypes>;

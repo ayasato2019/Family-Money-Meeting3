@@ -11,7 +11,7 @@
     <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script>
 
     <!-- chart.js -->
-    <script src="path/to/chartjs/dist/chart.umd.js"></script>
+    {{-- <script src="path/to/chartjs/dist/chart.umd.js"></script> --}}
 
     <!-- CSRF -->
     <meta name="csrf-token" content="{{ csrf_token() }}">

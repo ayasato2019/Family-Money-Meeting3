@@ -89,20 +89,17 @@ Route::middleware('auth')->group(function () {
     //コメント
     // Route::post('/comments', [CommentController::class, 'store'])->name('comment');
 
-    // //貯金の登録
-    // Route::get('/saving-registration', [SavingController::class, 'create'])->name('saving-create');
-    // Route::post('/savin-confirm', [SavingController::class, 'store'])->name('saving-confirm');
     // //投資の登録
-    // Route::get('/investment-registration', [InvestmentController::class, 'create'])->name('investment-create');
+    Route::get('/investment-registration', [AvatarController::class, 'create'])->name('investment-index');
     // Route::post('/investment-confirm', [InvestmentController::class, 'store'])->name('investment-confirm');
     // //必要の登録
-    // Route::get('/expenses-registration', [ExpensesController::class, 'create'])->name('expenses-create');
+    Route::get('/expenses-registration', [AvatarController::class, 'create'])->name('expenses-index');
     // Route::post('/expenses-confirm', [ExpensesController::class, 'store'])->name('expenses-confirm');
     // //欲しいの登録
-    // Route::get('/extravagance-registration', [ExtravaganceController::class, 'create'])->name('extravagance-create');
+    Route::get('/extravagance-registration', [AvatarController::class, 'create'])->name('extravagance-index');
     // Route::post('/extravagance-confirm', [ExtravaganceController::class, 'store'])->name('extravagance-confirm');
     // //寄付の登録
-    // Route::get('/donation-registration', [DonationController::class, 'create'])->name('donation-create');
+    Route::get('/donation-registration', [AvatarController::class, 'create'])->name('donation-index');
     // Route::post('/donation-confirm', [DonationController::class, 'store'])->name('donation-confirm');
     // // ゲームページ
     // Route::get('/game-registration', [GameController::class, 'create'])->name('game-create');

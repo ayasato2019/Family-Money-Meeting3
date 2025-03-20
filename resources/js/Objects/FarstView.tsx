@@ -6,14 +6,13 @@ import LineChart from "@/Objects/Chart";
 //タイプチェック
 import { UserTypes } from "@/types/tableUserData";
 import { StatusTypes } from '@/types/tableStatusData';
-import { ChartTypes } from '@/types/tableChartData';
+// import { ChartTypes } from '@/types/tableChartData';
 
 interface CustomPageProps extends PageProps {
     auth: {
         user: UserTypes & {
             role: string;
             team_id: number;
-            email: string;
         };
     };
     statuses?: Record<number, StatusTypes>;
@@ -22,10 +21,10 @@ interface CustomPageProps extends PageProps {
 
 export default function FarstViewAvatar({
     category,
-    chartData
+    // chartData
 }: {
     category: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-    chartData?: ChartTypes,
+    // chartData?: ChartTypes,
 }) {
 
     const { auth, avatar, statuses } = usePage<CustomPageProps>().props;
