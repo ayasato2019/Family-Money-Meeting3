@@ -5,7 +5,7 @@ import { StatusTypes } from '@/types/tableStatusData';
 export interface AuthPageProps {
     auth: {
         user: UserTypes & {
-            // role: string;
+            role: number;
             team_id: number;
             email: string;
             avatar: number | null;

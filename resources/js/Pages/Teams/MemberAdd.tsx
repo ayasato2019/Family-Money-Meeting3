@@ -7,36 +7,13 @@ import Checkbox from '@/Components/Checkbox';
 import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { FormEventHandler } from 'react';
-import { PageProps } from '@inertiajs/core';
+import { AuthPageProps } from '@/types/AuthPageProps';
 
 // 🟢 TeamMember インターフェース
 interface TeamMember {
     name: string;
     id: number;
     role: number;
-}
-
-// 🟢 User インターフェース
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    role: number;
-    avatar: string | null;
-    team_id: number | null;
-    team_members: TeamMember[];
-}
-
-// 🟢 CustomPageProps に `auth.user: User | null` を明示
-interface CustomPageProps extends PageProps {
-    auth: {
-        user: User | null;
-    };
-    authUser: User | null;
-    role: number;
-    team_id: number | null;
-    team_name: string | null;
-    team_members: TeamMember[];
 }
 
 export default function MemberAdd({
@@ -46,15 +23,11 @@ export default function MemberAdd({
     loginChildUrl: string;
     qrCodeBase64: string;
 }) {
-    const { auth, role, team_id, team_name, team_members } = usePage<CustomPageProps>().props;
+    const { auth, team_id, team_members } = usePage<AuthPageProps>().props;
     const user = auth?.user || null;
     const safeTeamId: number = team_id ?? 0;
     const teamMembers: TeamMember[] = (team_members ?? []) as TeamMember[];
-
-    console.log("取得した role:", role);
-    console.log("取得した user.role:", user?.role);
-    console.log("取得した team_id:", safeTeamId);
-    console.log("取得した team_members:", teamMembers);
+    console.log("🚀 user の全データ:", user);
 
     // useFormフックを使ってフォームデータを管理
     const { data, setData, post, processing, errors, reset } = useForm<{
