@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { LiatDataTypes } from "@/types/genericList";
-import CheckBox from "@/Components/";
+import CheckBox from "@/Components/Checkbox/Checkbox";
 
 interface Props {
 data: LiatDataTypes[];
 onEdit: (item: LiatDataTypes) => void;
 onDelete: (id: number) => void;
+onToggleAchieve: (id: number, newValue: boolean) => void;
 userId: number;
 teamId: number;
 }
@@ -14,9 +15,11 @@ export default function LiatDataList({
 data,
 onEdit,
 onDelete,
+onToggleAchieve,
 userId,
 teamId,
 }: Props) {
+
 const current = new Date();
 const thisMonthStr = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}`;
 
@@ -24,6 +27,13 @@ const months = [...new Set(data.map((item) => item.date.slice(0, 7)))].sort((a, 
 const thisMonthIndex = months.findIndex((m) => m === thisMonthStr);
 const [touchStart, setTouchStart] = useState<number | null>(null);
 const [currentMonthIndex, setCurrentMonthIndex] = useState(thisMonthIndex >= 0 ? thisMonthIndex : 0);
+
+const [achievedIds, setAchievedIds] = useState<number[]>([]);
+const toggleAchieve = (id: number) => {
+    setAchievedIds((prev) =>
+        prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+};
 
 const groupedData = data.reduce((acc: Record<string, LiatDataTypes[]>, item: LiatDataTypes) => {
     const month = item.date.slice(0, 7);
@@ -68,20 +78,29 @@ return (
             (!item.user_id && item.team_id === teamId) ||
             (item.is_share && item.team_id === teamId)
             )
-            .map((item: LiatDataTypes) => (
-            <li key={item.id} className="flex items-start justify-start gap-4 border-b pb-2">
+            .map((item) => {
+                const isAchieved = achievedIds.includes(item.id);
+                return (
+                <li key={item.id} className="flex items-start justify-start gap-4 border-b pb-4">
                 <ul className="flex flex-col gap-1 w-full">
-                <li className="flex gap-4 w-full">
+                <li className="flex flex-col gap-1 w-full">
+                    <div className="flex items-center gap-4 w-full">
+                    <CheckBox
+                        name="achieve"
+                        checked={item.achieve}
+                        onChange={(e) => onToggleAchieve(item.id, e.target.checked)}
+                    />
                     <time>{item.date}</time>
                     <p className="flex-auto">{item.title}</p>
                     <p>{item.price}円</p>
-                </li>
+                    </div>
                 {item.memo && item.memo.trim() !== "" && (
-                    <li>
+                    <p className="pl-8">
                     <span className="text-white font-bold bg-gray-400 text-xs py-1 px-2 rounded-2xl mr-2">メモ</span>
                     {item.memo}
-                    </li>
+                    </p>
                 )}
+                </li>
                 </ul>
                 <button className="w-6 h-6" onClick={() => onEdit(item)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512" width={16} height={16}>
@@ -89,7 +108,8 @@ return (
                 </svg>
                 </button>
             </li>
-            ))}
+            );
+            })}
         </ul>
     </div>
     </div>

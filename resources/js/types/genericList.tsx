@@ -1,5 +1,3 @@
-// @/types/genericList.ts
-
 export interface LiatDataTypes {
     id: number;
     team_id: number;
@@ -7,9 +5,10 @@ export interface LiatDataTypes {
     title: string;
     price: number;
     date: string;
+    achieve: boolean;
     is_share: boolean;
     images?: string | null;
     memo?: string | null;
     comment_id?: number | null;
     created_at?: string
-  }
+}

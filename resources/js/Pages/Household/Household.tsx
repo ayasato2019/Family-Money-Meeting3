@@ -45,6 +45,7 @@ export default function Household({
         title: "",
         price: 0,
         date: "",
+        achieve: 0,
         is_share: 1,
         images: "",
         memo: "",
@@ -80,6 +81,10 @@ export default function Household({
         setEditingHousehold(null)
     }
 
+    const handleToggleAchieve = (newValue: boolean) => {
+        setData("achieve", newValue ? 1 : 0);
+    };
+
     //コメント
     const [isCommentModalOpen, setIsCommentModalOpen] = useState(false)
     const [selectedHousehold, setSelectedHousehold] = useState<commentTypes | null>(null)
@@ -92,32 +97,6 @@ export default function Household({
         setIsCommentModalOpen(false)
         setSelectedHousehold(null)
     }
-
-    // 今月の年月 "YYYY-MM" を取得
-    const current = new Date();
-    const thisMonthStr = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}`;
-
-    // months を作成
-    const months = [...new Set(
-        household.map((item) => item.date.slice(0, 7))
-    )]
-    // .filter((m) => getLastThreeMonths().includes(m))
-    .sort((a, b) => a.localeCompare(b));
-
-    // 今月のインデックスを取得
-    const thisMonthIndex = months.findIndex((m) => m === thisMonthStr);
-    const [touchStart, setTouchStart] = useState<number | null>(null);
-
-    // state
-    const [currentMonthIndex, setCurrentMonthIndex] = useState(thisMonthIndex >= 0 ? thisMonthIndex : 0);
-
-    // household を月ごとに分類
-    const groupedHousehold = household.reduce((acc, item) => {
-        const month = item.date.slice(0, 7); // "YYYY-MM" 形式で取得
-        if (!acc[month]) acc[month] = [];
-        acc[month].push(item);
-        return acc;
-    }, {} as Record<string, typeof household>);
 
     return (
     <AuthenticatedLayout
@@ -190,11 +169,12 @@ export default function Household({
         </form>
 
         <LiatDataList
-        data={household}
-        userId={user.id}
-        teamId={user.team_id}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
+            data={household}
+            onChange={(e) => onToggleAchieve(item.id, e.target.checked)}
+            userId={user.id}
+            teamId={user.team_id}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
         />
 
         <EditHouseholdModal

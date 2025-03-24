@@ -5,6 +5,7 @@ export interface HouseholdTypes {
     title: string;
     price: number;
     date: string;
+    achieve: boolean;
     is_share: boolean;
     images?: string | null;
     memo?: string | null;
