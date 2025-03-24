@@ -12,8 +12,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Crypt;
+
 use Endroid\QrCode\QrCode;
+use App\Services\QrService;
+use Illuminate\Support\Facades\Crypt;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
@@ -22,34 +24,10 @@ use Endroid\QrCode\Color\Color;
 
 class TeamController extends Controller
 {
-    /**
-     * ヘッダーに掲載するチーム＆アバター情報
-     */
+    // use TeamViewProps;
+
     public function index()
     {
-        // // ユーザーの team_id からチーム名を取得
-        // $team_name = Team::where('id', Auth::user()->team_id)->first()?->team_name ?? null;
-
-        // // アバターの種類を取得
-        // $user_avatar = Avatar::where('user_id', Auth::id())->value('type') ?? 0;
-
-        // $user = Auth::user();
-        // $user_id = $user->id;
-
-
-        // // アバターの値を変換
-        // $avatars = [
-        //     0 => "default-avatar",
-        //     1 => "avatar-1",
-        //     2 => "avatar-2",
-        //     3 => "avatar-3",
-        // ];
-        // $user_avatar = $avatars[$user_avatar] ?? "default-avatar";
-
-        // return Inertia::render('Dashboard', [
-        //     'team_name' => $team_name,
-        //     'user_avatar' => $user_avatar,
-        // ]);
     }
 
 
@@ -70,21 +48,56 @@ class TeamController extends Controller
             $team_name = $team->team_name;
         } else {
             // チームが存在しない場合、新規作成する
-            $team_name = null; // チーム名はnullまたは空で渡す
+            $team_name = null;
         }
+
+        /* QRコード生成 */
+        $user = Auth::user();
+        $teamMembers = User::select('name', 'team_id')
+        ->where('team_id', $user->team_id)
+        ->get();
+        $team_id = $user->team_id;
+        $role = $user->role;
+
+        // URLを作成する
+        $appUrl = config('app.url');
+        $encryptedTeamId = Crypt::encryptString($team_id);
+        $loginChildUrl = $appUrl . '/login-child?team_id=' . urlencode($encryptedTeamId);
+
+        // QRコードを生成
+        $qrCode = QrCode::create($loginChildUrl)
+            ->setEncoding(new Encoding('UTF-8'))
+            ->setErrorCorrectionLevel(ErrorCorrectionLevel::High)
+            ->setSize(200)
+            ->setMargin(10)
+            ->setRoundBlockSizeMode(RoundBlockSizeMode::Margin)
+            ->setForegroundColor(new Color(0, 0, 0))
+            ->setBackgroundColor(new Color(255, 255, 255));
+
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
+
+        // Base64 エンコード
+        $qrCodeBase64 = 'data:' . $result->getMimeType() . ';base64,' . base64_encode($result->getString());
+
 
         return Inertia::render('Teams/CreateTeams', compact(
             'user_id',
             'role',
             'team_name',
+            'teamMembers',
+            'team_id',
+            'role',
+            'loginChildUrl',
+            'qrCodeBase64'
         ));
     }
 
-    /**
-     * チーム名の登録・修正
-     */
     public function store(StoreTeamRequest $request)
     {
+        /**
+         * チーム名の登録・修正
+         */
         $validated = $request->validate([
             'team_name' => 'required|string|max:255',
         ]);
@@ -120,42 +133,7 @@ class TeamController extends Controller
      */
     public function add()
     {
-        $user = Auth::user();
-        $teamMembers = User::select('name', 'team_id')
-        ->where('team_id', $user->team_id)
-        ->get();
-        $team_id = $user->team_id;
-        $role = $user->role;
-
-        // URLを作成する
-        $appUrl = config('app.url');
-        $encryptedTeamId = Crypt::encryptString($team_id);
-        $loginChildUrl = $appUrl . '/login-child?team_id=' . urlencode($encryptedTeamId);
-
-        // QRコードを生成
-        $qrCode = QrCode::create($loginChildUrl)
-            ->setEncoding(new Encoding('UTF-8'))
-            ->setErrorCorrectionLevel(ErrorCorrectionLevel::High)
-            ->setSize(200)
-            ->setMargin(10)
-            ->setRoundBlockSizeMode(RoundBlockSizeMode::Margin)
-            ->setForegroundColor(new Color(0, 0, 0))
-            ->setBackgroundColor(new Color(255, 255, 255));
-
-        $writer = new PngWriter();
-        $result = $writer->write($qrCode);
-
-        // Base64 エンコード
-        $qrCodeBase64 = 'data:' . $result->getMimeType() . ';base64,' . base64_encode($result->getString());
-
-
-        return Inertia::render('Teams/MemberAdd', compact(
-            'teamMembers',
-            'team_id',
-            'role',
-            'loginChildUrl',
-            'qrCodeBase64'
-        ));
+        //
     }
 
     /**

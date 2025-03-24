@@ -3,13 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import FarstView from '@/Objects/FarstView';
 
-import { Swiper as SwiperType } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import { Navigation, Pagination, Thumbs, Controller } from 'swiper/modules';
-
+import { usePage } from '@inertiajs/react';
 import { useState } from "react"
 import { useForm } from "@inertiajs/react"
 import InputLabel from "@/Components/InputLabel"
@@ -18,11 +12,20 @@ import Checkbox from "@/Components/Checkbox"
 import TextInput from "@/Components/TextInput"
 import EditHouseholdModal from "@/Objects/ModalEditer"
 import CommentModal from "@/Objects/ModalComments"
-import { HouseholdTypes } from "@/types/Household"
-import { commentTypes } from "@/types/Comment"
 import InputText from "@/Components/Input/InputText"
 import InputDate from "@/Components/Input/InputDate"
 import InputPrice from "@/Components/Input/InputPrice"
+
+import { HouseholdTypes } from "@/types/tableHouseholdData"
+import { commentTypes } from "@/types/Comment"
+import { UserTypes } from '@/types/tableUserData';
+
+// 型定義
+interface PageProps {
+    auth: {
+        user: UserTypes & { role: number; team_id: number };
+    };
+}
 
 export default function Household({
     household,
@@ -31,6 +34,11 @@ export default function Household({
     household: HouseholdTypes[]
     role: number
 }) {
+    // 型を明示的にキャストして取得
+    const { auth } = usePage().props as unknown as PageProps;
+    const user = auth.user;
+    const user_id = auth.user.id;
+
     const { data, setData, post, reset, processing } = useForm({
         title: "",
         price: 0,
@@ -83,31 +91,23 @@ export default function Household({
         setSelectedHousehold(null)
     }
 
-    // 「月ごと」に分類
-    // Swiper インスタンスを管理する state
-    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
-    const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
+    // 今月の年月 "YYYY-MM" を取得
+    const current = new Date();
+    const thisMonthStr = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}`;
 
-    // 📌 現在の年月と過去2か月を取得
-    const getLastThreeMonths = () => {
-        const today = new Date();
-        const months = [];
-        for (let i = 0; i < 3; i++) {
-            const year = today.getFullYear();
-            const month = today.getMonth() + 1 - i; // 現在の月から1つずつ引く
-            const adjustedYear = month <= 0 ? year - 1 : year; // 年を補正
-            const adjustedMonth = month <= 0 ? 12 + month : month; // 月を補正
-            months.push(`${adjustedYear}-${String(adjustedMonth).padStart(2, "0")}`);
-        }
-        return months;
-    };
+    // months を作成
+    const months = [...new Set(
+        household.map((item) => item.date.slice(0, 7))
+    )]
+    // .filter((m) => getLastThreeMonths().includes(m))
+    .sort((a, b) => a.localeCompare(b));
 
-    // household のデータから取得した月と結合
-    const months = [...new Set([
-        ...getLastThreeMonths(),
-        ...household.map((item) => item.date.slice(0, 7)),
-    ])]
-    .sort((a, b) => a.localeCompare(b)); // 昇順にソート
+    // 今月のインデックスを取得
+    const thisMonthIndex = months.findIndex((m) => m === thisMonthStr);
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+
+    // state
+    const [currentMonthIndex, setCurrentMonthIndex] = useState(thisMonthIndex >= 0 ? thisMonthIndex : 0);
 
     // household を月ごとに分類
     const groupedHousehold = household.reduce((acc, item) => {
@@ -116,6 +116,7 @@ export default function Household({
         acc[month].push(item);
         return acc;
     }, {} as Record<string, typeof household>);
+
     return (
         <AuthenticatedLayout
             header={
@@ -161,15 +162,6 @@ export default function Household({
                         required
                         />
                 </li>
-                {/* <li className="flex flex-col gap-2 w-full my-2">
-                    <InputLabel htmlFor="images" value="レシート登録" />
-                    <input
-                        name="images"
-                        type="file"
-                        value={data.images}
-                        onChange={(e) => setData("images", e.target.value)}
-                    />
-                </li> */}
                 <li>
                     <InputLabel htmlFor="memo" value="メモ" />
                     <TextInput
@@ -195,85 +187,78 @@ export default function Household({
                 </PrimaryButton>
             </form>
 
-            <div className="w-full mt-10">
-                <Swiper
-                    onSwiper={setThumbsSwiper}
-                    slidesPerView={3}
-                    spaceBetween={10}
-                    watchSlidesProgress
-                    controller={{ control: mainSwiper }}
-                    modules={[Thumbs, Controller]}
+            {/* Household：3ヶ月分の横スワイプ表示 */}
+            <div className="w-full my-10">
+            <div className="flex items-center justify-between mb-4 py-2 border-b border-t border-gray-200">
+                <button onClick={() => setCurrentMonthIndex((prev) => Math.max(prev - 1, 0))} disabled={currentMonthIndex === 0}>
+                ←
+                </button>
+                <span className="font-medium text-lg">{months[currentMonthIndex]}</span>
+                <button
+                onClick={() =>
+                    setCurrentMonthIndex((prev) => Math.min(prev + 1, months.length - 1))
+                }
+                disabled={currentMonthIndex === months.length - 1}
                 >
-                    {months.map((month) => (
-                        <SwiperSlide key={month} className="border-t border-b text-center p-2 cursor-pointer hover:bg-blue-100">
-                            {month}
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+                →
+                </button>
+            </div>
 
-                <Swiper
-                    onSwiper={setMainSwiper}
-                    spaceBetween={50}
-                    slidesPerView={1}
-                    navigation={{
-                        nextEl: '.button-next',
-                        prevEl: '.button-prev',
-                    }}
-                    controller={{ control: thumbsSwiper }}
-                    modules={[Navigation, Pagination, Thumbs, Controller]}
-                >
-                {household.filter((item) => item.is_share || role === 10).length > 0 ? (
-                Object.entries(groupedHousehold).map(([month, items]) => {
-                    // **各月の household データをフィルタリング**
-                    const filteredItems = items.filter((item) => item.is_share || role === 10);
+            <div
+                className="transition-transform duration-300 ease-in-out"
+                onTouchStart={(e) => setTouchStart(e.touches[0].clientX)}
+                onTouchEnd={(e) => {
+                if (touchStart === null) return;
+                const touchEnd = e.changedTouches[0].clientX;
+                const diff = touchStart - touchEnd;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) setCurrentMonthIndex((i) => Math.min(i + 1, months.length - 1));
+                    else setCurrentMonthIndex((i) => Math.max(i - 1, 0));
+                }
+                setTouchStart(null);
+                }}
+            >
+                <ul className={`flex flex-col gap-4 `}>
+                {/* ${!recentThreeMonths.includes(months[currentMonthIndex]) ? "hidden" : ""} */}
+                {groupedHousehold[months[currentMonthIndex]]
+                    ?.filter(
+                    (item) =>
+                        // item.user_id === user.id || (item.is_share && item.team_id === user.team_id)
+                        item.user_id === user.id || (!item.user_id && item.team_id === user.team_id) || (item.is_share && item.team_id === user.team_id)
 
-                    // **この月に表示すべきデータがない場合はスキップ**
-                    if (filteredItems.length === 0) return null;
-                    return (
-                        <SwiperSlide key={month} className="pb-10">
-                            {filteredItems.map((item) => (
-                            <li key={item.id} className="mt-6 flex items-start justify-start gap-4">
-                                    <button className="w-6 h-6" onClick={() => handleDelete(item.id)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={16} height={16}>
-                                            <path
-                                                fill="#dd5e5e"
-                                                d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"
-                                            />
-                                        </svg>
-                                    </button>
-                                    <ul className="flex flex-col gap-1 w-full">
-                                        <li className="flex gap-4 w-full"><time>{item.date}</time><p className='flex-auto'>{item.title}</p><p>{item.price}円</p></li>
-                                        {item.memo && typeof item.memo === "string" && item.memo.trim() !== "" && (
-                                            <li>
-                                                <span className='text-white font-bold bg-gray-400 text-xs py-1 px-2 rounded-2xl mr-2'>メモ</span>
-                                                {item.memo}
-                                            </li>
-                                        )}
-                                    </ul>
-                                    <button className="w-6 h-6" onClick={() => handleEdit(item)}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512" width={16} height={16}><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
-                                    </button>
-
-                                {/* <button
-                                    className="w-6 h-6"
-                                    onClick={() => handleComment(item)}
-                                    ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c0 0 0 0 0 0s0 0 0 0s0 0 0 0c0 0 0 0 0 0l.3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z" /></svg></button> */}
-
+                    )
+                    .map((item) => (
+                    <li key={item.id} className="flex items-start justify-start gap-4 border-b pb-2">
+                        <ul className="flex flex-col gap-1 w-full">
+                        <li className="flex gap-4 w-full">
+                            <time>{item.date}</time>
+                            <p className="flex-auto">{item.title}</p>
+                            <p>{item.price}円</p>
+                        </li>
+                        {item.memo && item.memo.trim() !== "" && (
+                            <li>
+                            <span className="text-white font-bold bg-gray-400 text-xs py-1 px-2 rounded-2xl mr-2">メモ</span>
+                            {item.memo}
                             </li>
+                        )}
+                        </ul>
+                        <button className="w-6 h-6" onClick={() => handleEdit(item)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512" width={16} height={16}>
+                            <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                        </svg>
+                        </button>
+                    </li>
                     ))}
-                </SwiperSlide>
-            );
-        })
-    ) : (
-        <p>共有されていないデータはありません</p>
-    )}
-    </Swiper>
-    </div>
+                </ul>
+            </div>
+        </div>
+
 
         <EditHouseholdModal
             isOpen={isModalOpen}
             onClose={closeModal}
             listData={editingHousehold}
+            isDelete={ handleDelete}
         />
 
         <CommentModal
@@ -284,4 +269,3 @@ export default function Household({
     </AuthenticatedLayout>
     )
 }
-

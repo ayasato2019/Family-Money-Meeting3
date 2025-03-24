@@ -9,7 +9,7 @@ import { StatusTypes } from '@/types/tableStatusData';
 import { SavingTypes } from '@/types/tableSavingData';
 import { UserTypes } from '@/types/tableUserData';
 
-// ✅ 型定義
+// 型定義
 interface PageProps {
     auth: {
         user: UserTypes & { role: number; team_id: number };
@@ -19,13 +19,13 @@ interface PageProps {
 }
 
 export default function SavingList() {
-    // ✅ 型を明示的にキャストして取得
+    // 型を明示的にキャストして取得
     const { auth, statuses, savings } = usePage().props as unknown as PageProps;
 
-    // ✅ ユーザー情報取得
+    // ユーザー情報取得
     const user = auth.user;
 
-    // ✅ ステータス取得 (存在しない場合はエラー表示)
+    // ステータス取得 (存在しない場合はエラー表示)
     const status = statuses?.[user.id] ?? null;
     if (!status || !savings) {
         return (

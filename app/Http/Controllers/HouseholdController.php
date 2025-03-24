@@ -28,13 +28,11 @@ class HouseholdController extends Controller
         // チームの家計簿を取得
         $team_id = Auth::user()->team_id;
         $role = Auth::user()->role;
-
         $household = Household::where('team_id', $team_id)->get();
 
         return Inertia::render('Household/Household', [
             'household' => $household,
             'role' => $role,
-            // 'team_id' => $team_id, // ここで明示的に渡す
         ]);
     }
 
@@ -43,8 +41,12 @@ class HouseholdController extends Controller
      */
     public function store(StoreHouseholdRequest $request)
     {
+        // ユーザーIDを取得
+        $user_id = Auth::id();
+
         // 現在のユーザーのチームIDを取得
         $team_id = Auth::user()->team_id;
+
         // リクエストにteam_idを追加
         $request->merge(['team_id' => $team_id]);
 
@@ -66,6 +68,7 @@ class HouseholdController extends Controller
         // 新規データを作成
         $household = Household::create([
             'team_id' => $team_id,
+            'user_id' => $user_id,
             'title' => $validated['title'],
             'price' => $validated['price'],
             'date' => $validated['date'],

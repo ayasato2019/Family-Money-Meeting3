@@ -17,12 +17,14 @@ interface EditListdModalProps {
         images?: string | null;
         memo?: string | null;
     } | null;
+    isDelete?: (id: number) => void;
 }
 
 export default function EditListdModal({
     isOpen,
     onClose,
     listData,
+    isDelete,
 }: EditListdModalProps) {
     const { data, setData, post, processing } = useForm({
         title: listData?.title || "",
@@ -90,9 +92,20 @@ export default function EditListdModal({
                         />
                     </div>
                 </div>
-                <div className="mt-4 flex gap-4 justify-end">
+                <div className="mt-4 mx-auto w-full flex gap-4 justify-center items-start">
+                {isDelete && listData && (
                     <button
-                        className="bg-red-500 text-white px-4 py-2 rounded mx-auto mb-5"
+                    onClick={() => {
+                        isDelete(listData.id);
+                        onClose();
+                    }}
+                        className="border border-red-500 text-red-500 font-bold mb-5 px-4 py-2 rounded"
+                    >
+                        削除
+                    </button>
+                )}
+                    <button
+                        className="bg-red-500 text-white px-4 py-2 rounded mb-5"
                         type="submit"
                         disabled={processing}
                     >

@@ -1,6 +1,7 @@
 export interface HouseholdTypes {
     id: number;
-    team_id?: number;
+    team_id: number;
+    user_id: number;
     title: string;
     price: number;
     date: string;

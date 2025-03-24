@@ -48,7 +48,7 @@ export default function Authenticated({
     ];
 
     return (
-        <div className="flex min-h-screen max-w-6xl mx-auto">
+        <div className="flex min-h-screen max-w-6xl mx-auto md:mr-5 lg:mr-0 ">
             {/* Left Sidebar (デスクトップ用) */}
             <div className="w-64 mt-16 p-4 hidden md:block" aria-hidden={!showingNavigationDropdown}>
                 <nav className="space-y-2">

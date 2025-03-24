@@ -1,10 +1,10 @@
 import { useRef } from 'react';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import InputError from '@/Components/InputError';
+import { Head, useForm } from '@inertiajs/react';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import MenberAddContents from '@/Pages/Teams/TeamEdit'
 
 export default function TeamsRegister({user_id, role, team_name}:{
     user_id: number;
@@ -41,6 +41,7 @@ export default function TeamsRegister({user_id, role, team_name}:{
     }
 >
     <Head title={pagetitle} />
+        <MenberAddContents />
         {role === 10 ? (
             <form onSubmit={handleSubmit}>
                 <TextInput
@@ -85,12 +86,7 @@ export default function TeamsRegister({user_id, role, team_name}:{
                     >登録</PrimaryButton>
                 </div>
             </form>
-) : (
-    <Link
-    href={route('login')}
-    className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-    >チームページへ</Link>
-)}
+) : ('')}
         </AuthenticatedLayout>
 </>
     );

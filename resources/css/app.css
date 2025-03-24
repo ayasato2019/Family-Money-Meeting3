@@ -103,3 +103,34 @@ reach-portal,
 .button-prev {
 
 }
+
+.accordion {
+    @apply mb-2;
+}
+
+
+.accordion summary {
+    @apply flex justify-between items-center relative py-4 text-gray-600 font-semibold cursor-pointer;
+}
+
+.accordion summary::-webkit-details-marker {
+    display: none;
+}
+
+.accordion summary::after {
+    content: '';
+    @apply w-2 h-2 ml-3 border-b-2 border-r-2 border-gray-400 transition-transform;
+    transform: translateY(-25%) rotate(45deg);
+}
+
+.accordion[open] summary::after {
+    transform: rotate(225deg);
+}
+
+.accordion p {
+    @apply -translate-y-2 opacity-0 m-0 px-8 pt-1 pb-6 transition-all duration-500;
+}
+
+.accordion[open] p {
+    @apply translate-y-0 opacity-100;
+}
