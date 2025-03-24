@@ -73,6 +73,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/household_edit/{id}', function () {
         return redirect('/household');
     });
+    Route::patch('/household/achieve/{id}', [HouseholdController::class, 'updateAchieve'])
+    ->name('household-achieve');
+
 
     //貯金
     Route::get('/saving', [SavingController::class, 'create'])->name('saving-create');

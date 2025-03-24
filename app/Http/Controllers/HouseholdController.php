@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\Team;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 
 class HouseholdController extends Controller
 {
@@ -148,12 +149,20 @@ class HouseholdController extends Controller
         return redirect()->route('houseold-create');
     }
 
+    public function updateAchieve(Request $request, $id)
+    {
+        $household = Household::findOrFail($id);
+        $household->achieve = $request->input('achieve'); // 0 or 1
+        $household->save();
+
+        return redirect()->back();
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        // IDで家計簿データを取得し、現在のユーザーのチームに紐づくデータのみ対象にする
         Household::destroy($id);
         return back();
     }

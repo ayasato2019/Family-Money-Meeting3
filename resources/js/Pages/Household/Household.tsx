@@ -22,6 +22,8 @@ import { HouseholdTypes } from "@/types/tableHouseholdData"
 import { commentTypes } from "@/types/Comment"
 import { UserTypes } from '@/types/tableUserData';
 
+import { router } from '@inertiajs/react';
+
 // 型定義
 interface PageProps {
     auth: {
@@ -81,8 +83,12 @@ export default function Household({
         setEditingHousehold(null)
     }
 
-    const handleToggleAchieve = (newValue: boolean) => {
-        setData("achieve", newValue ? 1 : 0);
+    const handleToggleAchieve = (id: number, newValue: boolean) => {
+        router.patch(`/household/achieve/${id}`, {
+            achieve: newValue ? 1 : 0,
+        }, {
+            preserveScroll: true,
+        });
     };
 
     //コメント
@@ -170,7 +176,7 @@ export default function Household({
 
         <LiatDataList
             data={household}
-            onChange={(e) => onToggleAchieve(item.id, e.target.checked)}
+            onToggleAchieve={handleToggleAchieve}
             userId={user.id}
             teamId={user.team_id}
             onEdit={handleEdit}
