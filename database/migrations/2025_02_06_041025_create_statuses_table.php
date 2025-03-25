@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('donation')->default(0);
             $table->integer('game_level')->default(0);
             $table->integer('game_life')->default(4);
-            $table->integer('is_share')->default(0); //０=team_share 1=not_share 2=public
+            $table->integer('is_share')->default(0); //０=非公開 1=公開
             $table->timestamps();
         });
     }

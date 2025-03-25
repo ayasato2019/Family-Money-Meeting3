@@ -140,9 +140,14 @@ export default function Authenticated({
                         {team_members.length > 0 ? (
                             <>
                                 {team_members.map((member) => (
-                                    <li key={member.id} className='flex items-center gap-2'>
-                                        <UserImage userId={member.id} />
-                                        <p className='leading-none'>{member.name}</p>
+                                    <li key={member.id}>
+                                        <Link
+                                            className='flex items-center gap-2 cursor-pointer'
+                                            href={route('team.status.show', { user: member.id })}
+                                            >
+                                            <UserImage userId={member.id} />
+                                            <p className='leading-none'>{member.name}</p>
+                                        </Link>
                                     </li>
                                 ))}
                             </>
@@ -167,8 +172,13 @@ export default function Authenticated({
                             <>
                                 {team_members.map((member) => (
                                     <li key={member.id} className='flex items-center gap-2'>
-                                        <UserImage userId={member.id} />
-                                        <p className='leading-none'>{member.name}</p>
+                                        <Link
+                                            className='flex items-center gap-2 cursor-pointer'
+                                            href={route('team.status.show', { user: member.id })}
+                                            >
+                                            <UserImage userId={member.id} />
+                                            <p className='leading-none'>{member.name}</p>
+                                        </Link>
                                     </li>
                                 ))}
                             </>

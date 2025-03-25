@@ -49,7 +49,7 @@ export default function Household({
         price: 0,
         date: "",
         achieve: 0,
-        is_share: 1,
+        is_shared: 1,
         images: "",
         memo: "",
         comment: "",
@@ -95,23 +95,7 @@ export default function Household({
     //コメント
     const [isCommentModalOpen, setIsCommentModalOpen] = useState(false)
     const [selectedHousehold, setSelectedHousehold] = useState<CommentsTypes | null>(null)
-    // const handleComment = (listData: HouseholdTypes) => {
-    // const comment = comments.find((c: { target_id: number; target_type: number; }) => c.target_id === listData.id && c.target_type === 1); // ← コメント一覧が必要（型: CommentsTypes[]）
-
-    //     setSelectedHousehold(comment ?? {
-    //         id: listData.comment_id ?? 0,
-    //         user_id_from: user_id,
-    //         user_id_to: listData.user_id,
-    //         target_type: 1, // 例: 1 = household
-    //         target_id: listData.id,
-    //         comment: '',
-    //     });
-
-    //     setIsCommentModalOpen(true);
-    // };
     const handleComment = (listData: HouseholdTypes) => {
-        console.log('コメントボタン押された:', listData);
-
         const comment = comments.find(
             (c) => c.target_id === listData.id && c.target_type === 1
         );
@@ -126,9 +110,6 @@ export default function Household({
             date: listData.date,
             comment: '',
         };
-
-        console.log('モーダルに渡すコメント:', newComment);
-
         setSelectedHousehold(newComment);
         setIsCommentModalOpen(true);
     };
@@ -137,6 +118,23 @@ export default function Household({
         setIsCommentModalOpen(false)
         setSelectedHousehold(null)
     }
+
+    const handleCommentSubmit = (commentData: {
+        id: number;
+        comment: string;
+        target_id: number;
+        target_type: number;
+        user_id_to: number;
+    }) => {
+    post("/comments", {
+        ...commentData,
+        onSuccess: () => {
+        setIsCommentModalOpen(false);
+        setSelectedHousehold(null);
+        },
+    });
+    };
+
 
     return (
     <AuthenticatedLayout
@@ -193,11 +191,11 @@ export default function Household({
             </li>
             <li className="flex items-center gap-2">
                 <Checkbox
-                    name="is_share"
-                    checked={data.is_share === 0}
-                    onChange={(e) => setData("is_share", e.target.checked ? 0 : 1)}
+                    name="is_shared"
+                    checked={data.is_shared === 0}
+                    onChange={(e) => setData("is_shared", e.target.checked ? 0 : 1)}
                 />
-                <InputLabel htmlFor="is_share" value="家族と共有する" />
+                <InputLabel htmlFor="is_shared" value="家族と共有する" />
             </li>
             </ul>
             <PrimaryButton
@@ -229,6 +227,14 @@ export default function Household({
             isCommentOpen={isCommentModalOpen}
             onCommentClose={closehandleCommentModal}
             listData={selectedHousehold}
+            onSubmit={(
+                comment: {
+                id: number;
+                comment: string;
+                target_id: number;
+                target_type: number;
+                user_id_to: number;
+            }) => handleCommentSubmit(comment)}
         />
     </AuthenticatedLayout>
     )

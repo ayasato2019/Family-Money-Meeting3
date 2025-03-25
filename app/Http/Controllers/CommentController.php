@@ -33,8 +33,6 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        //usr情報の取得
-        $user = Auth::user();
         dd($request->all());
 
         $validated = $request->validate([

@@ -6,7 +6,7 @@ export interface HouseholdTypes {
     price: number;
     date: string;
     achieve: boolean;
-    is_share: boolean;
+    is_shared: boolean;
     images?: string | null;
     memo?: string | null;
     comment_id?: number | null;

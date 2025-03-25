@@ -22,6 +22,10 @@ use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Color\Color;
 
+use App\Models\Status;
+use App\Models\Household;
+use App\Models\Saving;
+
 class TeamController extends Controller
 {
     // use TeamViewProps;
@@ -193,4 +197,52 @@ class TeamController extends Controller
     {
         //
     }
+
+    public function memberStatus(User $user)
+    {
+        $authUser = Auth::user();
+
+        // 同じチームのみ許可
+        if ($authUser->team_id !== $user->team_id) {
+            abort(403, '同じチームのメンバーのみ閲覧可能です。');
+        }
+
+        // is_share が true のみ取得（各モデル）
+
+        $statuses = Status::where('user_id', $user->id)
+            ->where('is_shared', true)
+            ->get();
+
+        $savings = Saving::where('user_id', $user->id)
+            ->where('is_shared', true)
+            ->get();
+
+        // $investments = Investment::where('user_id', $user->id)
+        //     ->where('is_share', true)
+        //     ->get();
+
+        // $needs = Need::where('user_id', $user->id)
+        //     ->where('is_share', true)
+        //     ->get();
+
+        // $wants = Want::where('user_id', $user->id)
+        //     ->where('is_share', true)
+        //     ->get();
+
+        // $donations = Donation::where('user_id', $user->id)
+        //     ->where('is_share', true)
+        //     ->get();
+
+        return Inertia::render('Teams/MemberStatus', [
+            'shared_user' => $user,
+            'statuses' => $statuses,
+            'savings' => $savings,
+            // 'investments' => $investments,
+            // 'needs' => $needs,
+            // 'wants' => $wants,
+            // 'donations' => $donations,
+        ]);
+    }
+
+
 }

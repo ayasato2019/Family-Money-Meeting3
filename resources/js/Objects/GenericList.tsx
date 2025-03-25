@@ -79,7 +79,7 @@ return (
             ?.filter((item: LiatDataTypes) =>
             item.user_id === userId ||
             (!item.user_id && item.team_id === teamId) ||
-            (item.is_share && item.team_id === teamId)
+            (item.is_shared && item.team_id === teamId)
             )
             .map((item) => {
                 const isAchieved = achievedIds.includes(item.id);
@@ -106,10 +106,10 @@ return (
                             )}
                             </li>
                         </ul>
-                        <button className="w-6 h-6" onClick={() => onEdit(item)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512" width={16} height={16}>
-                            <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                        </svg>
+                        <button className="flex items-center w-6 h-6 pl-2" onClick={() => onEdit(item)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512" width={16} height={16}>
+                                <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                            </svg>
                         </button>
                     </div>
                     <Comments

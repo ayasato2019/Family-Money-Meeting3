@@ -90,7 +90,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/avatarupdate', [AvatarController::class, 'update'])->name('avatar-update');
 
     //コメント
-    // Route::post('/comments', [CommentController::class, 'store'])->name('comment');
+    Route::post('/comments', [CommentController::class, 'store'])->name('comment');
 
     // //投資の登録
     Route::get('/investment-registration', [AvatarController::class, 'create'])->name('investment-index');
@@ -114,5 +114,12 @@ Route::middleware('auth')->group(function () {
     // Route::get('/{id}', [SavingController::class, 'show'])->name('saving.show');
     // Route::post('/update', [HistoryController::class, 'store'])->name('update');
 });
+
+//チームメンバーのページ
+Route::middleware(['auth'])->group(function () {
+    Route::get('/team/status/{user}', [TeamController::class, 'memberStatus'])
+        ->name('team.status.show');
+});
+
 
 require __DIR__ . '/auth.php';

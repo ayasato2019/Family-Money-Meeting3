@@ -30,7 +30,7 @@ export default function InputPrice({
     };
 
     return (
-        <div className={`inline-flex items-center justify-center bg-white px-2 rounded-md w-auto max-w-52 h-10 border border-solid border-gray-300 shadow-sm  ${className}`}>
+        <div className={`inline-flex items-center justify-center bg-white px-2 rounded-md w-auto h-10 border border-solid border-gray-300 shadow-sm  ${className}`}>
             <button
                 type="button"
                 onClick={handleDecrease}

@@ -13,7 +13,7 @@ interface EditListdModalProps {
         title: string;
         price: number;
         date: string;
-        is_share: boolean;
+        is_shared: boolean;
         images?: string | null;
         memo?: string | null;
     } | null;
@@ -30,7 +30,7 @@ export default function EditListdModal({
         title: listData?.title || "",
         price: listData?.price || 0,
         date: listData?.date || "",
-        is_share: listData?.is_share ? 1 : 0,
+        is_shared: listData?.is_shared ? 1 : 0,
         images: listData?.images || "",
         memo: listData?.memo || "",
     });
@@ -41,7 +41,7 @@ export default function EditListdModal({
                 title: listData.title || "",
                 price: listData.price || 0,
                 date: listData.date || "",
-                is_share: listData.is_share ? 1 : 0,
+                is_shared: listData.is_shared ? 1 : 0,
                 images: listData.images || "",
                 memo: listData.memo || "",
             });

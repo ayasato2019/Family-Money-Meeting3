@@ -4,20 +4,32 @@ import Modal from "@/Components/Modal/Modal"
 import Button from "@/Components/Button/PrimaryButton"
 
 interface CommentModalProps {
-    isCommentOpen: boolean
-    onCommentClose: () => void
+    isCommentOpen: boolean;
+    onCommentClose: () => void;
     listData: {
-        id: number,
-        comment: string,
-        title?: string,
-        date?: string,
-    } | null
+    user_id_to: number;
+    target_type: number;
+    target_id: number;
+    id: number;
+    comment: string;
+    title?: string;
+    date?: string;
+} | null;
+onSubmit: (comment: {
+    id: number;
+    comment: string;
+    target_id: number;
+    target_type: number;
+    user_id_to: number;
+    }) => void;
 }
+
 
 export default function CommentModal({
     isCommentOpen,
     onCommentClose,
     listData,
+    onSubmit,
 }: CommentModalProps) {
     const { data, setData, post, processing, reset } = useForm({
         comment: "",
@@ -38,48 +50,62 @@ export default function CommentModal({
     }, [isCommentOpen, reset])
 
     const handleUpdate = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!listData?.id) return
-
-        post(`/comments`, {
+        e.preventDefault();
+        if (!listData) return;
+        setData((prev) => ({
+            ...prev,
+            id: listData.id,
+            target_id: listData.target_id,
+            target_type: listData.target_type,
+            user_id_to: listData.user_id_to,
+        }));
+        post("/comments", {
             onSuccess: () => {
-                onCommentClose()
-                reset()
+                onCommentClose();
+                reset();
             },
-        })
-    }
+        });
+    };
+
 
     return (
-        <Modal show={isCommentOpen} onClose={onCommentClose}>
+        <Modal show={isCommentOpen} onClose={onCommentClose} maxWidth="md">
+        <form onSubmit={handleUpdate}>
+            <p>{listData?.user_id_to ?? 0}</p>
             <div className="relative p-6">
-                <p className="text-lg font-medium mb-4">コメント：{listData?.date ?? ""}{listData?.title ?? "タイトルなし"}</p>
+                <p className="flex gap-2 text-lg font-medium mb-4">
+                    <span className="text-gray-500">{listData?.date ?? ""}</span>
+                    {listData?.title ?? "タイトルなし"}
+                </p>
+
                 <div className="space-y-4">
                     <div className="flex flex-col gap-2">
                         <input
                             id="comment"
                             type="text"
-                            value={data.comment || ""}
+                            value={data.comment}
                             onChange={(e) => setData("comment", e.target.value)}
                             className="border rounded p-2"
                         />
                     </div>
                 </div>
+
                 <div className="mt-6 flex gap-4 justify-end">
-                    <Button
-                        onClick={handleUpdate}
-                        disabled={processing}
-                    >コメント</Button>
+                    <Button type="submit" disabled={processing}>
+                        コメント
+                    </Button>
                 </div>
+
                 <button
                     type="button"
                     className="absolute top-0 right-0 p-1"
                     onClick={onCommentClose}
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={24} height={24} >
-                        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" fill="#666" />
-                    </svg>
+                    {/* 閉じるアイコン */}
                 </button>
             </div>
+        </form>
+
         </Modal>
     )
 }
