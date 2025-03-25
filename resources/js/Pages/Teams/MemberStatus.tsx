@@ -18,7 +18,7 @@ shared_user: {
     id: number;
     name: string;
 };
-statuses: StatusTypes;
+status: StatusTypes;
 savings: SavingTypes[];
 // investments: Investment[];
 // needs: Need[];
@@ -28,9 +28,15 @@ savings: SavingTypes[];
 
 export default function MemberStatus({
     shared_user,
-    statuses,
+    status,
     savings
 }: Props) {
+
+    //たぶの制御
+    const [activeTab, setActiveTab] = useState('status');
+    const handleTabClick = (tabName: string) => {
+        setActiveTab(tabName);
+    };
 
     const { data, setData, post, reset, processing } = useForm({
         title: "",
@@ -107,87 +113,131 @@ const pagetitle = "チーム";
         </h1>
     }
 >
-    <Head title={`${shared_user.name}`} />
+<Head title={`${shared_user.name}`} />
 
-    <div className="max-w-4xl mx-auto p-4">
-        {/* ステータス一覧 */}
-        <section className="mb-6">
-        <h2 className="text-lg font-semibold mb-2">ステータス</h2>
-        {statuses && statuses.is_shared === 1 ? (
-        <ul className="space-y-2">
-            <li className="p-3 bg-white shadow rounded">
-            <p>ユーザーID: {statuses.user_id}</p>
-            <p>貯金: ¥{statuses.saving.toLocaleString()}</p>
-            <p>投資: ¥{statuses.investment.toLocaleString()}</p>
-            <p>必要: ¥{statuses.need.toLocaleString()}</p>
-            <p>欲しい: ¥{statuses.want.toLocaleString()}</p>
-            <p>寄付: ¥{statuses.donation.toLocaleString()}</p>
-            <p>レベル: Lv.{statuses.game_level}</p>
+    <div className="max-w-4xl mx-auto py-4">
+            {/* タブ切り替え */}
+            <div className="flex">
+                <label
+                    className={`flex-1 order-[-1] min-w-[70px] px-4 pt-3 pb-2 text-gray-700 text-sm text-center cursor-pointer hover:opacity-80 ${activeTab === 'status' ? 'bg-white border-[#2589d0] border-t-4' : 'bg-[#e9f0f6]'}`}
+                    onClick={() => handleTabClick('status')}
+                >
+                    ステータス
+                </label>
+                <label
+                    className={`flex-1 order-[-1] min-w-[70px] px-4 pt-3 pb-2 text-gray-700 text-sm text-center cursor-pointer hover:opacity-80 ${activeTab === 'saving' ? 'bg-white border-[#2589d0] border-t-4' : 'bg-[#e9f0f6]'}`}
+                    onClick={() => handleTabClick('saving')}
+                >
+                    貯金
+                </label>
+                {/* <label
+                    className={`flex-1 order-[-1] min-w-[70px] px-4 pt-3 pb-2 border-b border-gray-100 text-gray-700 text-sm text-center cursor-pointer hover:opacity-80 ${activeTab === 'investment' ? 'bg-white border-[#2589d0] border-t-4' : 'bg-[#e9f0f6]'}`}
+                    onClick={() => handleTabClick('investment')}
+                >
+                    投資
+                </label>
+                <label
+                    className={`flex-1 order-[-1] min-w-[70px] px-4 pt-3 pb-2 border-b border-gray-100 text-gray-700 text-sm text-center cursor-pointer hover:opacity-80 ${activeTab === 'need' ? 'bg-white border-[#2589d0] border-t-4' : 'bg-[#e9f0f6]'}`}
+                    onClick={() => handleTabClick('need')}
+                >
+                    必要
+                </label>
+                <label
+                    className={`flex-1 order-[-1] min-w-[70px] px-4 pt-3 pb-2 border-b border-gray-100 text-gray-700 text-sm text-center cursor-pointer hover:opacity-80 ${activeTab === 'want' ? 'bg-white border-[#2589d0] border-t-4' : 'bg-[#e9f0f6]'}`}
+                    onClick={() => handleTabClick('want')}
+                >
+                    欲しい
+                </label>
+                <label
+                    className={`flex-1 order-[-1] min-w-[70px] px-4 pt-3 pb-2 border-b border-gray-100 text-gray-700 text-sm text-center cursor-pointer hover:opacity-80 ${activeTab === 'donation' ? 'bg-white border-[#2589d0] border-t-4' : 'bg-[#e9f0f6]'}`}
+                    onClick={() => handleTabClick('donation')}
+                >
+                    寄付
+                </label> */}
+            </div>
 
-            <CommentModal
-                isCommentOpen={isCommentModalOpen}
-                onCommentClose={closehandleCommentModal}
-                listData={selectedHousehold}
-                onSubmit={handleCommentSubmit}
-            />
-            </li>
-        </ul>
-        ) : (
-        <p className="text-gray-500">公開されているステータスはありません。</p>
-        )}
+    {/* ステータス */}
+    {activeTab === 'status' && (
+        <section className={`w-full`}>
+            <h2 className='sr-only'>貯金</h2>
+            {status.is_shared === 1 ? (
+            <ul className="py-4">
+                <li className="space-y-2">
+                <p>ユーザーID: {status.user_id}</p>
+                <p>貯金: ¥{status.saving.toLocaleString()}</p>
+                <p>投資: ¥{status.investment.toLocaleString()}</p>
+                <p>必要: ¥{status.need.toLocaleString()}</p>
+                <p>欲しい: ¥{status.want.toLocaleString()}</p>
+                <p>寄付: ¥{status.donation.toLocaleString()}</p>
+                <p>レベル: Lv.{status.game_level}</p>
+
+                <CommentModal
+                    isCommentOpen={isCommentModalOpen}
+                    onCommentClose={closehandleCommentModal}
+                    listData={selectedHousehold}
+                    onSubmit={handleCommentSubmit}
+                />
+                </li>
+            </ul>
+            ) : (
+            <p className="text-gray-500">公開されているステータスはありません。</p>
+            )}
         </section>
+    )}
 
-        {/* 貯金一覧 */}
-        <section className="mb-6">
-        <h2 className="text-lg font-semibold mb-2">貯金</h2>
+    {/* 貯金一覧 */}
+    {activeTab === 'saving' && (
+        <section className={`w-full`}>
+        <h2 className='sr-only'>貯金</h2>
         {savings.length > 0 ? (
-            <ul className="space-y-2">
+            <ul className="py-8 space-y-8">
             {savings.map((saving) => (
-                <li key={saving.id} className="px-4 py-2 bg-white shadow rounded">
-                    <div>
-                        <p className="font-bold">{saving.title}</p>
-                        <p className='flex items-center justify-start gap-2'><span className='text-sm text-gray-400 font-bold'>目標金額</span>¥{saving.amount.toLocaleString()}</p>
-                        <p className='flex items-center justify-start gap-2'><span className='text-sm text-gray-400 font-bold'>達成日目標</span>{saving.deadline}</p>
-                    </div>
-                    <CommentModal
-                        isCommentOpen={isCommentModalOpen}
-                        onCommentClose={closehandleCommentModal}
-                        listData={selectedHousehold}
-                        onSubmit={(
-                            comment: {
+                <li key={saving.id} className="">
+                <div>
+                    <p className="font-bold">{saving.title}</p>
+                    <p className='flex items-center justify-start gap-2'><span className='text-sm text-gray-400 font-bold'>目標金額</span>¥{saving.amount.toLocaleString()}</p>
+                    <p className='flex items-center justify-start gap-2'><span className='text-sm text-gray-400 font-bold'>達成日目標</span>{saving.deadline}</p>
+                </div>
+                <CommentModal
+                    isCommentOpen={isCommentModalOpen}
+                    onCommentClose={closehandleCommentModal}
+                    listData={selectedHousehold}
+                    onSubmit={(
+                        comment: {
                             id: number;
                             comment: string;
                             target_id: number;
                             target_type: number;
                             user_id_to: number;
                         }) => handleCommentSubmit(comment)}
-                    />
-                </li>
-            ))}
-            </ul>
-        ) : (
-            <p className="text-gray-500">公開されている貯金はありません。</p>
-        )}
-        </section>
+                />
+            </li>
+        ))}
+        </ul>
+    ) : (
+        <p className="text-gray-500">公開されている貯金はありません。</p>
+    )}
+    </section>
+    )}
 
-        {/* 以下は後日実装用 */}
-        {/*
-        <section className="mb-6">
-        <h2 className="text-lg font-semibold">投資</h2>
-        </section>
+    {/* 以下は後日実装用 */}
+    {/*
+    <section className="mb-6">
+    <h2 className="text-lg font-semibold">投資</h2>
+    </section>
 
-        <section className="mb-6">
-        <h2 className="text-lg font-semibold">必要</h2>
-        </section>
+    <section className="mb-6">
+    <h2 className="text-lg font-semibold">必要</h2>
+    </section>
 
-        <section className="mb-6">
-        <h2 className="text-lg font-semibold">欲しい</h2>
-        </section>
+    <section className="mb-6">
+    <h2 className="text-lg font-semibold">欲しい</h2>
+    </section>
 
-        <section className="mb-6">
-        <h2 className="text-lg font-semibold">寄付</h2>
-        </section>
-        */}
+    <section className="mb-6">
+    <h2 className="text-lg font-semibold">寄付</h2>
+    </section>
+    */}
     </div>
 
     {selectedHousehold && (

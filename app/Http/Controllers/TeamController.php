@@ -209,12 +209,12 @@ class TeamController extends Controller
 
         // is_share が true のみ取得（各モデル）
 
-        $statuses = Status::where('user_id', $user->id)
-            ->where('is_shared', true)
-            ->get();
+        $status = Status::where('user_id', $user->id)
+        ->where('is_shared', 1)
+        ->first();
 
         $savings = Saving::where('user_id', $user->id)
-            ->where('is_shared', true)
+            ->where('is_shared', 1)
             ->get();
 
         // $investments = Investment::where('user_id', $user->id)
@@ -235,7 +235,7 @@ class TeamController extends Controller
 
         return Inertia::render('Teams/MemberStatus', [
             'shared_user' => $user,
-            'statuses' => $statuses,
+            'status' => $status,
             'savings' => $savings,
             // 'investments' => $investments,
             // 'needs' => $needs,
