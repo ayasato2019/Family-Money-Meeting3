@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use App\Models\Team;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use App\Models\Comment;
 
 class HouseholdController extends Controller
 {
@@ -31,9 +32,15 @@ class HouseholdController extends Controller
         $role = Auth::user()->role;
         $household = Household::where('team_id', $team_id)->get();
 
+        // コメントを追加で取得
+        $comments = Comment::where('target_type', 1)
+        ->whereIn('target_id', $household->pluck('id')) // household に関連するコメントのみ
+        ->get();
+
         return Inertia::render('Household/Household', [
             'household' => $household,
-            'role' => $role,
+            // 'role' => $role,
+            'comments' => $comments,
         ]);
     }
 

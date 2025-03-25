@@ -19,7 +19,7 @@ import InputPrice from "@/Components/Input/InputPrice"
 import LiatDataList from "@/Objects/GenericList";
 
 import { HouseholdTypes } from "@/types/tableHouseholdData"
-import { commentTypes } from "@/types/Comment"
+import { CommentsTypes } from "@/types/tableCommentsData"
 import { UserTypes } from '@/types/tableUserData';
 
 import { router } from '@inertiajs/react';
@@ -40,6 +40,7 @@ export default function Household({
 }) {
     // 型を明示的にキャストして取得
     const { auth } = usePage().props as unknown as PageProps;
+    const { comments } = usePage().props as unknown as { comments: CommentsTypes[] };
     const user = auth.user;
     const user_id = auth.user.id;
 
@@ -93,11 +94,44 @@ export default function Household({
 
     //コメント
     const [isCommentModalOpen, setIsCommentModalOpen] = useState(false)
-    const [selectedHousehold, setSelectedHousehold] = useState<commentTypes | null>(null)
-    const handleComment = (listData: commentTypes) => {
-        setSelectedHousehold(listData as commentTypes)
-        setIsCommentModalOpen(true)
-    }
+    const [selectedHousehold, setSelectedHousehold] = useState<CommentsTypes | null>(null)
+    // const handleComment = (listData: HouseholdTypes) => {
+    // const comment = comments.find((c: { target_id: number; target_type: number; }) => c.target_id === listData.id && c.target_type === 1); // ← コメント一覧が必要（型: CommentsTypes[]）
+
+    //     setSelectedHousehold(comment ?? {
+    //         id: listData.comment_id ?? 0,
+    //         user_id_from: user_id,
+    //         user_id_to: listData.user_id,
+    //         target_type: 1, // 例: 1 = household
+    //         target_id: listData.id,
+    //         comment: '',
+    //     });
+
+    //     setIsCommentModalOpen(true);
+    // };
+    const handleComment = (listData: HouseholdTypes) => {
+        console.log('コメントボタン押された:', listData);
+
+        const comment = comments.find(
+            (c) => c.target_id === listData.id && c.target_type === 1
+        );
+
+        const newComment: CommentsTypes = comment ?? {
+            id: listData.comment_id ?? 0,
+            user_id_from: user_id,
+            user_id_to: listData.user_id,
+            target_type: 1,
+            target_id: listData.id,
+            title: listData.title,
+            date: listData.date,
+            comment: '',
+        };
+
+        console.log('モーダルに渡すコメント:', newComment);
+
+        setSelectedHousehold(newComment);
+        setIsCommentModalOpen(true);
+    };
 
     const closehandleCommentModal = () => {
         setIsCommentModalOpen(false)
@@ -179,6 +213,7 @@ export default function Household({
             onToggleAchieve={handleToggleAchieve}
             userId={user.id}
             teamId={user.team_id}
+            onComment={handleComment}
             onEdit={handleEdit}
             onDelete={handleDelete}
         />

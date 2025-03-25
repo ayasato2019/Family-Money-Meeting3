@@ -1,9 +1,7 @@
-"use client"
-
-import Comment from '@/Objects/Comment';
 import { useEffect } from "react"
 import { useForm } from "@inertiajs/react"
-import Modal from "@/Components/Modal"
+import Modal from "@/Components/Modal/Modal"
+import Button from "@/Components/Button/PrimaryButton"
 
 interface CommentModalProps {
     isCommentOpen: boolean
@@ -11,13 +9,15 @@ interface CommentModalProps {
     listData: {
         id: number,
         comment: string,
+        title?: string,
+        date?: string,
     } | null
 }
 
 export default function CommentModal({
     isCommentOpen,
     onCommentClose,
-    listData
+    listData,
 }: CommentModalProps) {
     const { data, setData, post, processing, reset } = useForm({
         comment: "",
@@ -52,7 +52,7 @@ export default function CommentModal({
     return (
         <Modal show={isCommentOpen} onClose={onCommentClose}>
             <div className="relative p-6">
-                <h3 className="text-lg font-medium mb-4">コメント</h3>
+                <p className="text-lg font-medium mb-4">コメント：{listData?.date ?? ""}{listData?.title ?? "タイトルなし"}</p>
                 <div className="space-y-4">
                     <div className="flex flex-col gap-2">
                         <input
@@ -65,14 +65,10 @@ export default function CommentModal({
                     </div>
                 </div>
                 <div className="mt-6 flex gap-4 justify-end">
-                    <button
-                        type="button"
-                        className="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50"
+                    <Button
                         onClick={handleUpdate}
                         disabled={processing}
-                    >
-                        更新
-                    </button>
+                    >コメント</Button>
                 </div>
                 <button
                     type="button"

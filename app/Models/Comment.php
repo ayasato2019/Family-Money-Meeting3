@@ -11,6 +11,8 @@ class Comment extends Model
         'team_id',
         'user_id_from',
         'user_id_to',
+        'target_type',
+        'target_id',
         'comment'
     ];
 

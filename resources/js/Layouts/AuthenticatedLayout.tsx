@@ -40,16 +40,16 @@ export default function Authenticated({
 
     // 共通メニューリスト
     const menuLinks = [
-        { label: 'ホーム', route: 'dashboard', className: 'break-keep border border-solid !border-gray-300 rounded-md shadow' },
-        { label: 'プロフィール', route: 'profile.edit', className: 'break-keep border border-solid !border-gray-300 rounded-md shadow' },
+        { label: 'ホーム', route: 'dashboard', className: 'break-keep !border border-solid !border-gray-300 rounded-md shadow' },
+        { label: 'プロフィール', route: 'profile.edit', className: 'break-keep !border border-solid !border-gray-300 rounded-md shadow' },
         // ...(team_id ? [{ label: 'メンバーリスト', route: 'teams-member', className: 'break-keep' }] : []),
-        { label: 'ステータス', route: 'status-create', className: 'break-keep border border-solid !border-gray-300 rounded-md shadow' },
-        { label: 'チーム', route: 'teams-create', className: 'break-keep border border-solid !border-gray-300 rounded-md shadow' },
+        { label: 'ステータス', route: 'status-create', className: 'break-keep !border border-solid !border-gray-300 rounded-md shadow' },
+        { label: 'チーム', route: 'teams-create', className: 'break-keep !border border-solid !border-gray-300 rounded-md shadow' },
         { label: 'ログアウト', route: 'logout', method: 'post' as Method, as: 'button', className: '!w-auto mx-auto border border-transparent rounded-md bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 md:hidden' }
     ];
 
     return (
-        <div className="flex min-h-screen max-w-6xl mx-auto md:mr-5 lg:mr-0 ">
+        <div className="flex min-h-screen max-w-6xl mx-auto md:mr-5 lg:mr-auto">
             {/* Left Sidebar (デスクトップ用) */}
             <div className="w-64 mt-16 p-4 hidden md:block" aria-hidden={!showingNavigationDropdown}>
                 <nav className="space-y-2">
@@ -71,10 +71,10 @@ export default function Authenticated({
             <div className="flex-1 max-w-2xl mx-auto">
                 <div className="relative mx-auto lg:px-8 bg-gradation rounded-b-3xl flex justify-between">
                     <Link className='py-2 px-4 lg:px-0' href={route('dashboard')}>
-                        <ApplicationLogo className="block h-9 w-auto fill-current text-white" />
+                        <ApplicationLogo className="block h-8 w-auto fill-current text-white" />
                     </Link>
 
-                    <div className="flex items-center gap-2 p-4 lg:px-0">
+                    <div className="flex items-center gap-2 p-2 lg:px-0">
                         <Link
                             className='hidden md:flex'
                             href={route('profile.edit')}>
@@ -98,7 +98,8 @@ export default function Authenticated({
                 <main>
                 {header && (
                     <header className="bg-white">
-                        <div className="mx-auto max-w-3xl px-4 pt-2 sm:px-6 lg:px-8">
+                        <div className="mx-auto max-w-3xl px-4 pt-2 md:pt-8 sm:px-6 lg:px-8">
+                            {/* headerの中にh1タグ */}
                             {header}
                         </div>
                     </header>

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { LiatDataTypes } from "@/types/genericList";
 import CheckBox from "@/Components/Checkbox/Checkbox";
+import Comments from '@/Components/Comment/Comment';
 
 interface Props {
 data: LiatDataTypes[];
 onEdit: (item: LiatDataTypes) => void;
 onDelete: (id: number) => void;
 onToggleAchieve: (id: number, newValue: boolean) => void;
+onComment: (item: LiatDataTypes) => void;
 userId: number;
 teamId: number;
 }
@@ -15,6 +17,7 @@ export default function LiatDataList({
 data,
 onEdit,
 onDelete,
+onComment,
 onToggleAchieve,
 userId,
 teamId,
@@ -81,34 +84,41 @@ return (
             .map((item) => {
                 const isAchieved = achievedIds.includes(item.id);
                 return (
-                <li key={item.id} className="flex items-start justify-start gap-4 border-b pb-4">
-                <ul className="flex flex-col gap-1 w-full">
-                <li className="flex flex-col gap-1 w-full">
-                    <div className="flex items-center gap-4 w-full">
-                    <CheckBox
-                        name="achieve"
-                        checked={item.achieve}
-                        onChange={(e) => onToggleAchieve(item.id, e.target.checked)}
-                    />
-                    <time>{item.date}</time>
-                    <p className="flex-auto">{item.title}</p>
-                    <p>{item.price}円</p>
+                <li key={item.id} className="flex flex-col gap-0 border-b pb-4">
+                    <div className="flex items-start justify-start">
+                        <ul className="flex flex-col gap-1 w-full">
+                            <li className="flex flex-col gap-1 w-full">
+                                <div className="flex items-center gap-4 w-full">
+                                <CheckBox
+                                    name="achieve"
+                                    checked={item.achieve}
+                                    onChange={(e) => onToggleAchieve(item.id, e.target.checked)}
+                                    />
+                                <time>{item.date}</time>
+                                <p className="flex-auto">{item.title}</p>
+                                <p>{item.price}円</p>
+                                </div>
+                            {item.memo && item.memo.trim() !== "" && (
+                                <p className="pl-8">
+                                <span className="text-white font-bold bg-gray-400 text-xs py-1 px-2 rounded-2xl mr-2">メモ</span>
+                                {item.memo}
+                                </p>
+                            )}
+                            </li>
+                        </ul>
+                        <button className="w-6 h-6" onClick={() => onEdit(item)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512" width={16} height={16}>
+                            <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+                        </svg>
+                        </button>
                     </div>
-                {item.memo && item.memo.trim() !== "" && (
-                    <p className="pl-8">
-                    <span className="text-white font-bold bg-gray-400 text-xs py-1 px-2 rounded-2xl mr-2">メモ</span>
-                    {item.memo}
-                    </p>
-                )}
+                    <Comments
+                        className="w-full"
+                        targetId={item.id}
+                        onWriteClick={() => onComment(item)}
+                    />
                 </li>
-                </ul>
-                <button className="w-6 h-6" onClick={() => onEdit(item)}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512" width={16} height={16}>
-                    <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
-                </svg>
-                </button>
-            </li>
-            );
+                );
             })}
         </ul>
     </div>

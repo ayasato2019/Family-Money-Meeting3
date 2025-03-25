@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useForm } from "@inertiajs/react";
-import Modal from "@/Components/Modal";
+import Modal from "@/Components/Modal/Modal";
 import InputText from "@/Components/Input/InputText"
 import InputDate from "@/Components/Input/InputDate"
 import InputPrice from "@/Components/Input/InputPrice"
@@ -60,7 +60,7 @@ export default function EditListdModal({
     };
 
     return (
-        <Modal show={isOpen} onClose={onClose}>
+        <Modal show={isOpen} onClose={onClose} maxWidth="md">
             <form onSubmit={handleUpdate}>
                 <div className="relative mt-4 flex gap-4 items-center justify-center p-4 w-full">
                     <div className="flex flex-col gap-4 w-full">
