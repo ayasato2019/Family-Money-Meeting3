@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { LiatDataTypes } from "@/types/genericList";
+import { CommentsTypes } from "@/types/tableCommentsData";
 import CheckBox from "@/Components/Checkbox/Checkbox";
 import Comments from '@/Components/Comment/Comment';
 
 interface Props {
     data: LiatDataTypes[];
+    comments: CommentsTypes[];
     onEdit: (item: LiatDataTypes) => void;
     onDelete: (id: number) => void;
     onToggleAchieve: (id: number, newValue: boolean) => void;
@@ -15,6 +17,7 @@ interface Props {
 
 export default function LiatDataList({
     data,
+    comments,
     onEdit,
     onDelete,
     onComment,
@@ -77,8 +80,8 @@ return (
         <ul className="flex flex-col gap-4">
         {groupedData[months[currentMonthIndex]]
             ?.filter((item: LiatDataTypes) =>
-            item.team_id === teamId ||
-            item.is_shared ===1
+            item.user_id == userId ||
+            (item.team_id === teamId || item.is_shared === 1)
             )
             .map((item) => {
                 const isAchieved = achievedIds.includes(item.id);

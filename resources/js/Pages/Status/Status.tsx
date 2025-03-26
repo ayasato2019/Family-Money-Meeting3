@@ -13,14 +13,14 @@ export default function FirstStep({
     need,
     want,
     donation,
-    is_share,
+    is_shared,
 }: {
     saving: number,
     investment: number,
     need: number,
     want: number,
     donation: number,
-    is_share: number,
+    is_shared: number,
 }) {
     const { data, setData, post, processing } = useForm<{
         saving: number,
@@ -28,14 +28,14 @@ export default function FirstStep({
         need: number,
         want: number,
         donation: number,
-        is_share: number,
+        is_shared: number,
     }>({
         saving: saving,
         investment: investment,
         need: need,
         want: want,
         donation: donation,
-        is_share: is_share,
+        is_shared: is_shared,
     });
 
     // 送信関係
@@ -161,13 +161,13 @@ export default function FirstStep({
 
                 <div className="my-4 flex gap-2 items-center">
                     <Checkbox
-                        id="is_share"
-                        name="is_share"
-                        checked={data.is_share === 1}
-                        autoComplete="is_share"
-                        onChange={(e) => setData('is_share', e.target.checked ? 1 : 0)}
+                        id="is_shared"
+                        name="is_shared"
+                        checked={data.is_shared === 1}
+                        autoComplete="is_shared"
+                        onChange={(e) => setData('is_shared', e.target.checked ? 1 : 0)}
                     />
-                    <InputLabel htmlFor="is_share" value="ステータスはヒミツにする" />
+                    <InputLabel htmlFor="is_shared" value="ステータスはヒミツにする" />
                     {/* <InputError message="生年月日を登録してください" className="mt-2" /> */}
                 </div>
                 <PrimaryButton className="mx-auto" disabled={processing}

@@ -15,11 +15,12 @@ export default function UpdateAvatarForm({ className = '' }: { className?: strin
         avatar: user.avatar ? Number(user.avatar) : 1,
     });
 
-    const [selectedAvatar, setSelectedAvatar] = useState(data.avatar);
+    const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
 
     useEffect(() => {
-        setSelectedAvatar(data.avatar);
+        setSelectedAvatar(String(data.avatar));
     }, [data.avatar]);
+
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();

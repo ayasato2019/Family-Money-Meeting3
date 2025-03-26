@@ -27,25 +27,23 @@ import { router } from '@inertiajs/react';
 // 型定義
 interface PageProps {
     auth: {
-        user: UserTypes & { team_id: number };  // ユーザーにteam_idを追加
+        user: UserTypes & { role: number; team_id: number };  // ユーザーにteam_idを追加
     };
     team_id: number;  // team_idを追加
-    comments?: CommentsTypes[];  // commentsを追加
     [key: string]: any;  // インデックスシグネチャを追加
 }
 
 
 export default function Household({
     household,
-    role,
 }: {
     household: HouseholdTypes[]
-    role: number
 }) {
     // 型を明示的にキャストして取得
-    const { auth, comments, team_id } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
+    const { auth, team_id, role } = usePage<PageProps>().props;
     const user = auth.user;
-    const user_id = auth.user.id;
+    const [comments, setComments] = useState<CommentsTypes[]>([]);
+    const [targetId, setTargetId] = useState<number>(0);
 
     const { data, setData, post, reset, processing } = useForm({
         title: "",
@@ -212,6 +210,7 @@ export default function Household({
 
         <LiatDataList
             data={household}
+            comments={comments}
             onToggleAchieve={handleToggleAchieve}
             userId={user.id}
             teamId={user.team_id}

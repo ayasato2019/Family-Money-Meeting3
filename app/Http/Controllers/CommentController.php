@@ -7,29 +7,19 @@ use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
-use App\Models\Household;
 use Inertia\Inertia;
+
+use App\Models\Household;
+use App\Models\Saving;
+use App\Models\Investment;
+use App\Models\Need;
+use App\Models\Want;
+use App\Models\Donation;
 
 class CommentController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * コメントコントローラー
+     * コメント書き込み
      */
     public function store(StoreCommentRequest $request)
     {
@@ -57,36 +47,49 @@ class CommentController extends Controller
         // コメント作成後にイベントを発火
         event(new Registered($comment));  // もしCommentCreatedのような専用イベントがあればそれを使う
 
-        // 作成完了後、リダイレクト
         return redirect()->back();
-        // // id が 0 なら新規登録
-        // if ($validated['id'] == 0) {
-
-        // } else {
-        //     // id が 1 以上ならコメントの更新
-        //     $comment = Comment::find($validated['id']);
-
-        //     // コメントが見つからない場合、エラーメッセージを表示
-        //     if (!$comment) {
-        //         return redirect()->back()->withErrors(['error' => 'コメントが見つかりません。']);
-        //     }
-
-        //     // 更新する場合、ユーザーが自分のコメントのみを編集できるように
-        //     if ($comment->user_id_from == $user->id) {
-        //         $comment->update([
-        //             'comment' => $validated['comment'],
-        //         ]);
-        //         event(new Registered($comment));
-        //     }
-        // }
     }
 
     /**
-     * Display the specified resource.
+     * コメント表示
      */
-    public function show(Comment $comment)
+    public function show(Comment $targetType, $targetId)
     {
-        //
+        // target_typeに応じて異なるモデルを取得
+        $model = $this->index($targetType);
+        $item = $model::find($targetId);
+
+        // コメントを取得
+        $comments = Comment::where('target_id', $targetId)
+            ->where('target_type', $targetType)
+            ->get();
+
+        // もしアイテムが見つからない場合はエラーメッセージを返す
+        if (!$item) {
+            return response()->json(['error' => 'アイテムが見つかりません'], 404);
+        }
+
+        // Inertiaでページを返す
+        return Inertia::render('CommentsPage', [
+            'item' => $item,
+            'comments' => $comments
+        ]);
+    }
+
+    /**
+     * 場所によってだしわけ
+     */
+    public function index($targetType)
+    {
+        switch ($targetType) {
+            case 0: return Household::class;
+            case 1: return Saving::class;
+            // case 2: return Investment::class;
+            // case 3: return Need::class;
+            // case 4: return Want::class;
+            // case 5: return Donation::class;
+            default: throw new \Exception('Invalid target type');
+        }
     }
 
     /**

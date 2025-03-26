@@ -9,4 +9,3 @@ export type CommentsTypes = {
     title?: string;
     date?: string;
 };
-
