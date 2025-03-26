@@ -77,9 +77,8 @@ return (
         <ul className="flex flex-col gap-4">
         {groupedData[months[currentMonthIndex]]
             ?.filter((item: LiatDataTypes) =>
-            item.user_id === userId ||
-            (!item.user_id && item.team_id === teamId) ||
-            (item.is_shared && item.team_id === teamId)
+            item.team_id === teamId ||
+            item.is_shared ===1
             )
             .map((item) => {
                 const isAchieved = achievedIds.includes(item.id);
@@ -93,7 +92,7 @@ return (
                                     name="achieve"
                                     checked={item.achieve}
                                     onChange={(e) => onToggleAchieve(item.id, e.target.checked)}
-                                    />
+                                />
                                 <time>{item.date}</time>
                                 <p className="flex-auto">{item.title}</p>
                                 <p>{item.price}円</p>
