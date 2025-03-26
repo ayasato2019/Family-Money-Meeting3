@@ -53,6 +53,7 @@ export default function Household({
         images: "",
         memo: "",
         comment: "",
+        comment_id: 0,
     })
 
     //登録
@@ -97,14 +98,14 @@ export default function Household({
     const [selectedHousehold, setSelectedHousehold] = useState<CommentsTypes | null>(null)
     const handleComment = (listData: HouseholdTypes) => {
         const comment = comments.find(
-            (c) => c.target_id === listData.id && c.target_type === 1
+            (c) => c.target_id === listData.id && c.target_type === 0
         );
 
         const newComment: CommentsTypes = comment ?? {
             id: listData.comment_id ?? 0,
             user_id_from: user_id,
             user_id_to: listData.user_id,
-            target_type: 1,
+            target_type: 0,
             target_id: listData.id,
             title: listData.title,
             date: listData.date,
