@@ -3,6 +3,7 @@ import { PageProps } from '@/types';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import UserImage from '@/Components/UserAvatar';
 import CommentModal from "@/Objects/ModalComments";
+import Comments from '@/Components/Comment/Comment';
 
 import { usePage } from '@inertiajs/react';
 import { useState } from "react"
@@ -12,6 +13,7 @@ import { COMMENT_TARGET_TYPE, CommentTargetType } from '@/types/commentTargetTyp
 import { CommentsTypes } from "@/types/tableCommentsData";
 import { StatusTypes } from "@/types/tableStatusData";
 import { SavingTypes } from "@/types/tableSavingData";
+import { HouseholdTypes } from "@/types/tableHouseholdData"
 
 interface Props extends PageProps {
 shared_user: {
@@ -33,7 +35,7 @@ export default function MemberStatus({
 }: Props) {
 
     //たぶの制御
-    const [activeTab, setActiveTab] = useState('status');
+    const [activeTab, setActiveTab] = useState('saving');
     const handleTabClick = (tabName: string) => {
         setActiveTab(tabName);
     };
@@ -54,37 +56,37 @@ export default function MemberStatus({
     //コメント
     const [isCommentModalOpen, setIsCommentModalOpen] = useState(false)
     const [selectedHousehold, setSelectedHousehold] = useState<CommentsTypes | null>(null)
+    const targetType = COMMENT_TARGET_TYPE.saving;
 
-    const handleComment = (
-        listData: { id: number; date: string; title?: string },
-        type: CommentTargetType
-        ) => {
-            const targetType = COMMENT_TARGET_TYPE[type];
+    const handleGenericComment = (
+        item: any,
+        type: CommentTargetType,
+        userId: number,
+        itemTitle: string,
+        itemDate: string
+    ) => {
+        console.log('handleGenericComment called', { item, type, userId, comments });
+        const targetType = COMMENT_TARGET_TYPE[type];
 
-            const comment = comments.find(
-            (c) => c.target_id === listData.id && c.target_type === targetType
-            );
+        // commentsが存在するかチェック
+        const comment = comments && comments.find(
+            (c) => c.target_id === item.id && c.target_type === targetType
+        );
 
-            const newComment: CommentsTypes = comment ?? {
-            id: 0,
+        const newComment: CommentsTypes = comment ?? {
+            id: item.comment_id ?? 0,
             team_id: team_id ?? 0,
-            // user_id_from: auth.user.id,
-            user_id_to: shared_user.id,
+            user_id_to: userId,
             target_type: targetType,
-            target_id: listData.id,
-            title: listData.title ?? type,
-            date: listData.date,
+            target_id: item.id,
+            title: itemTitle,
+            date: itemDate,
             comment: '',
-            };
-
-            setSelectedHousehold(newComment);
-            setIsCommentModalOpen(true);
         };
 
-    const closehandleCommentModal = () => {
-        setIsCommentModalOpen(false)
-        setSelectedHousehold(null)
-    }
+        setSelectedHousehold(newComment);
+        setIsCommentModalOpen(true);
+    };
 
     const handleCommentSubmit = (commentData: {
         id: number;
@@ -93,15 +95,23 @@ export default function MemberStatus({
         target_type: number;
         user_id_to: number;
     }) => {
-    post("/comments", {
-        ...commentData,
-        onSuccess: () => {
-        setIsCommentModalOpen(false);
-        setSelectedHousehold(null);
-        },
-    });
+        post("/comments", {
+            ...commentData,
+            onSuccess: () => {
+            setIsCommentModalOpen(false);
+            setSelectedHousehold(null);
+            },
+        });
     };
 
+    //閉じる
+    const closehandleCommentModal = () => {
+        setIsCommentModalOpen(false);
+        setSelectedHousehold(null);
+    };
+
+    //コメント表示
+    
 
 //ページタイトル
 const pagetitle = "チーム";
@@ -121,7 +131,7 @@ const pagetitle = "チーム";
         {/* ステータス */}
         <section className={`w-full p-2 border border-t-4 border-t- border-gray-300 rounded-md`}>
             <h2 className='flex items-center justify-center gap-2 border-b border-gray-300 pb-2 text-center'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={24} height={24}><path d="M512 32c0 113.6-84.6 207.5-194.2 222c-7.1-53.4-30.6-101.6-65.3-139.3C290.8 46.3 364 0 448 0l32 0c17.7 0 32 14.3 32 32zM0 96C0 78.3 14.3 64 32 64l32 0c123.7 0 224 100.3 224 224l0 32 0 160c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-160C100.3 320 0 219.7 0 96z" fill="#374151"/></svg>ステータス</h2>
-            {status.is_shared === 1 ? (
+            {status && status.is_shared === 1 ? (
             <ul className="py-4">
                 <li className="space-y-2">
                 <p>ユーザーID: {status.user_id}</p>
@@ -178,7 +188,7 @@ const pagetitle = "チーム";
         {activeTab === 'saving' && (
             <section className={`w-full px-2`}>
             <h2 className='sr-only'>貯金</h2>
-            {savings.length > 0 ? (
+            {savings && savings.length > 0 ? (
                 <ul className="py-8 space-y-8">
                 {savings.map((saving) => (
                     <li key={saving.id} className="">
@@ -187,19 +197,18 @@ const pagetitle = "チーム";
                         <p className='flex items-center justify-start gap-2'><span className='text-sm text-gray-400 font-bold'>目標金額</span>¥{saving.amount.toLocaleString()}</p>
                         <p className='flex items-center justify-start gap-2'><span className='text-sm text-gray-400 font-bold'>達成日目標</span>{saving.deadline}</p>
                     </div>
-                    <CommentModal
-                        isCommentOpen={isCommentModalOpen}
-                        onCommentClose={closehandleCommentModal}
-                        listData={selectedHousehold}
-                        onSubmit={(
-                            comment: {
-                                id: number;
-                                team_id: number,
-                                comment: string;
-                                target_id: number;
-                                target_type: number;
-                                user_id_to: number;
-                            }) => handleCommentSubmit(comment)}
+                    <Comments
+                        className="w-full"
+                        targetType={1}
+                        comment={comments}
+                        comment_id={saving.id}
+                        onWriteClick={() => handleGenericComment(
+                            saving,
+                            'saving',
+                            saving.user_id,
+                            saving.title,
+                            saving.deadline
+                        )}
                     />
                 </li>
             ))}
@@ -231,14 +240,20 @@ const pagetitle = "チーム";
         </div>
     </div>
 
-    {selectedHousehold && (
     <CommentModal
         isCommentOpen={isCommentModalOpen}
         onCommentClose={closehandleCommentModal}
         listData={selectedHousehold}
-        onSubmit={handleCommentSubmit}
+        onSubmit={(
+            comment: {
+            id: number;
+            team_id: number;
+            comment: string;
+            target_id: number;
+            target_type: number;
+            user_id_to: number;
+        }) => handleCommentSubmit(comment)}
     />
-)}
     </AuthenticatedLayout>
 );
 }

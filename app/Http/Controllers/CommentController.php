@@ -101,7 +101,8 @@ class CommentController extends Controller
         // コメント作成後にイベントを発火
         event(new Registered($comment));  // もしCommentCreatedのような専用イベントがあればそれを使う
 
-        return redirect()->back();
+    // コントローラーでリダイレクト
+    return redirect()->back()->with('reload', true);
     }
 
     /**
