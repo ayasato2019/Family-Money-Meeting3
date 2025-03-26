@@ -62,9 +62,10 @@ class AvatarController extends Controller
         ]);
 
         $user = Auth::user();
-        if (!$user) {
+        if (!$user instanceof User) {
             return redirect()->back()->withErrors(['error' => 'ユーザーが認証されていません。']);
         }
+
 
         $user->update(['avatar' => $request->avatar]);
 

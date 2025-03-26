@@ -4,23 +4,23 @@ import CheckBox from "@/Components/Checkbox/Checkbox";
 import Comments from '@/Components/Comment/Comment';
 
 interface Props {
-data: LiatDataTypes[];
-onEdit: (item: LiatDataTypes) => void;
-onDelete: (id: number) => void;
-onToggleAchieve: (id: number, newValue: boolean) => void;
-onComment: (item: LiatDataTypes) => void;
-userId: number;
-teamId: number;
+    data: LiatDataTypes[];
+    onEdit: (item: LiatDataTypes) => void;
+    onDelete: (id: number) => void;
+    onToggleAchieve: (id: number, newValue: boolean) => void;
+    onComment: (item: LiatDataTypes) => void;
+    userId: number;
+    teamId: number;
 }
 
 export default function LiatDataList({
-data,
-onEdit,
-onDelete,
-onComment,
-onToggleAchieve,
-userId,
-teamId,
+    data,
+    onEdit,
+    onDelete,
+    onComment,
+    onToggleAchieve,
+    userId,
+    teamId,
 }: Props) {
 
 const current = new Date();

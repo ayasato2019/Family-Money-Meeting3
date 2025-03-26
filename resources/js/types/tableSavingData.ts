@@ -10,7 +10,7 @@ export interface SavingTypes {
     achieve: boolean; // tinyint(1) → boolean
     level: number; // int unsigned
     images?: string | null; // varchar(255) (null許容)
-    is_shared: boolean; // tinyint(1) → boolean
+    is_shared: number; // tinyint(1) → boolean
     comment_id: number | null; // bigint unsigned (null許容)
     memo?: string | null; // text (null許容)
 }

@@ -27,9 +27,13 @@ import { router } from '@inertiajs/react';
 // 型定義
 interface PageProps {
     auth: {
-        user: UserTypes & { role: number; team_id: number };
+        user: UserTypes & { team_id: number };  // ユーザーにteam_idを追加
     };
+    team_id: number;  // team_idを追加
+    comments?: CommentsTypes[];  // commentsを追加
+    [key: string]: any;  // インデックスシグネチャを追加
 }
+
 
 export default function Household({
     household,
@@ -39,8 +43,7 @@ export default function Household({
     role: number
 }) {
     // 型を明示的にキャストして取得
-    const { auth } = usePage().props as unknown as PageProps;
-    const { comments } = usePage().props as unknown as { comments: CommentsTypes[] };
+    const { auth, comments, team_id } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
     const user = auth.user;
     const user_id = auth.user.id;
 
@@ -103,7 +106,8 @@ export default function Household({
 
         const newComment: CommentsTypes = comment ?? {
             id: listData.comment_id ?? 0,
-            user_id_from: user_id,
+            team_id: team_id ?? 0,
+            // user_id_from: user_id,
             user_id_to: listData.user_id,
             target_type: 0,
             target_id: listData.id,
@@ -135,7 +139,6 @@ export default function Household({
         },
     });
     };
-
 
     return (
     <AuthenticatedLayout
@@ -231,6 +234,7 @@ export default function Household({
             onSubmit={(
                 comment: {
                 id: number;
+                team_id: number;
                 comment: string;
                 target_id: number;
                 target_type: number;

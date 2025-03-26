@@ -6,7 +6,7 @@ export interface LiatDataTypes {
     price: number;
     date: string;
     achieve: boolean;
-    is_shared: boolean;
+    is_shared: number;
     images?: string | null;
     memo?: string | null;
     comment_id?: number | null;

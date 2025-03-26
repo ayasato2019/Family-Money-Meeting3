@@ -33,38 +33,52 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        dd($request->all());
-
         $validated = $request->validate([
-            // 'team_id' => 'required|exists:teams,id',
-            // 'user_id_from' => 'required|exists:users,id',
-            'user_id_to' => 'required|exists:users,id',
-            'comment' => 'required|string'
+            'team_id' => 'required|integer',
+            'user_id_to' => 'required|integer',
+            'target_type' => 'required|integer', // 0household, 1貯金, 2投資, 3必要, 4欲しい 5寄付 のいずれか
+            'target_id' => 'required|integer',
+            'comment' => 'required|string|max:1000', // コメントは文字列で最大1000文字まで
         ]);
 
-        // //コメントデータを参照
-        // $household = Household::find(1);
-        // $commentId = $household->comment->id ?? null;
+        // 現在ログインしているユーザー情報を取得
+        $user = Auth::user();
 
-        // $commentId = DB::table('comments')
-        //     ->where('id', function ($query) {
-        //         $query->select('comment_id')->from('households')->where('id', 1);
-        //     })
-        //     ->value('id');
-
-        // // $comment = Comment::where('id', $list->comment_id)
-        // // ->lockForUpdate()  // ロックをかける
-        // // ->first();
-
-        Comment::create([
-            'team_id' => $user->team_id,
-            'user_id_from' => $user->id,
-            // 'user_id_to' => $validated['user_id_to'],
+        // 新規コメント作成
+        $comment = Comment::create([
+            'user_id_from' => $user->id, // user_id_fromは必須
+            'user_id_to' => $validated['user_id_to'],
+            'target_type' => $validated['target_type'],
+            'target_id' => $validated['target_id'],
             'comment' => $validated['comment'],
+            'team_id' => $validated['team_id'], // 必要に応じてteam_idを設定
         ]);
-        event(new Registered($comment));
-        return response()->json(['message' => 'Comment added'], 201);
-        return Inertia::render('Teams/CreateTeams');
+
+        // コメント作成後にイベントを発火
+        event(new Registered($comment));  // もしCommentCreatedのような専用イベントがあればそれを使う
+
+        // 作成完了後、リダイレクト
+        return redirect()->back();
+        // // id が 0 なら新規登録
+        // if ($validated['id'] == 0) {
+
+        // } else {
+        //     // id が 1 以上ならコメントの更新
+        //     $comment = Comment::find($validated['id']);
+
+        //     // コメントが見つからない場合、エラーメッセージを表示
+        //     if (!$comment) {
+        //         return redirect()->back()->withErrors(['error' => 'コメントが見つかりません。']);
+        //     }
+
+        //     // 更新する場合、ユーザーが自分のコメントのみを編集できるように
+        //     if ($comment->user_id_from == $user->id) {
+        //         $comment->update([
+        //             'comment' => $validated['comment'],
+        //         ]);
+        //         event(new Registered($comment));
+        //     }
+        // }
     }
 
     /**

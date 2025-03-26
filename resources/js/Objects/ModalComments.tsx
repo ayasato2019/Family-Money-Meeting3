@@ -14,6 +14,7 @@ interface PageProps {
         user: UserTypes;
         };
     comments: CommentsTypes[];
+    team_id: number | null;
     // 他のページのプロパティも必要に応じて追加
 }
 
@@ -21,11 +22,12 @@ export interface CommentModalProps {
     isCommentOpen: boolean;
     onCommentClose: () => void;
     listData: {
+        id: number;
+        team_id: number;
         user_id_to: number;
-        user_id_from: number;
+        // user_id_from: number;
         target_type: number;
         target_id: number;
-        id: number;
         comment_id?: number;
         comment: string;
         title?: string;
@@ -33,6 +35,7 @@ export interface CommentModalProps {
     } | null;
     onSubmit: (comment: {
         id: number;
+        team_id: number;
         comment: string;
         target_id: number;
         target_type: number;
@@ -48,36 +51,36 @@ export default function CommentModal({
 }: CommentModalProps) {
     const { data, setData, post, processing, reset } = useForm({
         id: 0,
+        team_id: 0,
+        // user_id_from: auth.user.id,
         user_id_to: 0,
-        user_id_from: 0,
         target_id: 0,
         target_type: 0,
         comment: "",
     });
 
-    // ログイン中のユーザーIDを取得
-const { auth, comments } = usePage().props as unknown as PageProps;
-const user_id = auth.user.id;
+    const { auth, comments, team_id } = usePage().props as unknown as PageProps;
+
     // コメント対象データが存在する場合、必要なデータを設定
     useEffect(() => {
         if (listData && listData.comment_id !== 0 && listData.target_type !== 0) {
             setData({
                 comment: listData.comment,
                 id: listData.id,
+                team_id: team_id ?? 0, // team_idを設定
                 target_id: listData.target_id,
                 target_type: listData.target_type,
                 user_id_to: listData.user_id_to,
-                user_id_from: user_id,
             });
         } else if (listData) {
             // listDataが存在する場合、ログインユーザーのIDとtarget_idを設定
             setData({
                 comment: '',
                 id: listData.id,
+                team_id: team_id ?? 0,
                 target_id: listData.target_id, // listDataから取得
                 target_type: listData.target_type, // listDataから取得
                 user_id_to: listData.user_id_to || auth.user.id, // コメントする相手ユーザーID
-                user_id_from: user_id, // 自分のユーザーID
             });
         }
     }, [listData, auth.user.id]);
@@ -130,6 +133,7 @@ const user_id = auth.user.id;
                                 value={data.comment}
                                 onChange={(e) => setData("comment", e.target.value)}
                                 className="border rounded p-2"
+                                required
                             />
                         </div>
                     </div>

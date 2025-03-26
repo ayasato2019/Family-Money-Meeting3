@@ -12,4 +12,5 @@ export type PageProps<
     auth: {
         user: User;
     };
+    team_id: number | null;
 };

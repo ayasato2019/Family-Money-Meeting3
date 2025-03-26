@@ -13,7 +13,7 @@ interface EditListdModalProps {
         title: string;
         price: number;
         date: string;
-        is_shared: boolean;
+        is_shared: number;
         images?: string | null;
         memo?: string | null;
     } | null;

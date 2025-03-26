@@ -48,7 +48,7 @@ export default function MemberStatus({
         memo: "",
         comment: "",
     })
-    const { auth, comments } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
+    const { auth, comments, team_id } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
 
 
     //コメント
@@ -67,7 +67,8 @@ export default function MemberStatus({
 
             const newComment: CommentsTypes = comment ?? {
             id: 0,
-            user_id_from: auth.user.id,
+            team_id: team_id ?? 0,
+            // user_id_from: auth.user.id,
             user_id_to: shared_user.id,
             target_type: targetType,
             target_id: listData.id,
@@ -193,6 +194,7 @@ const pagetitle = "チーム";
                         onSubmit={(
                             comment: {
                                 id: number;
+                                team_id: number,
                                 comment: string;
                                 target_id: number;
                                 target_type: number;
