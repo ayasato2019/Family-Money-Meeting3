@@ -17,7 +17,7 @@ img {
 }
 
 .balloon {
-    @apply relative inline-flex justify-center py-1 px-2 rounded-3xl bg-gray-300 dark:text-black;
+    @apply relative inline-flex justify-center py-1 px-2 rounded-3xl bg-gray-200 dark:text-black;
     &::before {
         @apply content-[''] absolute bottom-4 w-0 h-0 border-solid;
     }
@@ -27,7 +27,7 @@ img {
             @apply right-[-9px] top-[calc(50%-5px)];
             border-top: 5px solid transparent;
             border-bottom: 5px solid transparent;
-            border-left: 10px solid var(--tw-color-lightgray);
+            border-left: 10px solid #e5e7eb;
             border-right: 0;
         }
     }

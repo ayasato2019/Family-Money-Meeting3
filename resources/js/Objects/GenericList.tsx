@@ -7,6 +7,7 @@ import Comments from '@/Components/Comment/Comment';
 interface Props {
     data: LiatDataTypes[];
     comments: CommentsTypes[];
+    targetType: number;
     onEdit: (item: LiatDataTypes) => void;
     onDelete: (id: number) => void;
     onToggleAchieve: (id: number, newValue: boolean) => void;
@@ -18,6 +19,7 @@ interface Props {
 export default function LiatDataList({
     data,
     comments,
+    targetType,
     onEdit,
     onDelete,
     onComment,
@@ -25,28 +27,28 @@ export default function LiatDataList({
     userId,
     teamId,
 }: Props) {
-    console.log('コメント' + comments);
-const current = new Date();
-const thisMonthStr = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}`;
 
-const months = [...new Set(data.map((item) => item.date.slice(0, 7)))].sort((a, b) => a.localeCompare(b));
-const thisMonthIndex = months.findIndex((m) => m === thisMonthStr);
-const [touchStart, setTouchStart] = useState<number | null>(null);
-const [currentMonthIndex, setCurrentMonthIndex] = useState(thisMonthIndex >= 0 ? thisMonthIndex : 0);
+    const current = new Date();
+    const thisMonthStr = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}`;
 
-const [achievedIds, setAchievedIds] = useState<number[]>([]);
-const toggleAchieve = (id: number) => {
-    setAchievedIds((prev) =>
-        prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
-};
+    const months = [...new Set(data.map((item) => item.date.slice(0, 7)))].sort((a, b) => a.localeCompare(b));
+    const thisMonthIndex = months.findIndex((m) => m === thisMonthStr);
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+    const [currentMonthIndex, setCurrentMonthIndex] = useState(thisMonthIndex >= 0 ? thisMonthIndex : 0);
 
-const groupedData = data.reduce((acc: Record<string, LiatDataTypes[]>, item: LiatDataTypes) => {
-    const month = item.date.slice(0, 7);
-    if (!acc[month]) acc[month] = [];
-    acc[month].push(item);
-    return acc;
-}, {});
+    const [achievedIds, setAchievedIds] = useState<number[]>([]);
+    const toggleAchieve = (id: number) => {
+        setAchievedIds((prev) =>
+            prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+        );
+    };
+
+    const groupedData = data.reduce((acc: Record<string, LiatDataTypes[]>, item: LiatDataTypes) => {
+        const month = item.date.slice(0, 7);
+        if (!acc[month]) acc[month] = [];
+        acc[month].push(item);
+        return acc;
+    }, {});
 
 return (
     <div className="w-full my-10">
@@ -116,7 +118,9 @@ return (
                     </div>
                     <Comments
                         className="w-full"
-                        targetId={item.id}
+                        targetType={targetType}
+                        comment={comments}
+                        comment_id={item.id}
                         onWriteClick={() => onComment(item)}
                     />
                 </li>

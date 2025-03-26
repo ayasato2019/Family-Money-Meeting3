@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/react';
 import FarstView from '@/Objects/FarstView';
 
 import { usePage } from '@inertiajs/react';
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "@inertiajs/react"
 import InputLabel from "@/Components/InputLabel"
 import PrimaryButton from "@/Components/PrimaryButton"
@@ -24,6 +24,7 @@ import { UserTypes } from '@/types/tableUserData';
 
 import { router } from '@inertiajs/react';
 
+
 // 型定義
 interface PageProps {
     auth: {
@@ -42,8 +43,6 @@ export default function Household({
     // 型を明示的にキャストして取得
     const { auth, team_id, role } = usePage<PageProps>().props;
     const user = auth.user;
-    const [comments, setComments] = useState<CommentsTypes[]>([]);
-    const [targetId, setTargetId] = useState<number>(0);
 
     const { data, setData, post, reset, processing } = useForm({
         title: "",
@@ -95,11 +94,14 @@ export default function Household({
     };
 
     //コメント
+    //コメントモーダルの制御
     const [isCommentModalOpen, setIsCommentModalOpen] = useState(false)
     const [selectedHousehold, setSelectedHousehold] = useState<CommentsTypes | null>(null)
+    const [comments, setComments] = useState<CommentsTypes[]>([]);
+
     const handleComment = (listData: HouseholdTypes) => {
         const comment = comments.find(
-            (c) => c.target_id === listData.id && c.target_type === 0
+            (c) => c.target_id === listData.id && c.target_type === targetType
         );
 
         const newComment: CommentsTypes = comment ?? {
@@ -117,11 +119,16 @@ export default function Household({
         setIsCommentModalOpen(true);
     };
 
+    //モーダルの開閉の制御
     const closehandleCommentModal = () => {
         setIsCommentModalOpen(false)
         setSelectedHousehold(null)
     }
 
+    //コメントの表示
+    const targetType = 0;
+
+    //コメント書き込みボタン
     const handleCommentSubmit = (commentData: {
         id: number;
         comment: string;
@@ -210,13 +217,14 @@ export default function Household({
 
         <LiatDataList
             data={household}
-            comments={comments}
+            targetType={targetType}
             onToggleAchieve={handleToggleAchieve}
             userId={user.id}
             teamId={user.team_id}
             onComment={handleComment}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            comments={[]}
         />
 
         <EditHouseholdModal

@@ -91,6 +91,7 @@ Route::middleware('auth')->group(function () {
 
     //コメント
     Route::post('/comments', [CommentController::class, 'store'])->name('comment');
+    Route::get('/comments/{targetType}/{targetId}', [CommentController::class, 'show'])->name('comments-show');
 
     // //投資の登録
     Route::get('/investment-registration', [AvatarController::class, 'create'])->name('investment-index');

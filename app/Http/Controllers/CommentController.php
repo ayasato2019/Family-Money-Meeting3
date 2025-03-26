@@ -44,6 +44,60 @@ class CommentController extends Controller
             'team_id' => $validated['team_id'], // 必要に応じてteam_idを設定
         ]);
 
+        // コメント作成後に関連するテーブルのcomment_idを設定
+        switch ($validated['target_type']) {
+            case 0: // Household
+                $householdItem = Household::find($validated['target_id']);
+                if ($householdItem) {
+                    $householdItem->update([
+                        'comment_id' => $comment->id // 作成したコメントのIDを関連付ける
+                    ]);
+                }
+                break;
+            case 1: // Saving
+                $savingItem = Saving::find($validated['target_id']);
+                if ($savingItem) {
+                    $savingItem->update([
+                        'comment_id' => $comment->id
+                    ]);
+                }
+                break;
+            // case 2: // Investment
+            //     $investmentItem = Investment::find($validated['target_id']);
+            //     if ($investmentItem) {
+            //         $investmentItem->update([
+            //             'comment_id' => $comment->id
+            //         ]);
+            //     }
+            //     break;
+            // case 3: // Need
+            //     $needItem = Need::find($validated['target_id']);
+            //     if ($needItem) {
+            //         $needItem->update([
+            //             'comment_id' => $comment->id
+            //         ]);
+            //     }
+            //     break;
+            // case 4: // Want
+            //     $wantItem = Want::find($validated['target_id']);
+            //     if ($wantItem) {
+            //         $wantItem->update([
+            //             'comment_id' => $comment->id
+            //         ]);
+            //     }
+            //     break;
+            // case 5: // Donation
+            //     $donationItem = Donation::find($validated['target_id']);
+            //     if ($donationItem) {
+            //         $donationItem->update([
+            //             'comment_id' => $comment->id
+            //         ]);
+            //     }
+            //     break;
+            default:
+                throw new \Exception('Invalid target type');
+        }
+
         // コメント作成後にイベントを発火
         event(new Registered($comment));  // もしCommentCreatedのような専用イベントがあればそれを使う
 
@@ -53,27 +107,22 @@ class CommentController extends Controller
     /**
      * コメント表示
      */
-    public function show(Comment $targetType, $targetId)
+    public function show($targetType, $targetId)
     {
         // target_typeに応じて異なるモデルを取得
-        $model = $this->index($targetType);
-        $item = $model::find($targetId);
+        $model = $this->index($targetType);  // $targetTypeは整数値として渡される
+        $item = $model::find($targetId);  // モデルから対象アイテムを取得
 
         // コメントを取得
         $comments = Comment::where('target_id', $targetId)
-            ->where('target_type', $targetType)
+            ->where('target_type', $targetType)  // target_typeが一致するものを取得
             ->get();
-
         // もしアイテムが見つからない場合はエラーメッセージを返す
         if (!$item) {
             return response()->json(['error' => 'アイテムが見つかりません'], 404);
         }
-
-        // Inertiaでページを返す
-        return Inertia::render('CommentsPage', [
-            'item' => $item,
-            'comments' => $comments
-        ]);
+        // コメントを返す
+        return response()->json($comments);
     }
 
     /**
