@@ -25,7 +25,7 @@ export default function LiatDataList({
     userId,
     teamId,
 }: Props) {
-
+    console.log('コメント' + comments);
 const current = new Date();
 const thisMonthStr = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}`;
 
