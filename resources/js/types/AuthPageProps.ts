@@ -11,6 +11,7 @@ export interface AuthPageProps {
             avatar: number | null;
         };
     };
+    team_id: number | null;
     statuses?: Record<number, StatusTypes>;
     [key: string]: any;
 }

@@ -36,9 +36,9 @@ interface PageProps {
 
 
 export default function Household({
-    household,
+    investments,
 }: {
-    household: HouseholdTypes[]
+    investments: HouseholdTypes[]
 }) {
     // 型を明示的にキャストして取得
     const { auth, team_id, role } = usePage<PageProps>().props;
@@ -59,14 +59,14 @@ export default function Household({
     //登録
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault()
-        post("/household_registration", {
+        post("/investments_registration", {
             onSuccess: () => reset(),
         })
     }
 
     //削除
     const handleDelete = (id: number) => {
-        post(`/household_del/${id}`, {
+        post(`/investments_del/${id}`, {
             method: "delete",
         })
     }
@@ -86,7 +86,7 @@ export default function Household({
     }
 
     const handleToggleAchieve = (id: number, newValue: boolean) => {
-        router.patch(`/household/achieve/${id}`, {
+        router.patch(`/investments/achieve/${id}`, {
             achieve: newValue ? 1 : 0,
         }, {
             preserveScroll: true,
@@ -149,12 +149,11 @@ export default function Household({
     <AuthenticatedLayout
         header={
             <h1 className="flex gap-2 items-center justify-center text-lg font-semibold leading-tight text-[#374151]">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width={18} height={18}><path d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-384c0-35.3-28.7-64-64-64L64 0zM96 64l192 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L96 160c-17.7 0-32-14.3-32-32l0-32c0-17.7 14.3-32 32-32zm32 160a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM96 352a32 32 0 1 1 0-64 32 32 0 1 1 0 64zM64 416c0-17.7 14.3-32 32-32l96 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-96 0c-17.7 0-32-14.3-32-32zM192 256a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm32 64a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zm64-64a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm32 64a32 32 0 1 1 -64 0 32 32 0 1 1 64 0zM288 448a32 32 0 1 1 0-64 32 32 0 1 1 0 64z" fill="#374151"/></svg>
-                家計簿
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={20} height={20}><path d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z" fill="#374151"/></svg>                投資
             </h1>
         }
     >
-        <Head title="家計簿" />
+        <Head title="投資" />
 
         <FarstView
             category={6}
@@ -216,7 +215,7 @@ export default function Household({
         </form>
 
         <LiatDataList
-            data={household}
+            data={investments}
             targetType={targetType}
             onToggleAchieve={handleToggleAchieve}
             userId={user.id}

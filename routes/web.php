@@ -10,9 +10,11 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\HouseholdController;
 use App\Http\Controllers\SavingController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\InvestmentsController;
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CommentController;
 use App\Models\History;
+use App\Models\Investments;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -86,7 +88,7 @@ Route::middleware('auth')->group(function () {
     //目標の詳細ページ
     Route::get('/saving/saving_{id}', [SavingController::class, 'show'])->name('saving-show');
     Route::post('/saving/update', [HistoryController::class, 'store'])->name('saving-update');
-    Route::post('/saving/paid', [HistoryController::class, 'paid'])->name('saving-index');
+    // Route::post('/saving/paid', [HistoryController::class, 'paid'])->name('saving-index');
 
     //アバターアップデート
     Route::patch('/avatarupdate', [AvatarController::class, 'update'])->name('avatar-update');
@@ -96,8 +98,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/comments/{targetType}/{targetId}', [CommentController::class, 'show'])->name('comments-show');
 
     // //投資の登録
-    Route::get('/investment-registration', [AvatarController::class, 'create'])->name('investment-index');
-    // Route::post('/investment-confirm', [InvestmentController::class, 'store'])->name('investment-confirm');
+    Route::get('/investments', [InvestmentsController::class, 'create'])->name('houseold-create');
+    Route::post('/investments_registration', [InvestmentsController::class, 'store'])->name('houseold-register');
+    Route::post('/investmentsd_del/{id}', [InvestmentsController::class, 'destroy'])->name('houseold-destroy');
+    Route::get('/investments_del/{id}', function () {
+        return redirect('/investments');
+    });
+    Route::post('/investments_edit/{id}', [InvestmentsController::class, 'update'])->name('houseold-update');
+    Route::get('/investments_edit/{id}', function () {
+        return redirect('/investments');
+    });
+    Route::patch('/investments/achieve/{id}', [InvestmentsController::class, 'updateAchieve'])
+    ->name('investments-achieve');    // Route::post('/investment-confirm', [InvestmentController::class, 'store'])->name('investment-confirm');
     // //必要の登録
     Route::get('/expenses-registration', [AvatarController::class, 'create'])->name('expenses-index');
     // Route::post('/expenses-confirm', [ExpensesController::class, 'store'])->name('expenses-confirm');

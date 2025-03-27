@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreHouseholdRequest;
-use App\Http\Requests\UpdateHouseholdRequest;
-use App\Models\Household;
+use App\Http\Requests\StoreInvestmentsRequest;
+use App\Http\Requests\UpdateInvestmentsRequest;
+use App\Models\Investments;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 
-class HouseholdController extends Controller
+class InvestmentsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,31 +22,33 @@ class HouseholdController extends Controller
     }
 
     /**
-     * 家計簿を閲覧させる
+     * Show the form for creating a new resource.
      */
     public function create()
     {
-        // チームの家計簿を取得
-        $team_id = Auth::user()->team_id;
-        $role = Auth::user()->role;
-        $household = Household::where('team_id', $team_id)->get();
+        // ユーザーIDを取得
+        $user_id = Auth::user()->id;
 
-        // コメントを追加で取得
+        // ユーザーに関連する投資を取得
+        $investments = Investments::where('user_id', $user_id)->get();
+
+        // コメントを追加で取得（target_typeが1のコメントを取得）
         $comments = Comment::where('target_type', 1)
-        ->whereIn('target_id', $household->pluck('id')) // household に関連するコメントのみ
-        ->get();
+            ->whereIn('target_id', $investments->pluck('id'))  // investmentsに関連するコメントのみ取得
+            ->get();
 
-        return Inertia::render('Household/Household', [
-            'household' => $household,
-            // 'role' => $role,
+        // 投資データとコメントをInertiaに渡す
+        return Inertia::render('Investments/Investments', [
+            'investments' => $investments,
             'comments' => $comments,
         ]);
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreHouseholdRequest $request)
+    public function store(StoreInvestmentsRequest $request)
     {
         // ユーザーIDを取得
         $user_id = Auth::id();
@@ -63,7 +65,7 @@ class HouseholdController extends Controller
             'title' => 'required|string|max:255',
             'price' => 'required|integer',
             'date' => 'required|string|max:255',
-            'is_share' => 'nullable|boolean',
+            'is_shared' => 'nullable|boolean',
             'images' => 'nullable|string|max:255',
             'memo' => 'nullable|string|max:255',
         ]);
@@ -73,13 +75,13 @@ class HouseholdController extends Controller
         $validated['achieve'] = false;
 
         // 新規データを作成
-        $household = Household::create([
+        $investments = Investments::create([
             'team_id' => $team_id,
             'user_id' => $user_id,
             'title' => $validated['title'],
             'price' => $validated['price'],
             'date' => $validated['date'],
-            'is_share' => $validated['is_share'],
+            'is_shared' => $validated['is_shared'],
             'images' => $validated['images'],
             'memo' => $validated['memo'],
             'comment_id' => null,
@@ -87,7 +89,7 @@ class HouseholdController extends Controller
         ]);
 
         // イベントをトリガー
-        event(new Registered($household));
+        event(new Registered($investments));
 
         // 家計簿作成ページへリダイレクト
         return redirect()->route(
@@ -95,11 +97,10 @@ class HouseholdController extends Controller
         );
     }
 
-
     /**
      * Display the specified resource.
      */
-    public function show(Household $household)
+    public function show(Investments $investments)
     {
         //
     }
@@ -107,7 +108,7 @@ class HouseholdController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Household $household)
+    public function edit(Investments $investments)
     {
         //
     }
@@ -115,11 +116,11 @@ class HouseholdController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateHouseholdRequest $request, $id)
+    public function update(UpdateInvestmentsRequest $request, $id)
     {
         // リクエストにteam_idを追加
         $team_id = Auth::user()->team_id;
-        $household_id = $id;
+        $investments_id = $id;
         $request->merge(['team_id' => $team_id]);
 
         $validated = $request->validate([
@@ -127,24 +128,24 @@ class HouseholdController extends Controller
             'title' => 'required|string|max:255',
             'price' => 'required|integer',
             'date' => 'required|string|max:255',
-            'is_share' => 'nullable|boolean',
+            'is_shared' => 'nullable|boolean',
             'images' => 'nullable|string|max:255',
             'memo' => 'nullable|string|max:255',
         ]);
 
 
         // 既存のデータを更新する場合
-        $household_content = Household::where('id', $household_id)
+        $investments_content = Investments::where('id', $investments_id)
             ->lockForUpdate()
             ->first();
 
         // 既存のデータを更新
-        $household_content->update(array_merge([
+        $investments_content->update(array_merge([
             'team_id' => $team_id,
             'title' => $validated['title'],
             'price' => $validated['price'],
             'date' => $validated['date'],
-            'is_share' => $validated['is_share'],
+            'is_shared' => $validated['is_share'],
             'images' => $validated['images'],
             'memo' => $validated['memo'],
             'comment_id' => null,
@@ -157,9 +158,9 @@ class HouseholdController extends Controller
 
     public function updateAchieve(Request $request, $id)
     {
-        $household = Household::findOrFail($id);
-        $household->achieve = $request->input('achieve'); // 0 or 1
-        $household->save();
+        $investments = Investments::findOrFail($id);
+        $investments->achieve = $request->input('achieve'); // 0 or 1
+        $investments->save();
 
         return redirect()->back();
     }
@@ -167,9 +168,9 @@ class HouseholdController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Investments $investments, $id)
     {
-        Household::destroy($id);
+        Investments::destroy($id);
         return back();
     }
 }
