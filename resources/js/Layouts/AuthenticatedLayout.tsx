@@ -49,7 +49,7 @@ export default function Authenticated({
     ];
 
     return (
-        <div className="flex min-h-screen max-w-6xl mx-auto md:mr-5 lg:mr-auto">
+        <div className="flex min-h-screen max-w-6xl mx-auto md:mr-5 lg:mr-auto px-4 md:px-0">
             {/* Left Sidebar (デスクトップ用) */}
             <div className="w-64 mt-16 p-4 hidden md:block" aria-hidden={!showingNavigationDropdown}>
                 <nav className="space-y-2">
@@ -68,7 +68,7 @@ export default function Authenticated({
             </div>
 
             {/* Middle Content */}
-            <div className="flex-1 max-w-2xl mx-auto">
+            <div className="flex-1 max-w-2xl mx-auto w-full">
                 <div className="relative mx-auto lg:px-8 bg-gradation rounded-b-3xl flex justify-between">
                     <Link className='py-2 px-4 lg:px-0' href={route('dashboard')}>
                         <ApplicationLogo className="block h-8 w-auto fill-current text-white" />
@@ -95,10 +95,10 @@ export default function Authenticated({
                     </div>
                 </div>
 
-                <main>
+                <main className='pb-10'>
                 {header && (
                     <header className="bg-white">
-                        <div className="mx-auto max-w-3xl px-4 pt-2 md:pt-8 sm:px-6 lg:px-8">
+                        <div className="w-full mx-auto max-w-3xl px-4 pt-2 md:pt-8 sm:px-6 lg:px-8">
                             {/* headerの中にh1タグ */}
                             {header}
                         </div>
@@ -158,6 +158,7 @@ export default function Authenticated({
                     </div>
                 </div>
             </div>
+
              {/* Right Sidebar */}
             <div className="w-1/3 max-w-80 mt-16 p-4 hidden lg:block">
                 {/* チームメンバー一覧 */}

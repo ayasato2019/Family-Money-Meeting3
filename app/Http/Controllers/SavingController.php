@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class SavingController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * リスト一覧
      */
     public function index()
     {

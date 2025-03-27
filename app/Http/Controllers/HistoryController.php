@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreHistoryRequest;
 use App\Http\Requests\UpdateHistoryRequest;
+use Illuminate\Auth\Events\Registered;
+
 use App\Models\History;
 use App\Models\Saving;
 use Inertia\Inertia;
@@ -11,22 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class HistoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -36,32 +22,40 @@ class HistoryController extends Controller
             'user_id' => 'required|integer',
             'category' => 'required|integer',
             'goal_id' => 'required|integer',
-            'deadline' => 'required|date|nullable',
-            'amount_saved' => 'required|numeric',
+            'deadline' => 'required|date',
+            'memo' => 'nullable|string',
+            'amount' => 'required|numeric',
         ]);
 
         $id = Auth::id();
         $savings = Saving::where('user_id', $id)->get();
 
         // 新しい履歴を作成
-        $history = new History();
-        $history->user_id = $request->user_id;
-        $history->category = $request->category;
-        // dd($history);
-        $history->goal_group_id = $request->goal_group_id;
-        $history->amount_saved = $request->amount_saved;
-        $history->date_saved = $request->date_saved;
-        $history->memo = $request->memo ?? null; // メモがあれば保存
-        $history->is_shared = $request->is_shared ?? false; // 共有設定があれば保存
-        $history->created_at = now(); // 作成日時をセット
-        $histories = History::where('user_id', $id)->get();
+        $histories = History::create([
+            'user_id' => $validated['user_id'],
+            'category' => $validated['category'],
+            'goal_id' => $validated['goal_id'],
+            'amount' => $validated['amount'],
+            'date' => now()->toDateString(),
+            'memo' => $validated['memo'] ?? null,
+            'is_shared' => $validated['is_shared'] ?? 0,
+            'created_at' => now()->toDateString(),
+            'updated_at' => now()->toDateString(),
+        ]);
 
-        if ($request->amount_saved != 0) {
-            $history->save(); // 履歴を保存
+        if ($validated['amount'] != 0) {
+            event(new Registered($histories));
+            // dd($validated['amount']);
+        } else {
+            return redirect()->route('saving-show', [
+                'id' => $validated['goal_id'],
+                'savings' => $savings,
+            ]);
         }
+
         // 成功したらリダイレクト
         return redirect()->route('saving-show', [
-            'id' => $request->goal_id,
+            'id' => $validated['goal_id'],
             'histories' =>  $histories,
             'savings' =>  $savings,
         ]);

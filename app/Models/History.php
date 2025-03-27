@@ -13,8 +13,8 @@ class History extends Model
         'user_id',
         'category',
         'goal_id',
-        'amount_saved',
-        'date_saved',
+        'amount',
+        'date',
         'memo',
         'is_shared',
     ];

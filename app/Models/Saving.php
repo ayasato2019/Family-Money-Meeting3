@@ -9,6 +9,7 @@ class Saving extends Model
 {
     protected $fillable = [
         'user_id',
+        "category",
         'goal_id',
         'title',
         'amount',

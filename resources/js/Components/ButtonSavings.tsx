@@ -27,7 +27,7 @@ export default function ButtonSecondary({
             type={type}
             onClick={handleClick}
             className={
-                `button-savig inline-flex flex-col items-center justify-center gap-0 rounded-full w-20 h-20 border border-primary bg-primary text-sm font-bold uppercase tracking-normal text-white shadow-sm transition duration-150 ease-in-out hover:bg-gradation-blue hover:border-blue hover:text-white focus:outline-none focus:ring-2 focus:ring-blue focus:ring-offset-2 ${
+                `button-savig inline-flex flex-col items-center justify-center gap-0 rounded-full w-20 h-20 border border-primary-500 bg-primary-500 text-sm font-bold uppercase tracking-normal text-white shadow-sm transition duration-150 ease-in-out hover:bg-gradation-blue hover:border-blue hover:text-white focus:outline-none focus:ring-2 focus:ring-blue focus:ring-offset-2 ${
                     disabled && 'opacity-25 pointer-events-none'
                 } ` + className
             }

@@ -83,7 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/saving/list', [SavingController::class, 'index'])->name('saving-index');
 
     //目標の詳細ページ
-    Route::get('/saving/saving-{id}', [SavingController::class, 'show'])->name('saving-show');
+    Route::get('/saving/saving_{id}', [SavingController::class, 'show'])->name('saving-show');
     Route::post('/saving/update', [HistoryController::class, 'store'])->name('saving-update');
 
     //アバターアップデート

@@ -13,11 +13,11 @@ export default function StatusBar({
 
     const barHeight = {
         'small': 'h-1',
-        'large': 'h-6',
+        'large': 'h-8',
     }[size];
 
     return (
-        <div className={"overflow-hidden w-full bg-gray rounded-sm "+ barHeight}>
+        <div className={"overflow-hidden w-full bg-gray-300 rounded-sm "+ barHeight}>
             <div
                 className="h-full bg-gradation"
                 style={{

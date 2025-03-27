@@ -111,7 +111,7 @@ export default function MemberStatus({
     };
 
     //コメント表示
-    
+
 
 //ページタイトル
 const pagetitle = "チーム";
@@ -130,7 +130,7 @@ const pagetitle = "チーム";
 <div className="max-w-4xl mx-auto py-4 space-y-5">
         {/* ステータス */}
         <section className={`w-full p-2 border border-t-4 border-t- border-gray-300 rounded-md`}>
-            <h2 className='flex items-center justify-center gap-2 border-b border-gray-300 pb-2 text-center'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={24} height={24}><path d="M512 32c0 113.6-84.6 207.5-194.2 222c-7.1-53.4-30.6-101.6-65.3-139.3C290.8 46.3 364 0 448 0l32 0c17.7 0 32 14.3 32 32zM0 96C0 78.3 14.3 64 32 64l32 0c123.7 0 224 100.3 224 224l0 32 0 160c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-160C100.3 320 0 219.7 0 96z" fill="#374151"/></svg>ステータス</h2>
+            <h2 className='flex items-center justify-center gap-2 w-full border-b border-gray-300 pb-2 text-center'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={24} height={24}><path d="M512 32c0 113.6-84.6 207.5-194.2 222c-7.1-53.4-30.6-101.6-65.3-139.3C290.8 46.3 364 0 448 0l32 0c17.7 0 32 14.3 32 32zM0 96C0 78.3 14.3 64 32 64l32 0c123.7 0 224 100.3 224 224l0 32 0 160c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-160C100.3 320 0 219.7 0 96z" fill="#374151"/></svg>ステータス</h2>
             {status && status.is_shared === 1 ? (
             <ul className="py-4">
                 <li className="space-y-2">

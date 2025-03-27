@@ -10,9 +10,9 @@ export default function TitleSavings({
 }) {
 
     const typeClass = {
-        1: 'primary',    // '長'に対応
-        2: 'pink',   // '中'に対応
-        3: 'orange', // '短'に対応
+        1: 'primary-500',// '長'に対応
+        2: 'pink-500',   // '中'に対応
+        3: 'orange-500', // '短'に対応
     }[type];
 
     const displayText = {
@@ -22,8 +22,11 @@ export default function TitleSavings({
     }[type];
 
     return (
-        <div className={`relative flex flex-nowrap items-center justify-center gap-1 w-auto `+ className }>
-            {/* <span className={`inline-flex items-center justify-center px-1 py-1 text-${typeClass} border-2 border-${typeClass} leading-none font-bold text-sm rounded-sm dark:bg-black/95`}>{displayText}</span> */}
+        <div
+            className={`relative flex flex-nowrap items-center justify-center gap-1 mt-8 w-full border-b-4 border-dotted pb-2`+ className }
+        >
+            <span
+                className={`inline-flex items-center justify-center px-1 py-1 text-${typeClass} border-2 border-${typeClass} leading-none font-bold text-sm rounded-sm dark:bg-black/95`}>{displayText}</span>
             <h3
                 className={
                     'inline-block py-1 w-auto text-lg font-bold leading-none focus:outline-none ' +

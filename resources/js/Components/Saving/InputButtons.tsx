@@ -36,20 +36,20 @@ export default function InputButtons({
     }
 
     return (
-        <div className={`flex items-center justify-start flex-col gap-1 ${className}`}>
+        <div className={`flex items-center justify-start flex-col gap-4 ${className}`}>
             <div className="flex items-center justify-start gap-1 mb-1">
                 <InputPrice
                     name={inputName}
                     value={price}
                     onChange={handlePriceChange}
                 />
-                {/* <InputSelect /> */}
+                <InputSelect />
             </div>
-            {/* <div className="flex items-center justify-start gap-1">
+            <div className="flex items-center justify-start gap-1">
                 <ButtonPaid />
                 <ButtonMemo />
-                <ButtonComment />
-            </div> */}
+                {/* <ButtonComment /> */}
+            </div>
             <ButtonSaving onClick={handleSave} />
         </div>
     );

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ButtonHTMLAttributes } from 'react';
-import Modal from '@/Components/Modal';
+import Modal from '@/Components/Modal/Modal';
 import ModalPaidRegister from '@/Ui/ModalPaidRegister';
 
 export default function ButtonSecondary({
