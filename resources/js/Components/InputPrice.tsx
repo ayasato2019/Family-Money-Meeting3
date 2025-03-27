@@ -1,4 +1,4 @@
-import { useState, InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes } from 'react';
 
 interface InputPriceProps extends InputHTMLAttributes<HTMLInputElement> {
     value?: number;        // valueをnumber型に変更

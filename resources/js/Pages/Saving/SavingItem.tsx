@@ -1,9 +1,11 @@
 import { useState, useRef } from 'react';
-import { usePage, Head, Link } from '@inertiajs/react';
+import { usePage, Head, Link, useForm } from '@inertiajs/react';
+
 import TitleSavings from '@/Components/Saving/TitleSavings';
 import PriceConvert from '@/Components/Price/PriceConvert';
 import StatusBar from '@/Components/Saving/StatusBarLarge';
 import InputButtons from '@/Components/Saving/InputButtons';
+import ButtonPaid from '@/Components/Button/ButtonPaid';
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import FarstView from '@/Objects/FarstView';
@@ -48,6 +50,7 @@ export default function SavingId() {
         id: savings.id,
         comment_id: savings.comment_id,
         user_id: savings.user_id,
+        goal_id: savings.goal_id,
         title: savings.title,
         amount: savings.amount,
         deadline: savings.deadline,
@@ -103,6 +106,16 @@ export default function SavingId() {
     const metaCsrfToken = document.querySelector("meta[name='csrf-token']") as HTMLMetaElement;
     const csrfToken = useRef<string>(metaCsrfToken.content);
 
+    //使ったよモーダル
+    const { data, setData, post, reset, processing } = useForm({
+    memo: "",
+    amount: 0,
+    history_id: 0,
+    user_id: 0,
+    goal_id: 0,
+    category: 1,
+    })
+
     // 画面タイトル
     const pagetitle = "貯金";
     return (
@@ -139,12 +152,19 @@ export default function SavingId() {
                         </p>
                     </div>
 
-                    <InputButtons
-                        inputName="amount"
-                        className='mt-8'
-                        onChange={handlePriceChange}
-                        onSave={handleSave}
-                    />
+                    <div className="flex flex-col items-center justify-start gap-4 mx-auto w-auto">
+                        <InputButtons
+                            inputName="amount"
+                            className='mt-8'
+                            onChange={handlePriceChange}
+                            onSave={handleSave}
+                        />
+
+                        <ButtonPaid
+                            goal_id={saving.goal_id}  // goal_id
+                            category={1}  // category
+                        />
+                    </div>
                 </form>
             </div>
     </AuthenticatedLayout>

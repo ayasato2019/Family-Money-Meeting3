@@ -5,7 +5,7 @@ export interface HistoryTypes {
     comment_id?: number | null;
     category: number;
     amount: number;
-    deadline: string;
+    date: string;
     images?: string | null;
     is_shared: boolean;
     memo?: string | null;

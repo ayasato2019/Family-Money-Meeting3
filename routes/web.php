@@ -12,6 +12,7 @@ use App\Http\Controllers\SavingController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CommentController;
+use App\Models\History;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -85,6 +86,7 @@ Route::middleware('auth')->group(function () {
     //目標の詳細ページ
     Route::get('/saving/saving_{id}', [SavingController::class, 'show'])->name('saving-show');
     Route::post('/saving/update', [HistoryController::class, 'store'])->name('saving-update');
+    Route::post('/saving/paid', [HistoryController::class, 'paid'])->name('saving-index');
 
     //アバターアップデート
     Route::patch('/avatarupdate', [AvatarController::class, 'update'])->name('avatar-update');

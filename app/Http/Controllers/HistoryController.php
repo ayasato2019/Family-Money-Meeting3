@@ -30,6 +30,13 @@ class HistoryController extends Controller
         $id = Auth::id();
         $savings = Saving::where('user_id', $id)->get();
 
+        if ($validated['amount'] <= 0) {
+            return redirect()->route('saving-show', [
+                'id' => $validated['goal_id'],
+                'savings' => $savings,
+            ]);
+        }
+
         // 新しい履歴を作成
         $histories = History::create([
             'user_id' => $validated['user_id'],
@@ -43,15 +50,51 @@ class HistoryController extends Controller
             'updated_at' => now()->toDateString(),
         ]);
 
-        if ($validated['amount'] != 0) {
-            event(new Registered($histories));
-            // dd($validated['amount']);
-        } else {
+        // 成功したらリダイレクト
+        return redirect()->route('saving-show', [
+            'id' => $validated['goal_id'],
+            'histories' =>  $histories,
+            'savings' =>  $savings,
+        ]);
+    }
+
+    /**
+     * 使ったよモーダル
+     */
+    public function paid(StoreHistoryRequest $request)
+    {
+        dd($request->all);
+        $validated = $request->validate([
+            'user_id' => 'required|integer',
+            'category' => 'required|integer',
+            'goal_id' => 'required|integer',
+            'deadline' => 'required|date',
+            'memo' => 'nullable|string',
+            'amount' => 'required|numeric',
+        ]);
+
+        $id = Auth::id();
+        $savings = Saving::where('user_id', $id)->get();
+
+        if ($validated['amount'] <= 0) {
             return redirect()->route('saving-show', [
                 'id' => $validated['goal_id'],
                 'savings' => $savings,
             ]);
         }
+
+        // 新しい履歴を作成
+        $histories = History::create([
+            'user_id' => $validated['user_id'],
+            'category' => $validated['category'],
+            'goal_id' => $validated['goal_id'],
+            'amount' => $validated['amount'],
+            'date' => now()->toDateString(),
+            'memo' => $validated['memo'] ?? null,
+            'is_shared' => $validated['is_shared'] ?? 0,
+            'created_at' => now()->toDateString(),
+            'updated_at' => now()->toDateString(),
+        ]);
 
         // 成功したらリダイレクト
         return redirect()->route('saving-show', [

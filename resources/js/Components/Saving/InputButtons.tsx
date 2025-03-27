@@ -1,10 +1,6 @@
 import { useState, useRef } from 'react';
-import InputPrice from '@/Components/InputPrice';
-import ButtonMemo from '@/Components/ButtonMemo';
-import ButtonComment from '@/Components/ButtonComment';
-import ButtonPaid from '@/Components/ButtonPaid';
-import ButtonSaving from '@/Components/ButtonSavings';
-import InputSelect from '@/Components/InputSelectInterval';
+import InputPrice from '@/Components/Input/InputPrice';
+import ButtonSaving from '@/Components/Button/ButtonSavings';
 
 interface InputButtonsProps {
     className?: string;
@@ -39,16 +35,12 @@ export default function InputButtons({
         <div className={`flex items-center justify-start flex-col gap-4 ${className}`}>
             <div className="flex items-center justify-start gap-1 mb-1">
                 <InputPrice
+                    className='max-w-80'
                     name={inputName}
                     value={price}
                     onChange={handlePriceChange}
                 />
-                <InputSelect />
-            </div>
-            <div className="flex items-center justify-start gap-1">
-                <ButtonPaid />
-                <ButtonMemo />
-                {/* <ButtonComment /> */}
+                {/* <InputSelect /> */}
             </div>
             <ButtonSaving onClick={handleSave} />
         </div>
