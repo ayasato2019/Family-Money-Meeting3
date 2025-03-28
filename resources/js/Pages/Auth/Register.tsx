@@ -4,7 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<{
@@ -14,6 +14,7 @@ export default function Register() {
         password_confirmation: string,
         birth_date: string,
         role: number,
+        avatar: number,
         is_active: number,
     }> ({
         name: '',
@@ -22,8 +23,15 @@ export default function Register() {
         password_confirmation: '',
         birth_date: '',
         role: 10,
+        avatar: 1,
         is_active: 10,
     });
+
+    const [selectedAvatar, setSelectedAvatar] = useState<string | null>('1');
+
+    useEffect(() => {
+        setSelectedAvatar(String(data.avatar));
+    }, [data.avatar]);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -33,39 +41,83 @@ export default function Register() {
         });
     };
 
+    const appUrl = import.meta.env.VITE_APP_URL?.replace(/\/$/, "");
+    const imageUrl = `${appUrl}/build/assets/images/avatar/`;
+
     return (
-        <GuestLayout>
-            <Head title="Register" />
+    <GuestLayout>
+        <Head title="Register" />
 
-            <form onSubmit={submit}>
-                <TextInput
-                    id="role"
-                    type="hidden"
-                    name="role"
-                    value={data.role}
-                />
-                <TextInput
-                    id="is_active"
-                    type="hidden"
-                    name="is_active"
-                    value={data.is_active}
-                />
-                <div>
-                    <InputLabel htmlFor="name" value="ユーザー名（チーム内で表示する名前）" />
+        <form onSubmit={submit}>
+            <TextInput
+                id="role"
+                type="hidden"
+                name="role"
+                value={data.role}
+            />
+            <TextInput
+                id="is_active"
+                type="hidden"
+                name="is_active"
+                value={data.is_active}
+            />
+            <div>
+                <InputLabel htmlFor="name" value="ユーザー名（チーム内で表示する名前）" />
 
-                    <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
-                        placeholder ='例）ママ'
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
+                <TextInput
+                    id="name"
+                    name="name"
+                    value={data.name}
+                    className="mt-1 block w-full"
+                    autoComplete="name"
+                    placeholder ='例）ママ'
+                    isFocused={true}
+                    onChange={(e) => setData('name', e.target.value)}
+                    required
+                />
+                <InputError message={errors.name} className="mt-2" />
+            </div>
+
+            <div>
+                <div className="mt-8 flex justify-center">
+                    <img
+                        key={selectedAvatar}
+                        src={`${imageUrl}avatar_${selectedAvatar}.webp`}
+                        alt="選択中のアバター"
+                        className="!w-24 !h-24 rounded-full border-2 border-gray-300 transition-all duration-200"
                     />
+                </div>
 
-                    <InputError message={errors.name} className="mt-2" />
+                <div className="mt-6 space-y-6">
+                    <div className="mt-2 grid grid-cols-5 gap-1">
+                        {Array.from({ length: 5 }, (_, i) => {
+                            const avatarNumber = i + 1;
+                            return (
+                                <label key={`avatar-label-${avatarNumber}`} className="cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="avatar"
+                                        value={avatarNumber}
+                                        checked={Number(data.avatar) === avatarNumber}
+                                        onChange={(e) => setData('avatar', Number(e.target.value))}
+                                        className="hidden"
+                                    />
+                                    <img
+                                        key={`avatar-${avatarNumber}`}
+                                        src={`${imageUrl}avatar_${avatarNumber}.webp`}
+                                        alt={`アバター ${avatarNumber}`}
+                                        className={`!w-16 !h-16 rounded-full border-2 transition ${
+                                            Number(data.avatar) === avatarNumber ? 'border-blue-500 scale-110' : 'border-gray-300'
+                                        }`}
+                                    />
+                                </label>
+                            );
+                        })}
+                    </div>
+
+                    <InputError className="mt-2" message={errors.avatar} />
+                </div>
+                    <InputError message={errors.avatar} className="mt-2" />
                 </div>
 
                 <div className="mt-4">
@@ -158,8 +210,8 @@ export default function Register() {
                     <PrimaryButton className="ms-4" disabled={processing}>
                         登録
                     </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
+            </div>
+        </form>
+    </GuestLayout>
     );
 }

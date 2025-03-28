@@ -2,26 +2,18 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Model;
-
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'team_id',
+        'avatar',
         'email',
         'birth_date',
         'role',
@@ -29,21 +21,11 @@ class User extends Authenticatable
         'password'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -52,10 +34,17 @@ class User extends Authenticatable
         ];
     }
 
-    public function avatar()
-    {
-        return $this->avatar
-        ? asset('storage/' . $this->avatar->image_path) // DBの画像
-        : asset('assets/images/default-avatar.png'); // デフォルト画像
-    }
+    /**
+     * アバターのURLを取得
+     */
+    // public function getAvatarUrlAttribute(): string
+    // {
+    //     // `avatar` が 1 〜 5 の数値なら対応する画像を返す
+    //     if ($this->avatar && is_numeric($this->avatar)) {
+    //         return asset("assets/images/avatar/avatar_{$this->avatar}.webp");
+    //     }
+
+    //     // デフォルトアバター
+    //     return asset("assets/images/avatar/avatar_1.webp");
+    // }
 }

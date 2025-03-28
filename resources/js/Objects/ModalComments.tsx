@@ -1,88 +1,160 @@
-"use client"
-
-
-import Comment from '@/Objects/Comment';
 import { useEffect } from "react"
 import { useForm } from "@inertiajs/react"
-import Modal from "@/Components/Modal"
+import { usePage } from '@inertiajs/react';
 
-interface CommentModalProps {
-    isCommentOpen: boolean
-    onCommentClose: () => void
-    listData: {
-        id: number,
-        comment: string,
-    } | null
+import { UserTypes } from '@/types/tableUserData';
+import { CommentsTypes } from "@/types/tableCommentsData"
+
+import Modal from "@/Components/Modal/Modal"
+import Button from "@/Components/Button/PrimaryButton"
+import UserImage from '@/Components/UserAvatar';
+
+interface PageProps {
+    auth: {
+        user: UserTypes;
+        };
+    comments: CommentsTypes[];
+    team_id: number | null;
+    // 他のページのプロパティも必要に応じて追加
 }
 
-export default function CommentModal({ isCommentOpen, onCommentClose, listData }: CommentModalProps) {
+export interface CommentModalProps {
+    isCommentOpen: boolean;
+    onCommentClose: () => void;
+    listData: {
+        id: number;
+        team_id: number;
+        user_id_to: number;
+        // user_id_from: number;
+        target_type: number;
+        target_id: number;
+        comment_id?: number;
+        comment: string;
+        title?: string;
+        date?: string;
+    } | null;
+    onSubmit: (comment: {
+        id: number;
+        team_id: number;
+        comment: string;
+        target_id: number;
+        target_type: number;
+        user_id_to: number;
+    }) => void;
+}
+
+export default function CommentModal({
+    isCommentOpen,
+    onCommentClose,
+    listData,
+    onSubmit,
+}: CommentModalProps) {
     const { data, setData, post, processing, reset } = useForm({
+        id: 0,
+        team_id: 0,
+        // user_id_from: auth.user.id,
+        user_id_to: 0,
+        target_id: 0,
+        target_type: 0,
         comment: "",
-    })
+    });
 
+    const { auth, comments, team_id } = usePage().props as unknown as PageProps;
+
+    // コメント対象データが存在する場合、必要なデータを設定
     useEffect(() => {
-        if (listData) {
+        if (listData && listData.comment_id !== 0 && listData.target_type !== 0) {
             setData({
-                comment: "",
-            })
+                comment: listData.comment,
+                id: listData.id,
+                team_id: team_id ?? 0, // team_idを設定
+                target_id: listData.target_id,
+                target_type: listData.target_type,
+                user_id_to: listData.user_id_to,
+            });
+        } else if (listData) {
+            // listDataが存在する場合、ログインユーザーのIDとtarget_idを設定
+            setData({
+                comment: '',
+                id: listData.id,
+                team_id: team_id ?? 0,
+                target_id: listData.target_id, // listDataから取得
+                target_type: listData.target_type, // listDataから取得
+                user_id_to: listData.user_id_to || auth.user.id, // コメントする相手ユーザーID
+            });
         }
-    }, [listData, setData])
+    }, [listData, auth.user.id]);
 
+    // コメントフォームが閉じられたときにリセット
     useEffect(() => {
         if (!isCommentOpen) {
-            reset()
+            reset();
         }
-    }, [isCommentOpen, reset])
+    }, [isCommentOpen, reset]);
 
     const handleUpdate = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!listData?.id) return
-
-        post(`/comment/${listData.id}`, {
+        e.preventDefault();
+        if (!listData) return;
+        // フォームデータを送信
+        post("/comments", {
+            ...data,
             onSuccess: () => {
-                onCommentClose()
-                reset()
+                onCommentClose();
+                reset();
             },
-        })
-    }
+        });
+    };
+
+    // コメントが無効な場合、コメントフォームを表示しない
+    // if () {
+    //     return (
+    //         <Modal show={isCommentOpen} onClose={onCommentClose} maxWidth="md">
+    //             <div className="p-6">
+    //                 <p className="text-gray-500">コメントがありません。もしくは書き込み不可。</p>
+    //             </div>
+    //         </Modal>
+    //     );
+    // }
 
     return (
-        <Modal show={isCommentOpen} onClose={onCommentClose}>
-            <div className="relative p-6">
-                <h3 className="text-lg font-medium mb-4">コメント</h3>
-                <div className="space-y-4">
+        <Modal show={isCommentOpen} onClose={onCommentClose} maxWidth="md">
+            <form onSubmit={handleUpdate}>
+                <div className="relative p-6">
+                    <p className="flex gap-2 text-lg font-medium mb-4">
+                        <span className="text-gray-500">{listData?.date ?? ""}</span>
+                        {listData?.title ?? "タイトルなし"}
+                    </p>
 
-                    <div className="flex flex-col gap-2">
-                        <input
-                            id="comment"
-                            type="text"
-                            value={data.comment || ""}
-                            onChange={(e) => setData("comment", e.target.value)}
-                            className="border rounded p-2"
-                        />
+                    <div className="space-y-4">
+                        <div className="flex flex-col gap-2">
+                            <input
+                                id="comment"
+                                type="text"
+                                value={data.comment}
+                                onChange={(e) => setData("comment", e.target.value)}
+                                className="border rounded p-2"
+                                required
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="mt-6 flex gap-4 justify-end">
+
+                    <div className="mt-6 flex gap-4 justify-end">
+                        <Button type="submit" disabled={processing}>
+                            コメント
+                        </Button>
+                    </div>
+
                     <button
                         type="button"
-                        className="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50"
-                        onClick={handleUpdate}
-                        disabled={processing}
+                        className="absolute top-0 right-0 p-1"
+                        onClick={onCommentClose}
                     >
-                        更新
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={24} height={24} >
+                            <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" fill="#666" />
+                        </svg>
                     </button>
                 </div>
-                <button
-                    type="button"
-                    className="absolute top-0 right-0 p-1"
-                    onClick={onCommentClose}
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={24} height={24} >
-                        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" fill="#666" />
-                    </svg>
-                </button>
-            </div>
+            </form>
         </Modal>
-    )
+    );
 }
-

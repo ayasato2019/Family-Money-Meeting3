@@ -7,15 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    protected $fillable = [
+        'id',
+        'team_id',
+        'user_id_from',
+        'user_id_to',
+        'target_type',
+        'target_id',
+        'comment'
+    ];
+
     public function team() {
         return $this->belongsTo(Team::class);
     }
 
-    public function userFrom() {
+    public function sender() {
         return $this->belongsTo(User::class, 'user_id_from');
     }
 
-    public function userTo() {
+    public function receiver() {
         return $this->belongsTo(User::class, 'user_id_to');
     }
 }

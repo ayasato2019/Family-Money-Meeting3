@@ -8,7 +8,16 @@ use App\Http\Controllers\ChildaccountSessionController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\HouseholdController;
+use App\Http\Controllers\SavingController;
+use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\InvestmentsController;
+use App\Http\Controllers\NeedsController;
+use App\Http\Controllers\WantsController;
+use App\Http\Controllers\DonationController;
+use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\CommentController;
+use App\Models\History;
+use App\Models\Investments;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -70,25 +79,83 @@ Route::middleware('auth')->group(function () {
     Route::get('/household_edit/{id}', function () {
         return redirect('/household');
     });
+    Route::patch('/household/achieve/{id}', [HouseholdController::class, 'updateAchieve'])
+    ->name('household-achieve');
+
+
+    //貯金
+    Route::get('/saving', [SavingController::class, 'create'])->name('saving-create');
+    Route::post('/saving_registration', [SavingController::class, 'store'])->name('saving-register');
+    Route::get('/saving/list', [SavingController::class, 'index'])->name('saving-index');
+
+    //目標の詳細ページ
+    Route::get('/saving/saving_{id}', [SavingController::class, 'show'])->name('saving-show');
+    Route::post('/saving/update', [HistoryController::class, 'store'])->name('saving-update');
+    // Route::post('/saving/paid', [HistoryController::class, 'paid'])->name('saving-index');
+
+    //アバターアップデート
+    Route::patch('/avatarupdate', [AvatarController::class, 'update'])->name('avatar-update');
 
     //コメント
-    Route::post('/comments', [CommentController::class, 'store'])->name('houseold-update');
+    Route::post('/comments', [CommentController::class, 'store'])->name('comment');
+    Route::get('/comments/{targetType}/{targetId}', [CommentController::class, 'show'])->name('comments-show');
 
-
-    // //貯金の登録
-    // Route::get('/saving-registration', [SavingController::class, 'create'])->name('saving-create');
-    // Route::post('/savin-confirm', [SavingController::class, 'store'])->name('saving-confirm');
     // //投資の登録
-    // Route::get('/investment-registration', [InvestmentController::class, 'create'])->name('investment-create');
-    // Route::post('/investment-confirm', [InvestmentController::class, 'store'])->name('investment-confirm');
-    // //必要の登録
-    // Route::get('/expenses-registration', [ExpensesController::class, 'create'])->name('expenses-create');
-    // Route::post('/expenses-confirm', [ExpensesController::class, 'store'])->name('expenses-confirm');
-    // //欲しいの登録
-    // Route::get('/extravagance-registration', [ExtravaganceController::class, 'create'])->name('extravagance-create');
-    // Route::post('/extravagance-confirm', [ExtravaganceController::class, 'store'])->name('extravagance-confirm');
-    // //寄付の登録
-    // Route::get('/donation-registration', [DonationController::class, 'create'])->name('donation-create');
+    Route::get('/investments', [InvestmentsController::class, 'create'])->name('investments-create');
+    Route::post('/investments_registration', [InvestmentsController::class, 'store'])->name('investments-register');
+    Route::post('/investmentsd_del/{id}', [InvestmentsController::class, 'destroy'])->name('investments-destroy');
+    Route::get('/investments_del/{id}', function () {
+        return redirect('/investments');
+    });
+    Route::post('/investments_edit/{id}', [InvestmentsController::class, 'update'])->name('investments-update');
+    Route::get('/investments_edit/{id}', function () {
+        return redirect('/investments');
+    });
+    Route::patch('/investments/achieve/{id}', [InvestmentsController::class, 'updateAchieve'])
+    ->name('investments-achieve');
+
+    //必要の登録
+    Route::get('/needs', [NeedsController::class, 'create'])->name('needs-create');
+    Route::post('/needs_registration', [NeedsController::class, 'store'])->name('needs-register');
+    Route::post('/needs_del/{id}', [NeedsController::class, 'destroy'])->name('needs-destroy');
+    Route::get('/needs_del/{id}', function () {
+        return redirect('/needs');
+    });
+    Route::post('/needs_edit/{id}', [NeedsController::class, 'update'])->name('needs-update');
+    Route::get('/needs_edit/{id}', function () {
+        return redirect('/needs');
+    });
+    Route::patch('/needs/achieve/{id}', [NeedsController::class, 'updateAchieve'])
+    ->name('needs-achieve');
+
+    //欲しいの登録
+    Route::get('/wants', [WantsController::class, 'create'])->name('wants-create');
+    Route::post('/wants_registration', [WantsController::class, 'store'])->name('wants-register');
+    Route::post('/wants_del/{id}', [WantsController::class, 'destroy'])->name('wants-destroy');
+    Route::get('/wants_del/{id}', function () {
+        return redirect('/wants');
+    });
+    Route::post('/wants_edit/{id}', [WantsController::class, 'update'])->name('wants-update');
+    Route::get('/wants_edit/{id}', function () {
+        return redirect('/wants');
+    });
+    Route::patch('/wants/achieve/{id}', [WantsController::class, 'updateAchieve'])
+    ->name('wants-achieve');
+
+    //寄付の登録
+    Route::get('/donations', [DonationController::class, 'create'])->name('donations-create');
+    Route::post('/donations_registration', [DonationController::class, 'store'])->name('donations-register');
+    Route::post('/donations_del/{id}', [DonationController::class, 'destroy'])->name('donations-destroy');
+    Route::get('/donations_del/{id}', function () {
+        return redirect('/donations');
+    });
+    Route::post('/donations_edit/{id}', [DonationController::class, 'update'])->name('donations-update');
+    Route::get('/donations_edit/{id}', function () {
+        return redirect('/donations');
+    });
+    Route::patch('/donations/achieve/{id}', [DonationController::class, 'updateAchieve'])
+    ->name('donations-achieve');
+
     // Route::post('/donation-confirm', [DonationController::class, 'store'])->name('donation-confirm');
     // // ゲームページ
     // Route::get('/game-registration', [GameController::class, 'create'])->name('game-create');
@@ -100,5 +167,12 @@ Route::middleware('auth')->group(function () {
     // Route::get('/{id}', [SavingController::class, 'show'])->name('saving.show');
     // Route::post('/update', [HistoryController::class, 'store'])->name('update');
 });
+
+//チームメンバーのページ
+Route::middleware(['auth'])->group(function () {
+    Route::get('/team/status/{user}', [TeamController::class, 'memberStatus'])
+        ->name('team.status.show');
+});
+
 
 require __DIR__ . '/auth.php';

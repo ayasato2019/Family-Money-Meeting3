@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { useForm } from "@inertiajs/react";
-import Modal from "@/Components/Modal";
+import Modal from "@/Components/Modal/Modal";
+import InputText from "@/Components/Input/InputText"
+import InputDate from "@/Components/Input/InputDate"
+import InputPrice from "@/Components/Input/InputPrice"
 
 interface EditListdModalProps {
     isOpen: boolean;
@@ -10,22 +13,24 @@ interface EditListdModalProps {
         title: string;
         price: number;
         date: string;
-        is_share: boolean;
+        is_shared: number;
         images?: string | null;
         memo?: string | null;
     } | null;
+    isDelete?: (id: number) => void;
 }
 
 export default function EditListdModal({
     isOpen,
     onClose,
     listData,
+    isDelete,
 }: EditListdModalProps) {
     const { data, setData, post, processing } = useForm({
         title: listData?.title || "",
         price: listData?.price || 0,
         date: listData?.date || "",
-        is_share: listData?.is_share ? 1 : 0,
+        is_shared: listData?.is_shared ? 1 : 0,
         images: listData?.images || "",
         memo: listData?.memo || "",
     });
@@ -36,7 +41,7 @@ export default function EditListdModal({
                 title: listData.title || "",
                 price: listData.price || 0,
                 date: listData.date || "",
-                is_share: listData.is_share ? 1 : 0,
+                is_shared: listData.is_shared ? 1 : 0,
                 images: listData.images || "",
                 memo: listData.memo || "",
             });
@@ -55,30 +60,52 @@ export default function EditListdModal({
     };
 
     return (
-        <Modal show={isOpen} onClose={onClose}>
+        <Modal show={isOpen} onClose={onClose} maxWidth="md">
             <form onSubmit={handleUpdate}>
-                <div className="relative mt-4 flex gap-4 items-center">
-                    <div className="flex gap-4">
-                        <input
+                <div className="relative mt-4 flex gap-4 items-center justify-center p-4 w-full">
+                    <div className="flex flex-col gap-4 w-full">
+                        <InputDate
                             type="date"
                             value={data.date}
                             onChange={(e) => setData("date", e.target.value)}
                         />
-                        <input
+                        <InputText
                             type="text"
                             value={data.title}
                             onChange={(e) => setData("title", e.target.value)}
                         />
-                        <input
+                        <InputPrice
                             type="number"
                             value={data.price}
+                            className="ml-auto w-full"
                             onChange={(e) => setData("price", Number(e.target.value))}
+                        />
+                        {/* <input
+                            type="file"
+                            onChange={(e) => {setData("images", e.target.value)}}
+                        /> */}
+                        <InputText
+                            type="text"
+                            value={data.memo}
+                            className="w-full"
+                            onChange={(e) => {setData("memo", e.target.value)}}
                         />
                     </div>
                 </div>
-                <div className="mt-4 flex gap-4 justify-end">
+                <div className="mt-4 mx-auto w-full flex gap-4 justify-center items-start">
+                {isDelete && listData && (
                     <button
-                        className="bg-red-500 text-white px-4 py-2 rounded"
+                    onClick={() => {
+                        isDelete(listData.id);
+                        onClose();
+                    }}
+                        className="border border-red-500 text-red-500 font-bold mb-5 px-4 py-2 rounded"
+                    >
+                        削除
+                    </button>
+                )}
+                    <button
+                        className="bg-red-500 text-white px-4 py-2 rounded mb-5"
                         type="submit"
                         disabled={processing}
                     >

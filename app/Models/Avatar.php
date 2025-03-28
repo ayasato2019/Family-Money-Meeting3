@@ -10,7 +10,11 @@ class Avatar extends Model
     /** @use HasFactory<\Database\Factories\AvatarFactory> */
     use HasFactory;
     protected $fillable = [
-        'user_id',
         'type',
     ];
+
+    public function getUrlAttribute(): string
+    {
+        return asset('storage/avatars/' . $this->id . '.png');
+    }
 }

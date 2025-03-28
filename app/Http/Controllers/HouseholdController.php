@@ -7,8 +7,9 @@ use App\Http\Requests\UpdateHouseholdRequest;
 use App\Models\Household;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use App\Models\Team;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
+use App\Models\Comment;
 
 class HouseholdController extends Controller
 {
@@ -28,13 +29,17 @@ class HouseholdController extends Controller
         // チームの家計簿を取得
         $team_id = Auth::user()->team_id;
         $role = Auth::user()->role;
-
         $household = Household::where('team_id', $team_id)->get();
+
+        // コメントを追加で取得
+        $comments = Comment::where('target_type', 1)
+        ->whereIn('target_id', $household->pluck('id')) // household に関連するコメントのみ
+        ->get();
 
         return Inertia::render('Household/Household', [
             'household' => $household,
-            'role' => $role,
-            // 'team_id' => $team_id, // ここで明示的に渡す
+            // 'role' => $role,
+            'comments' => $comments,
         ]);
     }
 
@@ -43,8 +48,12 @@ class HouseholdController extends Controller
      */
     public function store(StoreHouseholdRequest $request)
     {
+        // ユーザーIDを取得
+        $user_id = Auth::id();
+
         // 現在のユーザーのチームIDを取得
         $team_id = Auth::user()->team_id;
+
         // リクエストにteam_idを追加
         $request->merge(['team_id' => $team_id]);
 
@@ -66,6 +75,7 @@ class HouseholdController extends Controller
         // 新規データを作成
         $household = Household::create([
             'team_id' => $team_id,
+            'user_id' => $user_id,
             'title' => $validated['title'],
             'price' => $validated['price'],
             'date' => $validated['date'],
@@ -145,12 +155,20 @@ class HouseholdController extends Controller
         return redirect()->route('houseold-create');
     }
 
+    public function updateAchieve(Request $request, $id)
+    {
+        $household = Household::findOrFail($id);
+        $household->achieve = $request->input('achieve'); // 0 or 1
+        $household->save();
+
+        return redirect()->back();
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        // IDで家計簿データを取得し、現在のユーザーのチームに紐づくデータのみ対象にする
         Household::destroy($id);
         return back();
     }

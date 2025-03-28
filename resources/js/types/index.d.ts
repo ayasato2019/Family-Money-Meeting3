@@ -1,4 +1,5 @@
 export interface User {
+    avatar: string;
     id: number;
     name: string;
     email: string;
@@ -11,4 +12,5 @@ export type PageProps<
     auth: {
         user: User;
     };
+    team_id: number | null;
 };

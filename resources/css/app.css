@@ -1,3 +1,136 @@
+:root {
+    --tw-color-lightgray: #f2f2f2;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+img {
+    @apply max-w-full;
+}
+/* コンポーネント */
+.button-primary {
+    @applu flex items-center justify-center rounded-md border border-transparent bg-gradation min-w-32 max-w-52 px-4 py-2 max-h-10 text-sm font-bold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gradation-blue focus:bg-gradation focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 active:bg-gradation;
+}
+
+.button-secondary {
+    @applu inline-flex items-center justify-center rounded-md min-w-32 max-w-52 max-h-10 border border-solid border-primary-500 bg-white px-4 py-2 text-sm font-bold uppercase tracking-widest text-primary-500 shadow-sm transition duration-150 ease-in-out hover:bg-orange-500 hover:border-orange-500 hover:text-white  focus:outline-none hover:text focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-25;
+}
+
+.balloon {
+    @apply relative inline-flex justify-center py-1 px-2 rounded-3xl bg-gray-200 dark:text-black;
+    &::before {
+        @apply content-[''] absolute bottom-4 w-0 h-0 border-solid;
+    }
+    &.right {
+        @apply mr-5;
+        &::before {
+            @apply right-[-9px] top-[calc(50%-5px)];
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 10px solid #e5e7eb;
+            border-right: 0;
+        }
+    }
+    &.left {
+        @apply ml-5;
+        &::before {
+            @apply left-[-9px] top-[calc(50%-5px)];
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-right: 10px solid var(--tw-color-lightgray);
+            border-left: 0;
+        }
+    }
+    &.top {
+        @apply mt-5;
+        &::before {
+            @apply left-[calc(50%-5px)] top-[-9px];
+            border-right: 5px solid transparent;
+            border-left: 5px solid transparent;
+            border-bottom: 10px solid var(--tw-color-lightgray);
+            border-top: 0;
+        }
+    }
+    &.bottom {
+        @apply mb-5;
+        &::before {
+            @apply left-[calc(50%-5px)] bottom-[-9px];
+            border-right: 5px solid transparent;
+            border-left: 5px solid transparent;
+            border-top: 10px solid var(--tw-color-lightgray);
+            border-bottom: 0;
+        }
+    }
+}
+reach-portal,
+/* [data-rsbs-is-dismissable='false'] [data-rsbs-backdrop], */
+[data-rsbs-overlay] {
+    @apply !bg-black/95;
+}
+[data-rsbs-has-header='false']:before, [data-rsbs-header]:before {
+    @apply !bg-orange-500;
+}
+
+.button-icon {
+    @apply inline-flex items-center justify-center gap-2 rounded-md min-w-24  border border-solid border-primary-500 bg-white px-2 py-3 text-sm font-bold uppercase tracking-widest text-primary-500 shadow-sm transition duration-150 ease-in-out hover:bg-orange-500 hover:border-orange-500 hover:text-white  focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-25;
+}
+
+.button-savig path{
+    fill: #FFD700; /* yellow */
+}
+
+.button-icon path {
+    fill: #30BFBF;
+}
+
+.button-savig:visited path,
+.button-icon:hover path {
+    fill: #FFF;
+}
+
+.unit-yen {
+    @apply inline-block ml-0.5 text-[10px];
+}
+
+.contents_box::-webkit-scrollbar{
+    display: none;
+}
+
+.button-next {
+
+}
+
+.button-prev {
+
+}
+
+.accordion {
+    @apply mb-2;
+}
+
+
+.accordion summary {
+    @apply flex justify-between items-center relative py-4 text-gray-600 font-semibold cursor-pointer;
+}
+
+.accordion summary::-webkit-details-marker {
+    display: none;
+}
+
+.accordion summary::after {
+    content: '';
+    @apply w-2 h-2 ml-3 border-b-2 border-r-2 border-gray-400 transition-transform;
+    transform: translateY(-25%) rotate(45deg);
+}
+
+.accordion[open] summary::after {
+    transform: rotate(225deg);
+}
+
+.accordion p {
+    @apply -translate-y-2 opacity-0 m-0 px-8 pt-1 pb-6 transition-all duration-500;
+}
+
+.accordion[open] p {
+    @apply translate-y-0 opacity-100;
+}
