@@ -37,8 +37,6 @@ export default function Edit({
                     </li>
                     <li className="">
                         <UpdateUpdateAvatarForm
-                            mustVerifyEmail={mustVerifyEmail}
-                            status={status}
                             className="max-w-xl"
                         />
                     </li>

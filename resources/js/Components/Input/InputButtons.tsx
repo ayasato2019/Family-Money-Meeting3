@@ -1,10 +1,10 @@
 import { useState, useRef } from 'react';
 import InputPrice from '@/Components/InputPrice';
-import ButtonMemo from '@/Components/ButtonMemo';
-import ButtonComment from '@/Components/ButtonComment';
-import ButtonPaid from '@/Components/ButtonPaid';
-import ButtonSaving from '@/Components/ButtonSavings';
-import InputSelect from '@/Components/InputSelectInterval';
+import ButtonMemo from '@/Components/Button/ButtonMemo';
+import ButtonComment from '@/Components/Button/ButtonComment';
+import ButtonPaid from '@/Components/Button/ButtonPaid';
+import ButtonSaving from '@/Components/Button/ButtonSavings';
+import InputSelect from '@/Components/Input/InputSelectInterval';
 
 interface InputButtonsProps {
     className?: string;
