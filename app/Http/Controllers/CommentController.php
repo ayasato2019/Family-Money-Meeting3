@@ -11,9 +11,9 @@ use Inertia\Inertia;
 
 use App\Models\Household;
 use App\Models\Saving;
-use App\Models\Investment;
-use App\Models\Need;
-use App\Models\Want;
+use App\Models\Investments;
+use App\Models\Needs;
+use App\Models\Wants;
 use App\Models\Donation;
 
 class CommentController extends Controller
@@ -62,38 +62,38 @@ class CommentController extends Controller
                     ]);
                 }
                 break;
-            // case 2: // Investment
-            //     $investmentItem = Investment::find($validated['target_id']);
-            //     if ($investmentItem) {
-            //         $investmentItem->update([
-            //             'comment_id' => $comment->id
-            //         ]);
-            //     }
-            //     break;
-            // case 3: // Need
-            //     $needItem = Need::find($validated['target_id']);
-            //     if ($needItem) {
-            //         $needItem->update([
-            //             'comment_id' => $comment->id
-            //         ]);
-            //     }
-            //     break;
-            // case 4: // Want
-            //     $wantItem = Want::find($validated['target_id']);
-            //     if ($wantItem) {
-            //         $wantItem->update([
-            //             'comment_id' => $comment->id
-            //         ]);
-            //     }
-            //     break;
-            // case 5: // Donation
-            //     $donationItem = Donation::find($validated['target_id']);
-            //     if ($donationItem) {
-            //         $donationItem->update([
-            //             'comment_id' => $comment->id
-            //         ]);
-            //     }
-            //     break;
+            case 2: // Investment
+                $investmentItem = Investments::find($validated['target_id']);
+                if ($investmentItem) {
+                    $investmentItem->update([
+                        'comment_id' => $comment->id
+                    ]);
+                }
+                break;
+            case 3: // Need
+                $needItem = Needs::find($validated['target_id']);
+                if ($needItem) {
+                    $needItem->update([
+                        'comment_id' => $comment->id
+                    ]);
+                }
+                break;
+            case 4: // Want
+                $wantItem = Wants::find($validated['target_id']);
+                if ($wantItem) {
+                    $wantItem->update([
+                        'comment_id' => $comment->id
+                    ]);
+                }
+                break;
+            case 5: // Donation
+                $donationItem = Donation::find($validated['target_id']);
+                if ($donationItem) {
+                    $donationItem->update([
+                        'comment_id' => $comment->id
+                    ]);
+                }
+                break;
             default:
                 throw new \Exception('Invalid target type');
         }
@@ -134,10 +134,10 @@ class CommentController extends Controller
         switch ($targetType) {
             case 0: return Household::class;
             case 1: return Saving::class;
-            // case 2: return Investment::class;
-            // case 3: return Need::class;
-            // case 4: return Want::class;
-            // case 5: return Donation::class;
+            case 2: return Investments::class;
+            case 3: return Needs::class;
+            case 4: return Wants::class;
+            case 5: return Donation::class;
             default: throw new \Exception('Invalid target type');
         }
     }

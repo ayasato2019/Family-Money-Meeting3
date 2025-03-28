@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/react';
 import FarstView from '@/Objects/FarstView';
 
 import { usePage } from '@inertiajs/react';
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "@inertiajs/react"
 import InputLabel from "@/Components/InputLabel"
 import PrimaryButton from "@/Components/PrimaryButton"
@@ -38,17 +38,17 @@ interface PageProps {
 export default function Household({
     listdata,
 }: {
-    listdata: HouseholdTypes[]
+    listdata: HouseholdTypes[],
 }) {
-
     //ページタイトル
-    const pagetitle = "投資";
+    const pagetitle = "ひつよう";
 
     //コメントの表示
-    const targetType = 2;
+    const targetType = 3;
 
     // 型を明示的にキャストして取得
     const { auth, team_id, role, comments } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
+
     const user = auth.user;
 
     const { data, setData, post, reset, processing } = useForm({
@@ -66,14 +66,14 @@ export default function Household({
     //登録
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault()
-        post("/investments_registration", {
+        post("/needs_registration", {
             onSuccess: () => reset(),
         })
     }
 
     //削除
     const handleDelete = (id: number) => {
-        post(`/investments_del/${id}`, {
+        post(`/needs_del/${id}`, {
             method: "delete",
         })
     }
@@ -93,7 +93,7 @@ export default function Household({
     }
 
     const handleToggleAchieve = (id: number, newValue: boolean) => {
-        router.patch(`/investments/achieve/${id}`, {
+        router.patch(`/needs/achieve/${id}`, {
             achieve: newValue ? 1 : 0,
         }, {
             preserveScroll: true,
@@ -113,9 +113,8 @@ export default function Household({
         const newComment: CommentsTypes = comment ?? {
             id: listData.comment_id ?? 0,
             team_id: team_id ?? 0,
-            // user_id_from: user_id,
             user_id_to: listData.user_id,
-            target_type: 2,
+            target_type: targetType,
             target_id: listData.id,
             title: listData.title,
             date: listData.date,
@@ -152,10 +151,11 @@ export default function Household({
     <AuthenticatedLayout
         header={
             <h1 className="flex gap-2 items-center justify-center text-lg font-semibold leading-tight text-[#374151]">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={20} height={20}><path d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z" fill="#374151"/></svg>{pagetitle}</h1>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width={24} height={20}><path d="M337.8 5.4C327-1.8 313-1.8 302.2 5.4L166.3 96 48 96C21.5 96 0 117.5 0 144L0 464c0 26.5 21.5 48 48 48l208 0 0-96c0-35.3 28.7-64 64-64s64 28.7 64 64l0 96 208 0c26.5 0 48-21.5 48-48l0-320c0-26.5-21.5-48-48-48L473.7 96 337.8 5.4zM96 192l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64c0-8.8 7.2-16 16-16zm400 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64zM96 320l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64c0-8.8 7.2-16 16-16zm400 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-64zM232 176a88 88 0 1 1 176 0 88 88 0 1 1 -176 0zm88-48c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-16 0 0-16c0-8.8-7.2-16-16-16z" fill="#374151"/></svg>                {pagetitle}
+                </h1>
         }
     >
-        <Head title={pagetitle} />
+            <Head title={pagetitle} />
 
         <FarstView
             category={6}

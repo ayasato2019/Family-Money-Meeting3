@@ -42,10 +42,10 @@ export default function Household({
 }) {
 
     //ページタイトル
-    const pagetitle = "投資";
+    const pagetitle = "ほしい";
 
     //コメントの表示
-    const targetType = 2;
+    const targetType = 4;
 
     // 型を明示的にキャストして取得
     const { auth, team_id, role, comments } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
@@ -66,14 +66,14 @@ export default function Household({
     //登録
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault()
-        post("/investments_registration", {
+        post("/wants_registration", {
             onSuccess: () => reset(),
         })
     }
 
     //削除
     const handleDelete = (id: number) => {
-        post(`/investments_del/${id}`, {
+        post(`/wants_del/${id}`, {
             method: "delete",
         })
     }
@@ -93,7 +93,7 @@ export default function Household({
     }
 
     const handleToggleAchieve = (id: number, newValue: boolean) => {
-        router.patch(`/investments/achieve/${id}`, {
+        router.patch(`/wants/achieve/${id}`, {
             achieve: newValue ? 1 : 0,
         }, {
             preserveScroll: true,
@@ -113,9 +113,8 @@ export default function Household({
         const newComment: CommentsTypes = comment ?? {
             id: listData.comment_id ?? 0,
             team_id: team_id ?? 0,
-            // user_id_from: user_id,
             user_id_to: listData.user_id,
-            target_type: 2,
+            target_type: targetType,
             target_id: listData.id,
             title: listData.title,
             date: listData.date,
@@ -152,7 +151,7 @@ export default function Household({
     <AuthenticatedLayout
         header={
             <h1 className="flex gap-2 items-center justify-center text-lg font-semibold leading-tight text-[#374151]">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width={20} height={20}><path d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z" fill="#374151"/></svg>{pagetitle}</h1>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={18} height={18}><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" fill="#374151"/></svg>{pagetitle}</h1>
         }
     >
         <Head title={pagetitle} />

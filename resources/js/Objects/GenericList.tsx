@@ -122,7 +122,7 @@ export default function LiatDataList({
                                 </button>
                             </div>
                             <Comments
-                                className="w-full"
+                                className="w-full mt-2"
                                 targetType={targetType}
                                 comment={comments}
                                 comment_id={item.id}

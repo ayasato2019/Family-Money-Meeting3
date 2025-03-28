@@ -33,13 +33,13 @@ class InvestmentsController extends Controller
         $investments = Investments::where('user_id', $user_id)->get();
 
         // コメントを追加で取得（target_typeが1のコメントを取得）
-        $comments = Comment::where('target_type', 1)
+        $comments = Comment::where('target_type', 2)
             ->whereIn('target_id', $investments->pluck('id'))  // investmentsに関連するコメントのみ取得
             ->get();
 
         // 投資データとコメントをInertiaに渡す
         return Inertia::render('Investments/Investments', [
-            'investments' => $investments,
+            'listdata' => $investments,
             'comments' => $comments,
         ]);
     }
@@ -93,7 +93,7 @@ class InvestmentsController extends Controller
 
         // 家計簿作成ページへリダイレクト
         return redirect()->route(
-            'houseold-create',
+            'investments-create',
         );
     }
 
@@ -145,7 +145,7 @@ class InvestmentsController extends Controller
             'title' => $validated['title'],
             'price' => $validated['price'],
             'date' => $validated['date'],
-            'is_shared' => $validated['is_share'],
+            'is_shared' => $validated['is_shared'],
             'images' => $validated['images'],
             'memo' => $validated['memo'],
             'comment_id' => null,
@@ -153,7 +153,7 @@ class InvestmentsController extends Controller
         ], $validated));
 
         // 家計簿作成ページへリダイレクト
-        return redirect()->route('houseold-create');
+        return redirect()->route('investments-create');
     }
 
     public function updateAchieve(Request $request, $id)

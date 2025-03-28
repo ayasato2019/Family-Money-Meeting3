@@ -7,6 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Donation extends Model
 {
-    /** @use HasFactory<\Database\Factories\DonationFactory> */
-    use HasFactory;
+    protected $fillable = [
+        'team_id',
+        'user_id',
+        'title',
+        'price',
+        'date',
+        'achieve',
+        'is_shared',
+        'images',
+        'memo',
+        'comment_id',
+    ];
+
+    public function comment()
+    {
+        return $this->belongsTo(Comment::class, 'comment_id');
+    }
 }

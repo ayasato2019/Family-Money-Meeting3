@@ -23,8 +23,11 @@ use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Color\Color;
 
 use App\Models\Status;
-use App\Models\Household;
 use App\Models\Saving;
+use App\Models\Investments;
+use App\Models\Needs;
+use App\Models\Wants;
+use App\Models\Donation;
 
 class TeamController extends Controller
 {
@@ -210,37 +213,37 @@ class TeamController extends Controller
         // is_share が true のみ取得（各モデル）
 
         $status = Status::where('user_id', $user->id)
-        ->where('is_shared', 1)
+        ->where('is_shared', 0)
         ->first();
 
         $savings = Saving::where('user_id', $user->id)
-            ->where('is_shared', 1)
+            ->where('is_shared', 0)
             ->get();
 
-        // $investments = Investment::where('user_id', $user->id)
-        //     ->where('is_share', true)
-        //     ->get();
+        $investments = Investments::where('user_id', $user->id)
+            ->where('is_shared', 0)
+            ->get();
 
-        // $needs = Need::where('user_id', $user->id)
-        //     ->where('is_share', true)
-        //     ->get();
+        $needs = Needs::where('user_id', $user->id)
+            ->where('is_shared', 0)
+            ->get();
 
-        // $wants = Want::where('user_id', $user->id)
-        //     ->where('is_share', true)
-        //     ->get();
+        $wants = Wants::where('user_id', $user->id)
+            ->where('is_shared', 0)
+            ->get();
 
-        // $donations = Donation::where('user_id', $user->id)
-        //     ->where('is_share', true)
-        //     ->get();
+        $donations = Donation::where('user_id', $user->id)
+            ->where('is_shared', 0)
+            ->get();
 
         return Inertia::render('Teams/MemberStatus', [
             'shared_user' => $user,
             'status' => $status,
             'savings' => $savings,
-            // 'investments' => $investments,
-            // 'needs' => $needs,
-            // 'wants' => $wants,
-            // 'donations' => $donations,
+            'investments' => $investments,
+            'needs' => $needs,
+            'wants' => $wants,
+            'donations' => $donations,
         ]);
     }
 
