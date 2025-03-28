@@ -34,7 +34,7 @@ export default function UserAvatar({
 
     // アバター画像の URL を構築
     const appUrl = import.meta.env.VITE_APP_URL?.replace(/\/$/, "");
-    const imageUrl = `${appUrl}/build/assets/images/avatar/${user_avatar}`;
+    const imageUrl = `${appUrl}/storage/images/avatar/${user_avatar}`;
 
     return (
         <div className={`overflow-hidden h-8 w-8 rounded-full ` + className}>

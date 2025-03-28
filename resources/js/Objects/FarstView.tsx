@@ -102,7 +102,7 @@ export default function FarstViewAvatar({
     }
     const plannedExtravagance: number = userData.want;
     const appUrl = import.meta.env.VITE_APP_URL?.replace(/\/$/, "");
-    const imageUrl = `${appUrl}/build/assets/images/bg/bg_${userBg}.webp`;
+    const imageUrl = `${appUrl}/storage/images/bg/bg_${userBg}.webp`;
 
     return (
         <div className="relative overflow-hidden aspect-video bg-slate-50 min-h-80 w-full max-w-full mt-2 rounded-lg">
