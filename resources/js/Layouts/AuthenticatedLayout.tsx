@@ -40,11 +40,16 @@ export default function Authenticated({
 
     // 共通メニューリスト
     const menuLinks = [
-        { label: 'ホーム', route: 'dashboard', className: 'break-keep !border border-solid !border-gray-300 rounded-md shadow' },
-        { label: 'プロフィール', route: 'profile.edit', className: 'break-keep !border border-solid !border-gray-300 rounded-md shadow' },
-        // ...(team_id ? [{ label: 'メンバーリスト', route: 'teams-member', className: 'break-keep' }] : []),
-        { label: 'ステータス', route: 'status-create', className: 'break-keep !border border-solid !border-gray-300 rounded-md shadow' },
-        { label: 'チーム', route: 'teams-create', className: 'break-keep !border border-solid !border-gray-300 rounded-md shadow' },
+        { label: 'ホーム', route: 'dashboard', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'ステータス', route: 'status-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: '家計簿', route: 'houseold-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'ちょきん', route: 'saving-index', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'とうし', route: 'investments-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'ひつよう', route: 'needs-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'ほしい', route: 'wants-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'きふ', route: 'donations-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'プロフィール', route: 'profile.edit', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'チーム', route: 'teams-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
         { label: 'ログアウト', route: 'logout', method: 'post' as Method, as: 'button', className: '!w-auto mx-auto border border-transparent rounded-md bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 md:hidden' }
     ];
 
@@ -98,8 +103,8 @@ export default function Authenticated({
                 <main className='pb-10'>
                 {header && (
                     <header className="bg-white">
+                        {/* headerの中にh1タグはあるから変更しない */}
                         <div className="w-full mx-auto max-w-3xl px-4 pt-2 md:pt-8 sm:px-6 lg:px-8">
-                            {/* headerの中にh1タグ */}
                             {header}
                         </div>
                     </header>
@@ -110,12 +115,12 @@ export default function Authenticated({
 
             {/*  SP, md 以下で表示されるナビゲーション */}
             <div id="mobile-menu" className={`absolute top-0 px-4 pt-16 pb-4 left-0 z-40 w-full shadow-md transition-all duration-300 bg-primary-100 ${showingNavigationDropdown ? 'block' : 'hidden'} lg:hidden`} aria-hidden={!showingNavigationDropdown}>
-                <div className="py-3 border-b-2 border-t-2 flex justify-center items-center">
+                <div className="py-3 bg-primary-500 flex justify-center items-center text-white">
                     <div className="text-base font-bold flex items-center gap-2 w-auto mx-auto">
                         {user.name}
                     </div>
                 </div>
-                <nav className="space-y-1">
+                <nav className="space-y-2 py-4">
                     {menuLinks.map((link) => (
                         <ResponsiveNavLink
                             key={link.route}

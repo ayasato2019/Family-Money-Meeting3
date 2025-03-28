@@ -50,7 +50,7 @@ export default function SavingId() {
         id: savings.id,
         comment_id: savings.comment_id,
         user_id: savings.user_id,
-        goal_id: savings.goal_id,
+        goal_id: savings.id,
         title: savings.title,
         amount: savings.amount,
         deadline: savings.deadline,
@@ -65,20 +65,25 @@ export default function SavingId() {
     const userHistories = histories?.filter((h) => h.user_id === user.id) ?? [];
 
     // 積立額の計算
+    // const calculateTotalSavings = (savingsId: number, histories: HistoryTypes[]): number => {
+    //     const relevantHistories = histories.filter((history) => history.goal_id === savingsId);
+    //         // フィルタリングされた履歴の amount をすべて足し合わせる
+    //     const totalSavings = relevantHistories.reduce((total, history) => {
+    //         // amount が正しい型であることを確認（数値に変換）
+    //         const amount = parseFloat(String(history.amount));
+    //         return total + (isNaN(amount) ? 0 : amount);  // amount が数値でない場合は 0 を加算
+    //     }, 0);
+
+    //     return totalSavings;
+    // };
     const calculateTotalSavings = (savingsId: number, histories: HistoryTypes[]): number => {
         const relevantHistories = histories.filter((history) => history.goal_id === savingsId);
-            // フィルタリングされた履歴の amount をすべて足し合わせる
         const totalSavings = relevantHistories.reduce((total, history) => {
-            // amount が正しい型であることを確認（数値に変換）
             const amount = parseFloat(String(history.amount));
-            return total + (isNaN(amount) ? 0 : amount);  // amount が数値でない場合は 0 を加算
+            return total + (isNaN(amount) ? 0 : amount);
         }, 0);
 
         return totalSavings;
-        // return histories
-        //     .filter((history) => history.goal_id === savingsId)
-        //     .map((history) => parseFloat(String(history.deadline)))
-        //     .reduce((total, amount) => total + amount, 0);
     };
 
     // 状態管理
@@ -105,16 +110,6 @@ export default function SavingId() {
     // CSRFトークン取得
     const metaCsrfToken = document.querySelector("meta[name='csrf-token']") as HTMLMetaElement;
     const csrfToken = useRef<string>(metaCsrfToken.content);
-
-    //使ったよモーダル
-    const { data, setData, post, reset, processing } = useForm({
-    memo: "",
-    amount: 0,
-    history_id: 0,
-    user_id: 0,
-    goal_id: 0,
-    category: 1,
-    })
 
     // 画面タイトル
     const pagetitle = "貯金";
@@ -161,8 +156,8 @@ export default function SavingId() {
                         />
 
                         <ButtonPaid
-                            goal_id={saving.goal_id}  // goal_id
-                            category={1}  // category
+                            goal_id={saving.goal_id}
+                            category={1}
                         />
                     </div>
                 </form>

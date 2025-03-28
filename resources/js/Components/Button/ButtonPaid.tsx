@@ -40,6 +40,7 @@ export default function ButtonPaid({
                     <ModalPaidRegister
                         goal_id={goal_id}
                         category={category}
+                        setIsOpen={handleCloseModal}
                     />
                 </Modal>
             )}
