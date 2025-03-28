@@ -6,25 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // `avatar` カラムの型変更 (string) & デフォルト値を `avatar_1.webp` に設定
-            $table->string('avatar')->default('1')->change();
+            // 外部キーを削除
+            $table->dropForeign('users_avatar_foreign');
+        });
+
+        Schema::table('users', function (Blueprint $table) {
+            // avatar を NOT NULL に変更（型そのまま）
+            $table->unsignedBigInteger('avatar')->default(1)->nullable(false)->change();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // 変更を元に戻す (デフォルトを `avatar_1.png` に戻す)
-            $table->string('avatar')->default('avatar_1.png')->change();
+            // avatar を nullable に戻す
+            $table->unsignedBigInteger('avatar')->nullable()->default(null)->change();
+
+            // 外部キーを復元
+            $table->foreign('avatar')->references('id')->on('avatars')->onDelete('set null');
         });
     }
 };
+
