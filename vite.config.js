@@ -9,13 +9,5 @@ export default defineConfig({
             refresh: true,
         }),
         react(),
-        // env({ prefix: "VITE", mountedPath: "process.env" }),
     ],
-    // publicDir: "public", // `public/` をそのまま扱う
-    // build: {
-    //   outDir: "public/build", // 出力フォルダを `public/build` に指定
-    //   emptyOutDir: false, // `build/` 内の既存ファイルを削除しない
-    //   assetsDir: "assets", // アセットフォルダのパスを明示
-    //   manifest: true, // Laravel 用に `manifest.json` を生成
-    // },
 });

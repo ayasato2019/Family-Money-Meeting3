@@ -7,9 +7,6 @@
 
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- react Scan -->
-    <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script>
-
     <!-- chart.js -->
     {{-- <script src="path/to/chartjs/dist/chart.umd.js"></script> --}}
 
