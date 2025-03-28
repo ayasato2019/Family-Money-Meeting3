@@ -30,7 +30,7 @@ export default function UpdateAvatarForm({ className = '' }: { className?: strin
 
 
     const appUrl = import.meta.env.VITE_APP_URL?.replace(/\/$/, "");
-    const imageUrl = `${appUrl}/build/assets/images/avatar/`;
+    const imageUrl = `${appUrl}/storage/images/avatar/`;
 
     return (
         <section className={className}>
