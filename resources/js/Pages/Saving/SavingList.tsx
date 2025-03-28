@@ -21,9 +21,11 @@ interface PageProps {
 }
 
 export default function SavingList() {
+    // 画面タイトル
+    const pagetitle = "ちょきん";
+
     // 型を明示的にキャストして取得
     const { auth, statuses, savings, histories } = usePage().props as unknown as PageProps;
-    console.log(JSON.stringify(histories,null,'\t'));
 
     // ユーザー情報取得
     const user = auth.user;
@@ -56,9 +58,6 @@ export default function SavingList() {
         game_level: 1,  // 仮の値
         game_life: 4,  // 仮の値
     };
-
-    // 画面タイトル
-    const pagetitle = "チーム";
 
     return (
         <AuthenticatedLayout header={<h1 className="w-full flex items-center justify-center text-xl font-semibold leading-tight text-gray-800">{pagetitle}</h1>}>

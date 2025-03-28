@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class HistoryController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * 貯金の履歴
      */
     public function store(StoreHistoryRequest $request)
     {
@@ -59,16 +59,15 @@ class HistoryController extends Controller
     }
 
     /**
-     * 使ったよモーダル
+     * 貯金を使った履歴
      */
     public function paid(StoreHistoryRequest $request)
     {
-        dd($request->all);
         $validated = $request->validate([
             'user_id' => 'required|integer',
             'category' => 'required|integer',
             'goal_id' => 'required|integer',
-            'deadline' => 'required|date',
+            'date' => 'required|date',
             'memo' => 'nullable|string',
             'amount' => 'required|numeric',
         ]);
@@ -76,7 +75,7 @@ class HistoryController extends Controller
         $id = Auth::id();
         $savings = Saving::where('user_id', $id)->get();
 
-        if ($validated['amount'] <= 0) {
+        if ($validated['amount'] > 0) {
             return redirect()->route('saving-show', [
                 'id' => $validated['goal_id'],
                 'savings' => $savings,
@@ -97,6 +96,7 @@ class HistoryController extends Controller
         ]);
 
         // 成功したらリダイレクト
+        session(['new_history' => $histories]);
         return redirect()->route('saving-show', [
             'id' => $validated['goal_id'],
             'histories' =>  $histories,
@@ -121,9 +121,9 @@ class HistoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * 使ったよモーダル
      */
-    public function update(UpdateHistoryRequest $request, History $history)
+    public function update(UpdateHistoryRequest $request, History $id)
     {
         //
     }

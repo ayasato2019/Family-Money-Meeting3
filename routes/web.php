@@ -91,7 +91,7 @@ Route::middleware('auth')->group(function () {
     //目標の詳細ページ
     Route::get('/saving/saving_{id}', [SavingController::class, 'show'])->name('saving-show');
     Route::post('/saving/update', [HistoryController::class, 'store'])->name('saving-update');
-    // Route::post('/saving/paid', [HistoryController::class, 'paid'])->name('saving-index');
+    Route::post('/saving/paid', [HistoryController::class, 'paid'])->name('saving-paid-update');
 
     //アバターアップデート
     Route::patch('/avatarupdate', [AvatarController::class, 'update'])->name('avatar-update');
