@@ -1,1 +1,0 @@
-import{j as e}from"./app-CnpFggrj.js";function o({price:t,className:n}){if(t===void 0)return e.jsx("span",{children:"価格がありません"});const r=Math.floor(t);return e.jsx("span",{className:"font-bold text-primary-700 text-lg after:content-['円'] after:text-sm after:pl-0.5",children:r.toLocaleString("ja-JP")})}export{o as C};

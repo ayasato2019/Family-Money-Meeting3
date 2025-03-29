@@ -1,66 +1,43 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Family Money Meeting
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**お金の使い方を家族で学ぼう！**
 
-## About Laravel
+家族みんなで使えるお小遣い帳アプリが登場！家族一人ひとりのアカウントを作成して、予算管理を簡単に行えます。まだお金の使い方に不安がある小学生から利用でき、お金の使い方について家族でコミュニケーションをとるきっかけになります。また、家計簿のシェアも可能で、どの食材がどれくらいするのか、日々の生活にどれだけお金が必要なのかを可視化します。見せたくない出費は非公開にすることも可能です。
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 特徴
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **家族全員での予算管理**：家族それぞれのアカウントを作成し、個別または全体の予算を管理できます。
+- **子供向けの金融教育**：小学生から利用可能で、お金の使い方や貯金の重要性を学べます。
+- **家計簿の共有**：家族間で家計簿を共有し、生活費の可視化を実現します。
+- **プライバシー設定**：見せたくない出費は非公開に設定可能です。
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## お金の管理方法
 
-## Learning Laravel
+お金の管理は、以下のカテゴリーから成り立っています：
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **貯金**
+- **投資**
+- **必要**
+- **欲しい**
+- **寄付**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+「お小遣い＝ただ浪費する」という概念を覆し、お金の振り分けを意識することで、出費と貯金のバランス感覚を子供のうちから養います。
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 目標設定
 
-## Laravel Sponsors
+子供は貯金が退屈に感じることがありますが、貯金に対して目標を掲げることで、子どもが思い描く「こんな大人になりたい」という思いのモチベーションを保ちつつ、貯金をサポートします。
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 背景
 
-### Premium Partners
+日本では高校生から金融教育を行いますが、義務教育では行わないため、お金について学ばないまま大人になる人もいます。生活に欠かせないものであるにもかかわらず、知識が少ない現状があります。一方、諸外国では平均で10歳前後からお金について学び、高校生までには起業や投資について学んでいます。
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+変動が多いこれからの時代を担う子どもたちに、お金の知識は強い味方になります。昨今のデジタル教育で一人ひとりにタブレットデバイスが貸し出されている状況を受け、Webアプリとして開発しました。ぜひご利用ください。
 
-## Contributing
+## 使用方法
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **管理者がアカウントを作成します。**
+2. **家族のアカウントを管理者が仮作成します。**
+3. **家族は、管理者が持っているチーム用のログイン画面から、自分の生年月日と仮のパスワードでログインします。**
+4. **ログイン後、まず手持ちの金額を入力します。**
+5. **その後、お小遣いの記録を自由につけていきます。**
+6. **メンバーのアイコンにアクセスすると、家族の参加状況が確認できます。コメントを送って、褒めたり意見を伝えたりしましょう。**
