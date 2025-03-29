@@ -77,22 +77,26 @@ export default function FarstViewAvatar({
     };
 
     // 寄付レベルで背景も変化
-    const donationTotal =userData.donation;
+    const donationTotal = userData.donation;
     let donationLavel: number = donationTotal
     let userBg = "";
-    if (donationTotal < 1000) {
+
+    if(donationTotal == 0) {
         donationLavel = 1;
         userBg = '1';
-    } else if (donationLavel < 2000) {
+    } else if (donationTotal < 1000) {
+        donationLavel = 1;
+        userBg = '1';
+    } else if (donationTotal < 2000) {
         donationLavel = 2;
         userBg = '2';
-    } else if (donationLavel < 3000) {
+    } else if (donationTotal < 3000) {
         donationLavel = 3;
         userBg = '3';
-    } else if (donationLavel < 4000) {
+    } else if (donationTotal < 4000) {
         donationLavel = 4;
         userBg = '4';
-    } else if (donationLavel < 5000) {
+    } else if (donationTotal < 5000) {
         donationLavel = 5;
         userBg = '5';
     }

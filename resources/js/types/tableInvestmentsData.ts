@@ -4,6 +4,8 @@ export interface InvestmentTypes {
     user_id: number;
     title: string;
     price: number;
+    plus: number;
+    minus: number;
     date: string;
     achieve: boolean;
     is_shared: number;

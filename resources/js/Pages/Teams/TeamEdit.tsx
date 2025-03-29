@@ -7,12 +7,7 @@ import Checkbox from '@/Components/Checkbox';
 import TextInput from '@/Components/TextInput';
 import { FormEventHandler } from 'react';
 import { AuthPageProps } from '@/types/AuthPageProps';
-
-interface TeamMember {
-    name: string;
-    id: number;
-    role: number;
-}
+import { TeamTypes } from '@/types/tableTeamsData';
 
 interface PageProps extends AuthPageProps {
     team_id: number;
@@ -29,7 +24,7 @@ export default function MemberAddContents() {
 
     const user = auth?.user || null;
     const safeTeamId: number = team_id ?? 0;
-    const teamMembers: TeamMember[] = (team_members ?? []) as TeamMember[];
+    const teamMembers: TeamTypes[] = (team_members ?? []) as TeamTypes[];
 
     console.log('受け渡し値' + qrCodeBase64);
 

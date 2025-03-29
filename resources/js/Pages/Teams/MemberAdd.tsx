@@ -2,14 +2,6 @@ import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import MemberAddContents from '@/Pages/Teams/TeamEdit';
 
-
-interface TeamMember {
-    name: string;
-    id: number;
-    role: number;
-}
-
-
 export default function MemberAdd() {
     //ページタイトル
     const pagetitle = "チーム";
