@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::table('comments', function (Blueprint $table) {
             $table->tinyInteger('target_type')
-            ->after('user_id_to')
-            ->comment('0=household, 1=saving, 2=investment, 3=need, 4=want, 5=donation');
-            $table->unsignedBigInteger('target_id')->after('target_type');
+                ->default(0) // SQLite対策でデフォルト値を指定
+                ->after('user_id_to')
+                ->comment('0=household, 1=saving, 2=investment, 3=need, 4=want, 5=donation');
+
+            $table->unsignedBigInteger('target_id')
+                ->nullable() // NULL許容にしておくと安全
+                ->after('target_type');
         });
     }
 
