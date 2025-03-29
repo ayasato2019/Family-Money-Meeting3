@@ -42,7 +42,7 @@ export default function Register() {
     };
 
     const appUrl = import.meta.env.VITE_APP_URL?.replace(/\/$/, "");
-    const imageUrl = `${appUrl}/build/assets/images/avatar/`;
+    const imageUrl = `${appUrl}/storage/images/avatar/`;
 
     return (
     <GuestLayout>
