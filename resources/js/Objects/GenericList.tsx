@@ -88,7 +88,7 @@ export default function LiatDataList({
                 {groupedData[months[currentMonthIndex]]
                     ?.filter((item: LiatDataTypes) =>
                     item.user_id == userId ||
-                    (item.team_id === teamId || item.is_shared === 1)
+                    (item.team_id === teamId || item.is_shared === 0)
                     )
                     .map((item) => {
                         const isAchieved = achievedIds.includes(item.id);

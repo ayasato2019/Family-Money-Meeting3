@@ -22,6 +22,10 @@ export default function FirstStep({
     donation: number,
     is_shared: number,
 }) {
+
+    //ページタイトル
+    const pagetitle = "ステータス";
+
     const { data, setData, post, processing } = useForm<{
         saving: number,
         investment: number,
@@ -35,7 +39,7 @@ export default function FirstStep({
         need: need,
         want: want,
         donation: donation,
-        is_shared: is_shared,
+        is_shared: is_shared ?? 0
     });
 
     // 送信関係
@@ -45,9 +49,6 @@ export default function FirstStep({
         e.preventDefault();
         post('./status_registration');
     };
-
-    //ページタイトル
-    const pagetitle = "ステータス";
 
 
     return (
@@ -104,8 +105,6 @@ export default function FirstStep({
                         onChange={(e) => setData('investment', parseInt(e.target.value, 10))}
                         required
                     />
-
-                    {/* <InputError message="生年月日を登録してください" className="mt-2" /> */}
                 </div>
 
                 <div className="mt-4">
