@@ -319,7 +319,7 @@ export default function Home({
                     <span className="text-primary-500">世界の潮流</span>と日本の現状
                     </h4>
                     <p className="text-gray-600">
-                    諸外国では10歳前後から金融教育に取り組んでいます。早い段階からお金の価値や管理方法を学ぶことで、将来的な経済的自立につながることが分かっています。
+                    諸外国では10歳前後から金融教育に取り組んでいます。高校生では企業や投資について学び、リテラシーを高めています。
                     </p>
                 </div>
 
@@ -331,7 +331,7 @@ export default function Home({
                     <span className="text-primary-500">バランス感覚</span>を育てる
                     </h4>
                     <p className="text-gray-600">
-                    このアプリは10歳くらいの子どもたちが、お小遣いを「使う」「貯める」「寄付する」という3つの視点でバランスよく管理する力を身につけるためのツールです。
+                    このアプリは子どもたちが、「貯める」「投資する」「寄付する」「使う」の４原則をもとに、さらに「必要」と「欲しい」に分類することで、お金のバランス感覚を養います。
                     </p>
                 </div>
                 </div>
@@ -355,7 +355,7 @@ export default function Home({
                     <span className="bg-primary-200 px-2 rounded">お小遣いの分類管理</span>
                     </h4>
                     <p className="text-gray-700">
-                    お小遣いを「使う」「貯める」「寄付する」の3つに分けて記録できます。それぞれの目的に合わせた使い方を視覚的に理解できるので、計画的な管理が身につきます。
+                    お小遣いを「貯める」「投資する」「寄付する」必要」「欲しい」の5つに分けて記録できます。それぞれの目的に合わせた使い方を視覚的に理解できるので、計画的な管理が身につきます。
                     </p>
                 </div>
 
@@ -376,10 +376,10 @@ export default function Home({
                     <span className="text-3xl">📊</span>
                     </div>
                     <h4 className="text-xl font-bold mb-4 text-center">
-                    <span className="bg-primary-200 px-2 rounded">わかりやすい収支レポート</span>
+                    <span className="bg-primary-200 px-2 rounded">家族で収支を確認</span>
                     </h4>
                     <p className="text-gray-700">
-                    お小遣いの収入と支出をグラフやチャートで表示します。子どもでも理解しやすい視覚的なレポートで、お金の流れを把握する力が自然と身につきます。
+                    お小遣いの使い道だけでなく家計簿のシェア機能もあり、「お金について意見し合う」場を提供します。家族のバランス感覚から、お子様がさらに学びを得られることを期待しています。見せたくない収支は非公開にもできます。
                     </p>
                 </div>
                 </div>
@@ -413,7 +413,7 @@ export default function Home({
                     <div>
                         <h4 className="text-xl font-bold mb-3">アカウント作成</h4>
                         <p className="text-gray-600">
-                        保護者の方がアカウントを作成し、お子さんのプロフィールを登録します。複数のお子さんを一つのアカウントで管理できるので、ご家族全員で使えます。
+                        保護者の方がアカウントを作成し、お子さんのプロフィールを登録します。チームページの特別なURLからログインすると、チームの一員として活動できます。
                         </p>
                     </div>
                     </div>
