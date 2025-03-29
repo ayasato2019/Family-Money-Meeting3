@@ -14,11 +14,13 @@ import { COMMENT_TARGET_TYPE, CommentTargetType } from '@/types/commentTargetTyp
 import { CommentsTypes } from "@/types/tableCommentsData";
 import { StatusTypes } from "@/types/tableStatusData";
 import { SavingTypes } from "@/types/tableSavingData";
-import { HouseholdTypes } from "@/types/tableHouseholdData"
 import { InvestmentTypes } from "@/types/tableInvestmentsData"
 import { NeedTypes } from "@/types/tableNeedsData"
 import { WantTypes } from "@/types/tableWantsData"
 import { DonationTypes } from "@/types/tableDonationData"
+import { HistoryTypes } from '@/types/tableHistoryData';
+
+import StatusBar from '@/Components/Saving/StatusBarLarge';
 
 interface Props extends PageProps {
 shared_user: {
@@ -31,6 +33,7 @@ investments: InvestmentTypes[];
 needs: NeedTypes[];
 wants: WantTypes[];
 donations: DonationTypes[];
+histories?: HistoryTypes[];
 }
 
 export default function MemberStatus({
@@ -62,8 +65,7 @@ export default function MemberStatus({
         memo: "",
         comment: "",
     })
-    const { auth, comments, team_id } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
-
+    const { comments, team_id, histories } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
 
     //コメント
     const [isCommentModalOpen, setIsCommentModalOpen] = useState(false)
@@ -202,6 +204,11 @@ const pagetitle = "チーム";
                     <li key={saving.id} className="">
                     <div>
                         <p className="font-bold">{saving.title}</p>
+                        {/* <StatusBar
+                            size="small"
+                            total={saving.amount}
+                            amount={totalSavings}
+                        /> */}
                         <p className='flex items-center justify-start gap-2'><span className='text-sm text-gray-400 font-bold'>目標金額</span>¥{saving.amount.toLocaleString()}</p>
                         <p className='flex items-center justify-start gap-2'><span className='text-sm text-gray-400 font-bold'>達成日目標</span>{saving.deadline}</p>
                     </div>

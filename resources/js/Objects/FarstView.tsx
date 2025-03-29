@@ -1,12 +1,10 @@
 import UserStatus from '@/Components/UserStatus';
 import { usePage } from '@inertiajs/react';
 import { PageProps } from '@inertiajs/core';
-import LineChart from "@/Objects/Chart";
 
 //タイプチェック
 import { UserTypes } from "@/types/tableUserData";
 import { StatusTypes } from '@/types/tableStatusData';
-// import { ChartTypes } from '@/types/tableChartData';
 
 interface CustomPageProps extends PageProps {
     auth: {
@@ -24,8 +22,7 @@ export default function FarstViewAvatar({
     // chartData?: ChartTypes,
 }) {
 
-    const { auth, avatar, statuses } = usePage<CustomPageProps>().props;
-    const fvImages = avatar ? avatar : "";
+    const { auth, statuses } = usePage<CustomPageProps>().props;
 
     const user = auth.user;
     if (!user) {
@@ -43,45 +40,44 @@ export default function FarstViewAvatar({
         6: 'yellow',
     }[category];
 
-    // ユーザー情報の宣言
-    const userSaving: number = status?.saving ?? 0;
-    const userInvestment: number = status?.investment ?? 0;
-    const userNeed: number = status?.need ?? 0;
-    const userWant: number = status?.want ?? 0;
-    const userDonation: number = status?.donation ?? 0;
-
     // ステータス
     const userData: UserTypes & StatusTypes = {
         ...user,
         ...status,
-        game_level: 1,  // 仮の値
-        game_life: 4,  // 仮の値
     };
+
+    const saving = userData.saving ?? 0;
+    const investment = userData.investment ?? 0;
+    const need = userData.need ?? 0;
+    const want = userData.want ?? 0;
+    const donation = userData.donation ?? 0;
+    const level = userData.game_level ?? 0;
+    const useName = userData.name ?? "";
+
 
     const ImagesFv = () => {
         switch (category) {
             case 0: // 'Home' カテゴリの場合
-                return <div>ホーム画面</div>;
+                return <div></div>;
             case 1: // 'Saving' カテゴリの場合
-                return <div>貯金のグラフ</div>;// className='w-full max-w-full h-full object-cover object-center'
+                return <div></div>;// className='w-full max-w-full h-full object-cover object-center'
             case 2: // 'Investments' カテゴリの場合
-                return <div>投資のグラフ</div>;
+                return <div></div>;
             case 3: // 'Need' カテゴリの場合
-                return <div>必要のグラフ</div>;
+                return <div></div>;
             case 4: // 'Want' カテゴリの場合
-                return <div>欲しいのグラフ</div>;
+                return <div></div>;
             case 5: // 'Donations' カテゴリの場合
-                return <div>寄付のグラフ</div>;
+                return <div></div>;
             case 6: // Household' カテゴリの場合
-                return <div>家計簿のグラフ</div>;
+                return <div></div>;
             default:
                 return null;
         }
     };
 
-
     // 寄付レベルで背景も変化
-    const donationTotal = userDonation;
+    const donationTotal =userData.donation;
     let donationLavel: number = donationTotal
     let userBg = "";
     if (donationTotal < 1000) {
@@ -100,7 +96,6 @@ export default function FarstViewAvatar({
         donationLavel = 5;
         userBg = '5';
     }
-    const plannedExtravagance: number = userData.want;
     const appUrl = import.meta.env.VITE_APP_URL?.replace(/\/$/, "");
     const imageUrl = `${appUrl}/storage/images/bg/bg_${userBg}.webp`;
 
@@ -112,9 +107,8 @@ export default function FarstViewAvatar({
                 level={userData.game_level}
                 savings={userData.saving}
                 investment={userData.investment}
-                essential={userData.need}
-                extravagance={userData.want}
-                plannedExtravagance={plannedExtravagance}
+                need={userData.need}
+                want={userData.want}
             />
             <div
                 style={{ backgroundImage: `url(${imageUrl})` }}

@@ -42,13 +42,13 @@ export default function Household({
 }) {
 
     //ページタイトル
-    const pagetitle = "投資";
+    const pagetitle = "とうし";
 
     //コメントの表示
     const targetType = 2;
 
     // 型を明示的にキャストして取得
-    const { auth, team_id, role, comments } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
+    const { auth, team_id, comments } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
     const user = auth.user;
 
     const { data, setData, post, reset, processing } = useForm({

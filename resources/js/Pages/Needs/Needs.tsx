@@ -47,7 +47,7 @@ export default function Household({
     const targetType = 3;
 
     // 型を明示的にキャストして取得
-    const { auth, team_id, role, comments } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
+    const { auth, team_id, comments } = usePage<PageProps & { comments: CommentsTypes[] }>().props;
 
     const user = auth.user;
 

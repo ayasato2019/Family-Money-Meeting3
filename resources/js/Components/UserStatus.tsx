@@ -7,18 +7,16 @@ export default function UserStatus({
     useName,
     savings,
     investment,
-    essential,
-    extravagance,
-    plannedExtravagance,
+    need,
+    want,
     donation,
     level,
 }: {
     useName: string;
     savings: number;
     investment: number;
-    essential: number;
-    extravagance: number;
-    plannedExtravagance: number;
+    need: number;
+    want: number;
     donation: number;
     level: number;
 }) {
@@ -39,17 +37,16 @@ export default function UserStatus({
                 <div
                     onClick={handleOpen}
                     // onTouchStart={handleOpen}
-                    className={`absolute right-0 w-1/2 flex items-stert justify-end transition-all duration-300 ${isOpen ? 'top-0' : 'top-[-68px]'
+                    className={`absolute right-0 w-1/2 flex items-stert justify-end transition-all duration-300 ${isOpen ? 'top-0' : 'top-[-74px]'
                     }`}>
-                    <UserStatusAmount
+                    {/* <UserStatusAmount
                         isOpen={isOpen}
                         savings={savings}
                         investment={investment}
-                        essential={essential}
-                        extravagance={extravagance}
-                        plannedExtravagance={plannedExtravagance}
+                        need={need}
+                        want={want}
                         donation={donation}
-                        />
+                        /> */}
                 </div>
             </div>
         </div>
