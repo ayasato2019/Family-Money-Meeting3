@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/react';
 import FarstView from '@/Objects/FarstView';
 
 import { usePage } from '@inertiajs/react';
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useForm } from "@inertiajs/react"
 import InputLabel from "@/Components/InputLabel"
 import PrimaryButton from "@/Components/PrimaryButton"
@@ -49,7 +49,7 @@ export default function Household({
         price: 0,
         date: "",
         achieve: 0,
-        is_shared: 1,
+        is_shared: 0,
         images: "",
         memo: "",
         comment: "",
