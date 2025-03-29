@@ -1,6 +1,9 @@
 import { useForm } from "@inertiajs/react";
 import { useRef } from 'react';
-import { Head } from '@inertiajs/react';
+import { usePage, Head, Link } from '@inertiajs/react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import FarstView from '@/Objects/FarstView';
+import TitleSection from '@/Components/TitleSection';
 import TitleModal from '@/Objects/TitleModal';
 import ButtonPrimary from '@/Components/ButtonPrimary';
 import InputPrice from '@/Components/InputPrice';
@@ -17,7 +20,7 @@ export default function SavingCreate() {
         deadline: "",
         level: 1,
         images: "",
-        is_shared: 1, // Ensure this is a boolean
+        is_shared: 0, // Ensure this is a boolean
         memo: "",
     });
 
@@ -27,6 +30,10 @@ export default function SavingCreate() {
             [field]: value,
         });
     };
+
+    // 画面タイトル
+    const pagetitle = "ちょきん";
+
 
     // CSRF token for security
     const metaCsrfToken = document.querySelector("meta[name='csrf-token']") as HTMLMetaElement;
@@ -41,10 +48,12 @@ export default function SavingCreate() {
     };
 
     return (
-        <>
-            <Head title="目標を登録" />
-            <div className='overflow-hidden flex items-center justify-center w-full h-full'>
-                <div className='contents_box overflow-auto flex flex-col gap-5 pb-5 w-full md:max-w-[64vmin] h-screen md:border-solid border-0 md:border-8 md:border-black md:rounded-2xl '>
+        <AuthenticatedLayout header={<h1 className="w-full flex items-center justify-center text-xl font-semibold leading-tight text-gray-800">{pagetitle}</h1>}>
+            <Head title={pagetitle} />
+
+            <FarstView category={1} />
+            <div className="overflow-hidden flex items-center justify-center w-full h-full">
+                <div className="contents_box w-full">
                     <div className="flex flex-col gap-8">
                         <form onSubmit={handleRegister}>
                             <input type="hidden" name="_token" value={csrfToken.current} />
@@ -99,7 +108,7 @@ export default function SavingCreate() {
                                     </label>
                                 </div>
 
-                                <div className="flex">
+                                <div className="flex items-center gap-2">
                                     <Checkbox
                                         name="is_share"
                                         checked={data.is_shared === 0}
@@ -115,6 +124,6 @@ export default function SavingCreate() {
                     </div>
                 </div>
             </div>
-        </>
+        </AuthenticatedLayout>
     );
 }

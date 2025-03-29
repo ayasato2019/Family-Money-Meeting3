@@ -50,7 +50,6 @@ class SavingController extends Controller
      */
     public function store(StoreSavingRequest $request)
     {
-        dd($request);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'amount' => 'required|integer',
@@ -78,7 +77,7 @@ class SavingController extends Controller
         event(new Registered($saving));
 
         return redirect()->route(
-            'saving-show',
+            'saving-index',
         );
     }
 

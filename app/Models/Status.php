@@ -14,6 +14,6 @@ class Status extends Model
         'need',
         'want',
         'donation',
-        'is_share',
+        'is_shared',
     ];
 }

@@ -5,32 +5,34 @@ export default function InputSelectInterval({
     isOpen,
     savings,
     investment,
-    essential,
-    extravagance,
-    plannedExtravagance,
+    need,
+    want,
     donation,
 }: {
     isOpen: boolean;
     savings: number;
     investment: number;
-    essential: number;
-    extravagance: number;
-    plannedExtravagance: number;
+    need: number;
+    want: number;
     donation: number;
 }) {
 
     const assets = savings + investment;
-    const expense = essential + donation;
-    const left = extravagance;
+    const expense = need + donation;
+    const left = want;
 
     return (
-        <div className="overflow-hidden flex flex-col items-start justify-center gap-1 bg-gray-900/85 px-2 pt-0.5 pb-1 rounded-md max-w-80 shadow-xl text-white">
-            <div className="flex items-center justify-between gap-2 pb-0.5 w-full h-auto border-b border-dotted border-white pr-3">
-                <BadgeType variant="assets" />
+        <div className="overflow-hidden flex flex-col items-start justify-center gap-1 bg-gray-900/85 px-2 py-2 rounded-md max-w-80 shadow-xl text-white">
+            <div className="flex items-center justify-between gap-2 pb-0.5 w-full h-auto border-b border-dotted pr-3 ">
+                <BadgeType
+                    variant="assets"
+                    className='bg-pink-600 font-bold border-0' />
                 <p className="text-sm"><ConvertPrice price={assets} /></p>
             </div>
-            <div className="flex items-center justify-between gap-2 pb-0.5 w-full h-auto border-b border-dotted border-white pr-3">
-                <BadgeType variant="liabilities" />
+            <div className="flex items-center justify-between gap-2 pb-0.5 w-full h-auto border-b border-dotted pr-3">
+                <BadgeType
+                    variant="liabilities"
+                    className='bg-sky-700 font-bold border-0' />
                 <p className="text-sm "><ConvertPrice price={expense} /></p>
             </div>
             <div className="flex items-center justify-between gap-2 w-full h-auto">

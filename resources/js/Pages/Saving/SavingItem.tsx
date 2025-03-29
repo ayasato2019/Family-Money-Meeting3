@@ -63,19 +63,6 @@ export default function SavingId() {
 
     // 履歴の取得（ユーザーに関連するもののみ）
     const userHistories = histories?.filter((h) => h.user_id === user.id) ?? [];
-
-    // 積立額の計算
-    // const calculateTotalSavings = (savingsId: number, histories: HistoryTypes[]): number => {
-    //     const relevantHistories = histories.filter((history) => history.goal_id === savingsId);
-    //         // フィルタリングされた履歴の amount をすべて足し合わせる
-    //     const totalSavings = relevantHistories.reduce((total, history) => {
-    //         // amount が正しい型であることを確認（数値に変換）
-    //         const amount = parseFloat(String(history.amount));
-    //         return total + (isNaN(amount) ? 0 : amount);  // amount が数値でない場合は 0 を加算
-    //     }, 0);
-
-    //     return totalSavings;
-    // };
     const calculateTotalSavings = (savingsId: number, histories: HistoryTypes[]): number => {
         const relevantHistories = histories.filter((history) => history.goal_id === savingsId);
         const totalSavings = relevantHistories.reduce((total, history) => {

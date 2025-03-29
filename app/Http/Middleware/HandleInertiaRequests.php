@@ -37,12 +37,7 @@ class HandleInertiaRequests extends Middleware
         // 現在ログインしているユーザー
         $user = Auth::user();
 
-        // ユーザーのアバター情報を取得（デフォルト 0）
-        // $avatar = Avatar::where('type', 0)->first();
-        // $user_avatar = $avatar && $avatar->filename ? $avatar->filename : 'avatar_1.webp';
-
         // チーム情報を取得
-        // $team = $user ? Team::where('id', $user->team_id)->first() : null;
         $team = $user ? Team::find($user->team_id) : null;
         $team_id = $team?->id;
         $team_name = $team?->team_name;

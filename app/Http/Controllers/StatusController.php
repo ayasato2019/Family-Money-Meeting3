@@ -62,7 +62,7 @@ class StatusController extends Controller
             'need' => 'required|integer',
             'want' => 'required|integer',
             'donation' => 'required|integer',
-            'is_share' => 'required|integer',
+            'is_shared' => 'required|integer',
         ]);
 
         $user = Auth::user();
@@ -79,7 +79,7 @@ class StatusController extends Controller
                 'need' =>  $validated['need'],
                 'want' =>  $validated['want'],
                 'donation' =>  $validated['donation'],
-                'is_share' =>  $validated['is_share'],
+                'is_shared' =>  $validated['is_shared'],
             ]);
         } else {
             // 新規作成
@@ -92,7 +92,7 @@ class StatusController extends Controller
                 'donation' =>  $validated['donation'],
                 'game_level' =>  0,
                 'game_life' =>  4,
-                'is_share' =>  $validated['is_share'],
+                'is_shared' =>  $validated['is_shared'],
             ]);
         }
         event(new Registered($status));

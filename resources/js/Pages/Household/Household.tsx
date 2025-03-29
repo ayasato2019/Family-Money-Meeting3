@@ -144,7 +144,7 @@ export default function Household({
         },
     });
     };
-
+    console.log(data);
     return (
     <AuthenticatedLayout
         header={
