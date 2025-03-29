@@ -41,15 +41,15 @@ export default function Authenticated({
     // 共通メニューリスト
     const menuLinks = [
         { label: 'ホーム', route: 'dashboard', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'プロフィール', route: 'profile.edit', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'チーム', route: 'teams-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
         { label: 'ステータス', route: 'status-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
-        { label: '家計簿', route: 'houseold-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
+        { label: 'かけいぼ', route: 'houseold-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
         { label: 'ちょきん', route: 'saving-index', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
         { label: 'とうし', route: 'investments-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
         { label: 'ひつよう', route: 'needs-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
         { label: 'ほしい', route: 'wants-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
         { label: 'きふ', route: 'donations-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
-        { label: 'プロフィール', route: 'profile.edit', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
-        { label: 'チーム', route: 'teams-create', className: 'break-keep bg-white !border border-solid !border-gray-100 rounded-md shadow' },
         { label: 'ログアウト', route: 'logout', method: 'post' as Method, as: 'button', className: '!w-auto mx-auto border border-transparent rounded-md bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 active:bg-red-700 md:hidden' }
     ];
 
@@ -138,7 +138,10 @@ export default function Authenticated({
                     <div className="w-full h-full ">
                         <div className="relative">
                             <h2 className='text-center font-bold'>メンバー</h2>
-                            <Link className='absolute right-0 top-0 group pl-1 ml-auto flex items-center justify-center w-7 h-7 border-2 border-dashed border-gray-600 rounded-full hover:border-orange-500 hover:border-solid hover:scale-110 transition-all' href={route('teams-member')}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width={18} height={18} className="fill-gray-600 group-hover:fill-orange-500 transition-all"><path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM504 312l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" /></svg></Link>
+                            <Link
+                                href={route('teams-create')}
+                                className='absolute right-0 top-0 group pl-1 ml-auto flex items-center justify-center w-7 h-7 border-2 border-dashed border-gray-600 rounded-full hover:border-orange-500 hover:border-solid hover:scale-110 transition-all'
+                                ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width={18} height={18} className="fill-gray-600 group-hover:fill-orange-500 transition-all"><path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM504 312l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" /></svg></Link>
                         </div>
 
                         <ul className='my-5 flex flex-col gap-2'>
